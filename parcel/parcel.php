@@ -184,7 +184,15 @@ function thaiMonth($month) {
                       echo '<td class="text-center">' . $row['name'] . '</td>';
                       echo '<td class="text-center">' . (isset($row['year']) ? ($row['year'] + 543) : '') . '</td>';
                       echo '<td class="text-center">' . $row['price'] . '</td>';
-                      echo '<td class="text-center">' . $row['department'] . '</td>';
+                      $department = $row['department'];
+                      $sql_department = "SELECT name FROM department WHERE id_department = ' $department' LIMIT 1";
+                      $result_department = mysqli_query($conn, $sql_department);
+                      if ($row_department = mysqli_fetch_assoc($result_department)) {
+                        echo '<td class="text-center">' . $row_department['name'] . '</td>';
+                    } else {
+                        // หากไม่พบข้อมูล, กำหนดค่าเป็น N/A หรืออื่น ๆ ตามที่ต้องการ
+                        echo '<td class="text-center">N/A</td>';
+                    }
                       $stauts_res=getStatusColorFromDurableCheck($conn, $row['asset_id']);
                       echo '<td class="text-center" style="color: ' . getStatusColor($stauts_res) . ';">' . $stauts_res . '</td>';
                       
@@ -200,10 +208,10 @@ function thaiMonth($month) {
                       }
               
                       echo '<td class="project-actions text-right">';
-                      echo '<a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-search-plus"></i> View</a>&nbsp;&nbsp;';
+                      echo '<a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fa fa-search-plus"></i> View</a>&nbsp;&nbsp;';
                       echo '<a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a>&nbsp';
                       echo '<a class="btn btn-warning btn-sm" href="#"><i class="fas fa-pencil-alt"></i> Repair</a>&nbsp';
-                      echo '<a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Del</a>';
+                      echo '<a class="btn btn-danger btn-sm del-asset" href="#" data-id="'. $row['asset_id'] ."-,". $row['name'] .'"><i class="fas fa-trash"></i> Delete</a>';
                       echo '</td>';
                       echo '</tr>';
                   }
@@ -293,5 +301,35 @@ setTimeout(function() {
 <?php
   }
 ?>
+
+const deleteAsset = document.querySelectorAll('.del-asset');
+
+deleteAsset.forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const repairData = this.getAttribute('data-id').split('-,'); // แยกข้อมูลด้วยตัวแยก '-'
+        const repairId = repairData[0];
+        const repairName = repairData[1];
+
+        Swal.fire({
+            title: '<h4><label class="label t1">คุณต้องการลบข้อมูล</label></h4>',
+            html: `<div><h6><label class="label t1">ชื่อครุภัณฑ์ : </label> ${repairName}<br><label class="label t1">เลขครุภัณฑ์ : </label>${repairId}<br></h6><br>`,
+            focusConfirm: false,
+            preConfirm: () => {
+                return [];
+            },
+            confirmButtonText: 'Delete',
+            showCancelButton: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Modify the URL to include the uroleId
+                window.location.href = `./controller/del_asset?id_repair=${repairId}`;
+            }
+        });
+    });
+});
 </script>
 <?php require '../popup/popup.php'; ?>

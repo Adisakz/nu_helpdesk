@@ -144,7 +144,7 @@ function thaiMonth($month) {
                                 <!-- /.card-header -->
 
                                 <!-- form start -->
-                                <form id="quickForm" action="./controller/edit_asset" method="POST" enctype="multipart/form-data">
+                                <form id="quickForm" action="tech" method="post">
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- ส่วนซ้าย -->
@@ -154,8 +154,9 @@ function thaiMonth($month) {
                                                         <label for="type-durable"
                                                             class="col-sm-4 col-form-label">หมวดหมู่ครุภัณฑ์</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control-plaintext" id="type-durable" 
-                                                                value="<?php echo ($type_durable); ?>">
+                                                            <input type="text"  class="form-control"
+                                                                id="type-durable"
+                                                                value="<?php echo htmlspecialchars($type_durable); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -164,10 +165,11 @@ function thaiMonth($month) {
                                                         <label for="department-durable"
                                                             class="col-sm-4 col-form-label">แผนกผู้รับผิดชอบ</label>
                                                         <div class="col-sm-8">
-
-                                                            <input type="text" class="form-control"
+                                                            
+                                                            <input type="text"  class="form-control"
                                                                 id="department-durable"
-                                                                value="<?php echo ($department_durable); ?>">
+
+                                                                value="<?php echo htmlspecialchars($department_durable); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,11 +178,9 @@ function thaiMonth($month) {
                                                         <label for="asset-id"
                                                             class="col-sm-4 col-form-label">เลขที่ครุภัณฑ์</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" name="asset-id-new"
-                                                            id="asset-id-new"
-                                                                value="<?php echo ($asset_id); ?>">
-                                                                <input type="text" class="form-control" name="id" id="id"
-                                                                value="<?php echo ($_GET['id_durable']);  ?>" hidden >
+                                                            <input type="text"  class="form-control"
+                                                                id="asset-id"
+                                                                value="<?php echo htmlspecialchars($asset_id); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -189,9 +189,9 @@ function thaiMonth($month) {
                                                         <label for="name-asset"
                                                             class="col-sm-4 col-form-label">ชื่อครุภัณฑ์</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="name-asset"
-                                                            name="name-asset"
-                                                                value="<?php echo ($name_asset); ?>">
+                                                            <input type="text"  class="form-control"
+                                                                id="name-asset"
+                                                                value="<?php echo htmlspecialchars($name_asset); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -200,19 +200,20 @@ function thaiMonth($month) {
                                                         <label for="brand"
                                                             class="col-sm-4 col-form-label">ยี่ห้อ</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="brand"
-                                                            name="brand"
-                                                                value="<?php echo ($brand); ?>">
+                                                            <input type="text"  class="form-control"
+                                                                id="brand"
+                                                                value="<?php echo htmlspecialchars($brand); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="mb-3 row">
-                                                        <label for="model" class="col-sm-4 col-form-label">รุ่น</label>
+                                                        <label for="model"
+                                                            class="col-sm-4 col-form-label">รุ่น</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="model"
-                                                            name="model"
-                                                                value="<?php echo ($model); ?>">
+                                                            <input type="text"  class="form-control"
+                                                                id="model"
+                                                                value="<?php echo htmlspecialchars($model); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -221,9 +222,9 @@ function thaiMonth($month) {
                                                         <label for="building"
                                                             class="col-sm-4 col-form-label">อาคาร</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="building"
-                                                            name="building"
-                                                                value="<?php echo ($building); ?>">
+                                                            <input type="text"  class="form-control-plaintext"
+                                                                id="building"
+                                                                value="<?php echo htmlspecialchars($building); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,20 +233,21 @@ function thaiMonth($month) {
                                                         <label for="room-number"
                                                             class="col-sm-4 col-form-label">ห้อง</label></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="room-number"
-                                                            name="room-number"
-                                                                value="<?php echo ($room_number); ?>">
+                                                            <input type="text"  class="form-control-plaintext"
+                                                                id="room-number"
+                                                                value="<?php echo htmlspecialchars($room_number); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="mb-3 row">
-                                                        <label for="status"
+                                                        <label for="staticEmail"
                                                             class="col-sm-4 col-form-label">สถานะ</label></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="status"
+                                                            <input type="text"  class="form-control-plaintext"
+                                                                id="staticEmail"
                                                                 style="color: <?php echo getStatusColor($status); ?>;"
-                                                                value="<?php echo ($status); ?>">
+                                                                value="<?php echo htmlspecialchars($status); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -254,9 +256,9 @@ function thaiMonth($month) {
                                                         <label for="year"
                                                             class="col-sm-4 col-form-label">ปีที่ซื้อ</label></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="year"
-                                                            name="year"
-                                                                value="<?php echo  (isset($year) ? ($year + 543) : '') ?>">
+                                                            <input type="text"  class="form-control-plaintext"
+                                                                id="year"
+                                                                value="<?php echo htmlspecialchars((isset($year) ? ($year + 543) : '') ); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -265,9 +267,9 @@ function thaiMonth($month) {
                                                         <label for="price"
                                                             class="col-sm-4 col-form-label">ราคา(บาท)</label></label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="price"
-                                                            name="price"
-                                                                value="<?php echo ($price); ?>">
+                                                            <input type="text"  class="form-control-plaintext"
+                                                                id="price"
+                                                                value="<?php echo htmlspecialchars($price); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -280,28 +282,19 @@ function thaiMonth($month) {
                                                         width="400px">
                                                     <!-- เพิ่ม input fields อื่น ๆ ที่ต้องการแสดงทางขวา -->
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="image">อัพโหลดรูปภาพครุภัณฑ์ : </label>
-                                                    <input type="file" class="form-control" id="image-signature-report"
-                                                        name="image-asset">
-                                                </div>
                                             </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div aria-label="Contacts Page Navigation">
-                                        <button type="submit" name="submit" class="btn btn-success">บันทึก</button>
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                             <!-- เพิ่มการ์ดหัวข้อ -->
                             <div class="card card-primary">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3> 
+                                        <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3>
+                                        <a class="btn btn-success btn-sm" href="form_add_asset"
+                                            style=" margin-left: 10px ;margin-right: auto; "><i
+                                                class="fas fa-plus"></i>Add</a>
                                         <div class="card-tools">
                                             <section class="content">
                                                 <div class="container-fluid">
