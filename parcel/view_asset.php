@@ -16,6 +16,9 @@ $building = $row['building'];
 $room_number = $row['room_number'];
 $model = $row['model'];
 $brand = $row['brand'];
+$year = $row['year'];
+
+$price = $row['price'];
 $image = $row['image_asset'];
 
 $sql_status = "SELECT status FROM durable_check WHERE asset_id = '$id_asset' ORDER BY date_update DESC LIMIT 1";
@@ -237,6 +240,28 @@ function thaiMonth($month) {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <div class="mb-3 row">
+                                                        <label for="staticEmail"
+                                                            class="col-sm-4 col-form-label">ปีที่ซื้อ</label></label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                id="staticEmail"
+                                                                value="<?php echo htmlspecialchars((isset($year) ? ($year + 543) : '') ); ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="mb-3 row">
+                                                        <label for="staticEmail"
+                                                            class="col-sm-4 col-form-label">ราคา(บาท)</label></label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                id="staticEmail"
+                                                                value="<?php echo htmlspecialchars($price); ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <!-- ส่วนขวา -->
@@ -253,113 +278,127 @@ function thaiMonth($month) {
                             </div>
                             <!-- เพิ่มการ์ดหัวข้อ -->
                             <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">ข้อมูลการตรวจสอบครุภัณฑ์</h3>
-                                </div>
-                                <div class="card-body">
-                                    <!-- ส่วนที่ต้องการแสดงข้อมูล durable_check -->
-                                    <?php
-                                    $sqlCount = "SELECT COUNT(*) AS total FROM durable_check WHERE asset_id = '$id_asset' AND status !=''";
-                                    $resultCount = mysqli_query($conn, $sqlCount);
-                                    $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-                                    // กำหนดจำนวนรายการต่อหน้า
-                                    $recordsPerPage = 3;
-                     
-                                    // รับค่าหน้าปัจจุบัน
-                                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                     
-                                    // คำนวณ offset สำหรับคำสั่ง SQL
-                                    $offset = ($page - 1) * $recordsPerPage;
-                     
-                                    // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                                    $sql_check = "SELECT * FROM durable_check WHERE asset_id = '$id_asset' AND status !='' ORDER BY date_update DESC LIMIT $offset, $recordsPerPage";
-                                    $result_check = mysqli_query($conn, $sql_check);
-
-                                    if (mysqli_num_rows($result_check) > 0) {
-                                    // ทำการ loop และแสดงข้อมูล
-                                    while ($row_check = mysqli_fetch_assoc($result_check)) {
-                                        // ในแต่ละรอบของลูป ให้แสดงข้อมูลดังนี้
-                                        ?>
-                                    <div class="form-group">
-                                        <div class="mb-3 row">
-                                            <label for="staticEmail" class="col-sm-4 col-form-label">สถานะ</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext"
-                                                    id="staticEmail"
-                                                    style="color: <?php echo getStatusColor($row_check['status']); ?>;"
-                                                    value="<?php echo htmlspecialchars($row_check['status']); ?>">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="mb-3 row">
-                                            <label for="staticEmail" class="col-sm-4 col-form-label">ตรวจสอบโดย</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext"
-                                                    id="staticEmail" value="<?php echo$row_check['name_check']; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="mb-3 row">
-                                            <label for="staticEmail"
-                                                class="col-sm-4 col-form-label">รายละเอียดการตรวจสอบ</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext"
-                                                    id="staticEmail"
-                                                    value="<?php echo htmlspecialchars($row_check['detail_check']); ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="mb-3 row">
-                                            <label for="staticEmail"
-                                                class="col-sm-4 col-form-label">วันที่ตรวจสอบ</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control-plaintext"
-                                                    id="staticEmail"
-                                                    value="<?php echo date('d', strtotime($row_check['date_update'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_update']))) . ' ' . (date('Y', strtotime($row_check['date_update'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_update'])); ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        ___
-                                    </div>
-                                    <?php
-}
-                                    }else {
-                                        // ไม่มีข้อมูล
-                                        ?>
-                                        <div class="form-group">
-                                            <div class="mb-3 row">
-                                                <div class="col-sm-12">
-                                                    <p style="color: red;">ไม่มีการตรวจเช็ค</p>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">รายการข้อมูลครุภัณฑ์</h3>
+                                        <a class="btn btn-success btn-sm" href="form_add_asset"
+                                            style=" margin-left: 10px ;margin-right: auto; "><i
+                                                class="fas fa-plus"></i>Add</a>
+                                        <div class="card-tools">
+                                            <section class="content">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-10 offset-md-2">
+                                                            <form action="simple-results.html">
+                                                                <div class="input-group">
+                                                                    <input type="search"
+                                                                        class="form-control form-control-m"
+                                                                        placeholder="Type your keywords here"
+                                                                        style="weight:300px;">
+                                                                    <div class="input-group-append">
+                                                                        <button type="submit"
+                                                                            class="btn btn-m btn-default">
+                                                                            <i class="fa fa-search"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </section>
                                         </div>
-                                        <?php
-                                    }
-?>
-                                    <div class="card-footer">
-                                        <nav aria-label="Contacts Page Navigation">
-                                            <ul class="pagination justify-content-center m-0">
-                                                <?php
-                                                    // คำนวณจำนวนหน้าทั้งหมด
-                                                    $totalPages = ceil($totalRecords / $recordsPerPage);
-
-                                                    // แสดงปุ่ม Pagination
-                                                    for ($i = 1; $i <= $totalPages; $i++) {
-                                                        $activeClass = ($page == $i) ? 'active' : '';
-                                                        echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?id='.$id_asset.'&page=' . $i . '">' . $i . '</a></li>';
-                                                    }
-                                                    ?>
-                                            </ul>
-                                        </nav>
                                     </div>
-                                    <!-- สิ้นสุดส่วนที่ให้แสดงข้อมูล durable_check -->
+                                    <div class="card-body p-0">
+                                        <table class="table table-striped projects">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">
+                                                        #
+                                                    </th>
+                                                    <th class="text-center">
+                                                        หมวดหมู่ครุภัณฑ์
+                                                    </th>
+                                                    <th class="text-center">
+                                                        เลขที่ครุภัณฑ์
+                                                    </th>
+                                                    <th class="text-center">
+                                                        ชื่อครุภัณฑ์
+                                                    </th>
+                                                    <th class="text-center" width="120px">
+                                                        ปีที่ซื้อ
+                                                    </th>
+                                                    <th class="text-center" width="120px">
+                                                        ราคา(บาท)
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                        แผนกที่รับผิดชอบ
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                        สถานะ
+                                                    </th>
+                                                    <th class="text-center" width="120px">
+                                                        ตรวจสอบล่าสุด
+                                                    </th>
+                                                    <th class="text-center" width="340px">
+
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $sql = "SELECT * FROM durable_articles";
+                $result = mysqli_query($conn, $sql); 
+               
+                if ($result) {
+                    // วนลูปเพื่อแสดงข้อมูล
+                    while ($row = mysqli_fetch_assoc($result)) {
+                      echo '<tr>';
+                      echo '<td class="text-center">' . $row['id_durable'] . '</td>';
+                      echo '<td class="text-center">' . $row['type_durable'] . '</td>';
+                      echo '<td class="text-center">' . $row['asset_id'] . '</td>';
+                      echo '<td class="text-center">' . $row['name'] . '</td>';
+                      echo '<td class="text-center">' . ($row['year'] + 543) . '</td>';
+                      echo '<td class="text-center">' . $row['price'] . '</td>';
+                      echo '<td class="text-center">' . $row['department'] . '</td>';
+                      $stauts_res=getStatusColorFromDurableCheck($conn, $row['asset_id']);
+                      echo '<td class="text-center" style="color: ' . getStatusColor($stauts_res) . ';">' . $stauts_res . '</td>';
+                      
+                      // ดึงข้อมูลจากตาราง durable_check
+                      $asset_id = $row['asset_id'];
+                      $sql_check = "SELECT date_update FROM durable_check WHERE asset_id = '$asset_id' ORDER BY id DESC LIMIT 1";
+                      $result_check = mysqli_query($conn, $sql_check);
+                      
+                      if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
+                        echo '<td class="text-center">' . date('d', strtotime($row_check['date_update'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_update']))) . ' ' . (date('Y', strtotime($row_check['date_update'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_update'])) . '</td>';
+                      } else {
+                          echo '<td class="text-center">N/A</td>';
+                      }
+              
+                      echo '<td class="project-actions text-right">';
+                      echo '<a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-search-plus"></i> View</a>&nbsp;&nbsp;';
+                      echo '<a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a>&nbsp';
+                      echo '<a class="btn btn-warning btn-sm" href="#"><i class="fas fa-pencil-alt"></i> Repair</a>&nbsp';
+                      echo '<a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Del</a>';
+                      echo '</td>';
+                      echo '</tr>';
+                  }
+                } else {
+                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                }
+
+                // ปิดการเชื่อมต่อ
+                mysqli_close($conn);
+            
+                ?>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <!-- /.card-body -->
                                 </div>
+                                <!-- /.card -->
+
                             </div>
                             <!-- /.card -->
 

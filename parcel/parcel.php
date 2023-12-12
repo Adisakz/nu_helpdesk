@@ -150,6 +150,12 @@ function thaiMonth($month) {
                                     <th class="text-center">
                                         ชื่อครุภัณฑ์
                                     </th>
+                                    <th class="text-center" width="120px">
+                                        ปีที่ซื้อ
+                                    </th>
+                                    <th class="text-center" width="120px">
+                                        ราคา(บาท)
+                                    </th>
                                     <th class="text-center" width="150px">
                                         แผนกที่รับผิดชอบ
                                     </th>
@@ -176,10 +182,12 @@ function thaiMonth($month) {
                       echo '<td class="text-center">' . $row['type_durable'] . '</td>';
                       echo '<td class="text-center">' . $row['asset_id'] . '</td>';
                       echo '<td class="text-center">' . $row['name'] . '</td>';
+                      echo '<td class="text-center">' . (isset($row['year']) ? ($row['year'] + 543) : '') . '</td>';
+                      echo '<td class="text-center">' . $row['price'] . '</td>';
                       echo '<td class="text-center">' . $row['department'] . '</td>';
                       $stauts_res=getStatusColorFromDurableCheck($conn, $row['asset_id']);
                       echo '<td class="text-center" style="color: ' . getStatusColor($stauts_res) . ';">' . $stauts_res . '</td>';
-              
+                      
                       // ดึงข้อมูลจากตาราง durable_check
                       $asset_id = $row['asset_id'];
                       $sql_check = "SELECT date_update FROM durable_check WHERE asset_id = '$asset_id' ORDER BY id DESC LIMIT 1";
@@ -209,7 +217,9 @@ function thaiMonth($month) {
                 ?>
                             </tbody>
                         </table>
+
                     </div>
+
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->

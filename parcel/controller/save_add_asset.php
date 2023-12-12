@@ -62,6 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $departmentId = $_POST["department-id"];
     $building = $_POST["building"];
     $roomNumber = $_POST["room-number"];
+    $year = isset($_POST["year"]) ? ($_POST["year"] - 543) : '';
+    $price = $_POST["price"];
     // ดึงข้อมูลไฟล์รูปภาพ
     $image = isset($_FILES["image-asset"]) ? $_FILES["image-asset"] : null;
     if ($image && $image["error"] == UPLOAD_ERR_OK) {
@@ -80,8 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $resized_img_name = resizeImage($tmp_name, $img_name, $img_size, '../../image_asset/', 600);
     
                 // INSERT into database
-                $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset) VALUES 
-                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$resized_img_name') ";
+                $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset,year,price) VALUES 
+                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$resized_img_name','$year','$price') ";
                 mysqli_query($conn, $sql);
                 header("location: ../parcel?success=success");
             } else {
@@ -91,8 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 move_uploaded_file($tmp_name, $dir);
     
                 // INSERT into database
-                $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset) VALUES 
-                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$new_img_name') ";
+                $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset,year,price) VALUES 
+                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$new_img_name','$year','$price') ";
                 mysqli_query($conn, $sql);
                 header("location: ../parcel?success=success");
             }
@@ -102,8 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // ไม่มีการอัปโหลดรูปหรือมีปัญหาในการอัปโหลด
-        $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset) VALUES 
-        ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','no-image.png') ";
+        $sql = "INSERT INTO durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset,year,price) VALUES 
+        ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','no-image.png','$year','$price') ";
         mysqli_query($conn, $sql);
         header("location: ../parcel?success=success");
     }

@@ -53,6 +53,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="./type_repair" class="nav-link" name="type-repair">
+              <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+                จัดการประเภทการซ่อม
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>

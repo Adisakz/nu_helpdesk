@@ -70,7 +70,7 @@ require_once '../dbconfig.php';
                                 <form id="quickForm" action="./controller/save_add_asset" method="post" enctype="multipart/form-data">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="type-rapair">หมวดหมู่ครุภัณฑ์</label>
+                                            <label for="type-rapair">หมวดหมู่ครุภัณฑ์ *</label>
                                             <select name="type-asset" class="form-control" id="type-asset" required>
                                                 <option value="" disabled selected>--- เลือกประเภท ---</option>
                                                 <?php
@@ -92,18 +92,18 @@ require_once '../dbconfig.php';
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="asset-id">หมายเลขครุภัณฑ์</label>
+                                            <label for="asset-id">หมายเลขครุภัณฑ์ *</label>
                                             <input type="text" name="asset-id" class="form-control" id="asset-id" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="asset-name">ชื่อครุภัณฑ์</label>
+                                            <label for="asset-name">ชื่อครุภัณฑ์ *</label>
                                             <input type="text" name="asset-name" class="form-control" id="asset-name"
                                                 required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="department-id">หน่วยงานที่รับผิดชอบ</label>
+                                            <label for="department-id">หน่วยงานที่รับผิดชอบ *</label>
                                             <select name="department-id" class="form-control" id="department-id"
-                                                >
+                                            required>
                                                 <option value="" disabled selected>--- เลือกหน่วยงาน ---</option>
                                                 <?php
                         // ทำการดึงข้อมูลจากฐานข้อมูล
@@ -138,6 +138,16 @@ require_once '../dbconfig.php';
                                         <div class="form-group">
                                             <label for="room-number">ห้อง</label>
                                             <input type="text" name="room-number" class="form-control" id="room-number"
+                                                >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="year">ปีที่ซื้อ</label>
+                                            <input type="text" name="year" class="form-control" id="year"
+                                                >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">ราคา(บาท)</label>
+                                            <input type="text" name="price" class="form-control" id="price"
                                                 >
                                         </div>
                                         <div class="form-group">
