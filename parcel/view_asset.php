@@ -60,23 +60,23 @@ function getStatusColor($status) {
 
 
 function thaiMonth($month) {
-  $months = array(
-      '01' => 'ม.ค.',
-      '02' => 'ก.พ.',
-      '03' => 'มี.ค.',
-      '04' => 'เม.ย.',
-      '05' => 'พ.ค.',
-      '06' => 'มิ.ย.',
-      '07' => 'ก.ค.',
-      '08' => 'ส.ค.',
-      '09' => 'ก.ย.',
-      '10' => 'ต.ค.',
-      '11' => 'พ.ย.',
-      '12' => 'ธ.ค.'
-  );
-
-  return $months[$month];
-}
+    $months = array(
+        '01' => 'ม.ค.',
+        '02' => 'ก.พ.',
+        '03' => 'มี.ค.',
+        '04' => 'เม.ย.',
+        '05' => 'พ.ค.',
+        '06' => 'มิ.ย.',
+        '07' => 'ก.ค.',
+        '08' => 'ส.ค.',
+        '09' => 'ก.ย.',
+        '10' => 'ต.ค.',
+        '11' => 'พ.ย.',
+        '12' => 'ธ.ค.'
+    );
+  
+    return $months[$month];
+  }
 ?>
 
 <!DOCTYPE html>
@@ -85,24 +85,29 @@ function thaiMonth($month) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Help Desk | Parcel</title>
+    <title>Help Desk | Admin</title>
     <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
+    <link rel="stylesheet" href="">
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
     <div class="wrapper">
-        <!-- Navbar -->
+
+        <!-- /.navbar -->
         <?php include './navber/navber.php' ;?>
         <!-- /.navbar -->
+        <!-- /.menu -->
         <?php include './menu/menu.php' ;?>
+        <!-- /.menu -->
         <script>
         // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
@@ -132,6 +137,7 @@ function thaiMonth($month) {
 
             <!-- Main content -->
             <section class="content">
+                
                 <div class="container-fluid">
                     <div class="row">
                         <!-- left column -->
@@ -144,7 +150,8 @@ function thaiMonth($month) {
                                 <!-- /.card-header -->
 
                                 <!-- form start -->
-                                <form id="quickForm" action="./controller/edit_asset" method="POST" enctype="multipart/form-data">
+                                <form id="quickForm" action="./controller/edit_asset" method="POST"
+                                    enctype="multipart/form-data">
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- ส่วนซ้าย -->
@@ -154,7 +161,8 @@ function thaiMonth($month) {
                                                         <label for="type-durable"
                                                             class="col-sm-4 col-form-label">หมวดหมู่ครุภัณฑ์</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control-plaintext" id="type-durable" 
+                                                            <input type="text" class="form-control-plaintext"
+                                                                id="type-durable"
                                                                 value="<?php echo ($type_durable); ?>">
                                                         </div>
                                                     </div>
@@ -165,7 +173,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">แผนกผู้รับผิดชอบ</label>
                                                         <div class="col-sm-8">
 
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control-plaintext"
                                                                 id="department-durable"
                                                                 value="<?php echo ($department_durable); ?>">
                                                         </div>
@@ -177,10 +185,9 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">เลขที่ครุภัณฑ์</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" name="asset-id-new"
-                                                            id="asset-id-new"
-                                                                value="<?php echo ($asset_id); ?>">
-                                                                <input type="text" class="form-control" name="id" id="id"
-                                                                value="<?php echo ($_GET['id_durable']);  ?>" hidden >
+                                                                id="asset-id-new" value="<?php echo ($asset_id); ?>">
+                                                            <input type="text" class="form-control" name="id" id="id"
+                                                                value="<?php echo ($_GET['id_durable']);  ?>" hidden>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -190,8 +197,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">ชื่อครุภัณฑ์</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="name-asset"
-                                                            name="name-asset"
-                                                                value="<?php echo ($name_asset); ?>">
+                                                                name="name-asset" value="<?php echo ($name_asset); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -201,8 +207,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">ยี่ห้อ</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="brand"
-                                                            name="brand"
-                                                                value="<?php echo ($brand); ?>">
+                                                                name="brand" value="<?php echo ($brand); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -211,8 +216,7 @@ function thaiMonth($month) {
                                                         <label for="model" class="col-sm-4 col-form-label">รุ่น</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="model"
-                                                            name="model"
-                                                                value="<?php echo ($model); ?>">
+                                                                name="model" value="<?php echo ($model); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -222,8 +226,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">อาคาร</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="building"
-                                                            name="building"
-                                                                value="<?php echo ($building); ?>">
+                                                                name="building" value="<?php echo ($building); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -233,7 +236,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">ห้อง</label></label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="room-number"
-                                                            name="room-number"
+                                                                name="room-number"
                                                                 value="<?php echo ($room_number); ?>">
                                                         </div>
                                                     </div>
@@ -255,7 +258,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">ปีที่ซื้อ</label></label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="year"
-                                                            name="year"
+                                                                name="year"
                                                                 value="<?php echo  (isset($year) ? ($year + 543) : '') ?>">
                                                         </div>
                                                     </div>
@@ -266,8 +269,7 @@ function thaiMonth($month) {
                                                             class="col-sm-4 col-form-label">ราคา(บาท)</label></label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="price"
-                                                            name="price"
-                                                                value="<?php echo ($price); ?>">
+                                                                name="price" value="<?php echo ($price); ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -291,7 +293,7 @@ function thaiMonth($month) {
                                     </div>
                                     <div class="card-footer">
                                         <div aria-label="Contacts Page Navigation">
-                                        <button type="submit" name="submit" class="btn btn-success">บันทึก</button>
+                                            <button type="submit" name="submit" class="btn btn-success">บันทึก</button>
                                         </div>
                                     </div>
                                 </form>
@@ -301,7 +303,7 @@ function thaiMonth($month) {
                             <div class="card card-primary">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3> 
+                                        <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3>
                                         <div class="card-tools">
                                             <section class="content">
                                                 <div class="container-fluid">
@@ -309,17 +311,34 @@ function thaiMonth($month) {
                                                         <div class="col-md-10 offset-md-2">
                                                             <form action="simple-results.html">
                                                                 <div class="input-group">
-                                                                    <input type="search"
-                                                                        class="form-control form-control-m"
-                                                                        placeholder="Type your keywords here"
-                                                                        style="weight:300px;">
-                                                                    <div class="input-group-append">
-                                                                        <button type="submit"
-                                                                            class="btn btn-m btn-default">
-                                                                            <i class="fa fa-search"></i>
-                                                                        </button>
-                                                                    </div>
+                                                                    <input type="search" class="form-control form-control-m" id="searchInput" placeholder="พิมพ์เพื่อค้นหา" style="width :400px;">
+
                                                                 </div>
+                                                                <script>
+                                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                                        var keywordInput = document.querySelector("#searchInput");
+                                                                        var tableRows = document.querySelectorAll("#tableBody tr");
+
+                                                                        keywordInput.addEventListener("input", function () {
+                                                                            var keyword = this.value.trim().toLowerCase();
+
+                                                                            tableRows.forEach(function (row) {
+                                                                                var cells = row.getElementsByTagName("td");
+                                                                                var rowMatchesKeyword = false;
+
+                                                                                for (var i = 0; i < cells.length; i++) {
+                                                                                    var cellText = cells[i].textContent || cells[i].innerText;
+                                                                                    if (cellText.toLowerCase().indexOf(keyword) > -1) {
+                                                                                        rowMatchesKeyword = true;
+                                                                                        break;
+                                                                                    }
+                                                                                }
+
+                                                                                row.style.display = rowMatchesKeyword ? "" : "none";
+                                                                            });
+                                                                        });
+                                                                    });
+                                                                </script>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -328,11 +347,15 @@ function thaiMonth($month) {
                                         </div>
                                     </div>
                                     <div class="card-body p-0">
-                                        <table class="table table-striped projects">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped projects" style="width: 100%;"> 
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">
                                                         #
+                                                    </th>
+                                                    <th class="text-center">
+                                                        ประเภทการแจ้ง
                                                     </th>
                                                     <th class="text-center">
                                                         หมวดหมู่ครุภัณฑ์
@@ -344,73 +367,41 @@ function thaiMonth($month) {
                                                         ชื่อครุภัณฑ์
                                                     </th>
                                                     <th class="text-center" width="120px">
-                                                        ปีที่ซื้อ
-                                                    </th>
-                                                    <th class="text-center" width="120px">
-                                                        ราคา(บาท)
+                                                        สภาพการชำรุด
                                                     </th>
                                                     <th class="text-center" width="150px">
-                                                        แผนกที่รับผิดชอบ
-                                                    </th>
-                                                    <th class="text-center" width="150px">
-                                                        สถานะ
-                                                    </th>
-                                                    <th class="text-center" width="120px">
-                                                        ตรวจสอบล่าสุด
-                                                    </th>
-                                                    <th class="text-center" width="340px">
-
+                                                        วันที่ดำเนินการ
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <?php $sql = "SELECT * FROM durable_articles";
-                $result = mysqli_query($conn, $sql); 
-               
-                if ($result) {
-                    // วนลูปเพื่อแสดงข้อมูล
-                    while ($row = mysqli_fetch_assoc($result)) {
-                      echo '<tr>';
-                      echo '<td class="text-center">' . $row['id_durable'] . '</td>';
-                      echo '<td class="text-center">' . $row['type_durable'] . '</td>';
-                      echo '<td class="text-center">' . $row['asset_id'] . '</td>';
-                      echo '<td class="text-center">' . $row['name'] . '</td>';
-                      echo '<td class="text-center">' . ($row['year'] + 543) . '</td>';
-                      echo '<td class="text-center">' . $row['price'] . '</td>';
-                      echo '<td class="text-center">' . $row['department'] . '</td>';
-                      $stauts_res=getStatusColorFromDurableCheck($conn, $row['asset_id']);
-                      echo '<td class="text-center" style="color: ' . getStatusColor($stauts_res) . ';">' . $stauts_res . '</td>';
-                      
-                      // ดึงข้อมูลจากตาราง durable_check
-                      $asset_id = $row['asset_id'];
-                      $sql_check = "SELECT date_update FROM durable_check WHERE asset_id = '$asset_id' ORDER BY id DESC LIMIT 1";
-                      $result_check = mysqli_query($conn, $sql_check);
-                      
-                      if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
-                        echo '<td class="text-center">' . date('d', strtotime($row_check['date_update'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_update']))) . ' ' . (date('Y', strtotime($row_check['date_update'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_update'])) . '</td>';
-                      } else {
-                          echo '<td class="text-center">N/A</td>';
-                      }
-              
-                      echo '<td class="project-actions text-right">';
-                      echo '<a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-search-plus"></i> View</a>&nbsp;&nbsp;';
-                      echo '<a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a>&nbsp';
-                      echo '<a class="btn btn-warning btn-sm" href="#"><i class="fas fa-pencil-alt"></i> Repair</a>&nbsp';
-                      echo '<a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Del</a>';
-                      echo '</td>';
-                      echo '</tr>';
-                  }
-                } else {
-                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-                }
+                                            <tbody id="tableBody">
+                                                <?php $sql = "SELECT * FROM repair_report_pd05";
+                                                    $result = mysqli_query($conn, $sql); 
+                                                
+                                                    if ($result) {
+                                                        // วนลูปเพื่อแสดงข้อมูล
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo '<tr>';
+                                                        echo '<td class="text-center">' . $row['id_repair'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['type'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['type_repair'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['asset_id'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['asset_name'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['asset_detail'] . '</td>';
+                                                        echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
+                                                        echo '</tr>';
+                                                    }
+                                                    } else {
+                                                        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                                                    }
 
-                // ปิดการเชื่อมต่อ
-                mysqli_close($conn);
-            
-                ?>
+                                                    // ปิดการเชื่อมต่อ
+                                                    mysqli_close($conn);
+                                                
+                                                    ?>
                                             </tbody>
                                         </table>
-
+                                        </div>                 
                                     </div>
 
                                     <!-- /.card-body -->
@@ -425,7 +416,9 @@ function thaiMonth($month) {
                     </div>
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
+                                                
             </section>
+
             <!-- /.content -->
         </div>
 
@@ -454,3 +447,26 @@ function thaiMonth($month) {
 </body>
 
 </html>
+<style>
+    .form-group img {
+        width: 100%; /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
+        max-width: 400px; /* กำหนดความกว้างสูงสุดเพื่อไม่ให้รูปภาพมีขนาดใหญ่เกินไป */
+        height: auto; /* ให้ความสูงปรับตามอัตราส่วนของรูปภาพ */
+        display: block; /* แสดงรูปภาพเป็น block element เพื่อให้ขยับไปอยู่บนบรรทัดใหม่ */
+        margin: 0 auto; /* กำหนดให้รูปภาพอยู่ตรงกลาง */
+    }
+
+    /* Media Query เมื่อขนาดหน้าจอเล็กกว่าหรือเท่ากับ 767px (tablet และมือถือ) */
+    @media (max-width: 767px) {
+        .form-group img {
+            max-width: 100%; /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
+        }
+        #searchInput {
+        width: 100%; /* ทำให้เต็มความกว้างของพื้นที่ที่เป็นคอนเทนเนอร์ */
+        max-width: 300px; /* ตั้งขนาดสูงสุด */
+        margin-bottom: 10px; /* เพิ่มขอบล่าง */
+    }
+
+    }
+    
+</style>

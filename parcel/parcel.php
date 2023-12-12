@@ -120,12 +120,32 @@ function thaiMonth($month) {
                                             <form action="simple-results.html">
                                                 <div class="input-group">
                                                     <input type="search" class="form-control form-control-m"
-                                                        placeholder="Type your keywords here" style="weight:300px;">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-m btn-default">
-                                                            <i class="fa fa-search"></i>
-                                                        </button>
-                                                    </div>
+                                                    id="searchInput" placeholder="พิมพ์เพื่อค้นหา">
+                                                        <script>
+                                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                                        var keywordInput = document.querySelector("#searchInput");
+                                                                        var tableRows = document.querySelectorAll("#tableBody tr");
+
+                                                                        keywordInput.addEventListener("input", function () {
+                                                                            var keyword = this.value.trim().toLowerCase();
+
+                                                                            tableRows.forEach(function (row) {
+                                                                                var cells = row.getElementsByTagName("td");
+                                                                                var rowMatchesKeyword = false;
+
+                                                                                for (var i = 0; i < cells.length; i++) {
+                                                                                    var cellText = cells[i].textContent || cells[i].innerText;
+                                                                                    if (cellText.toLowerCase().indexOf(keyword) > -1) {
+                                                                                        rowMatchesKeyword = true;
+                                                                                        break;
+                                                                                    }
+                                                                                }
+
+                                                                                row.style.display = rowMatchesKeyword ? "" : "none";
+                                                                            });
+                                                                        });
+                                                                    });
+                                                                </script>
                                                 </div>
                                             </form>
                                         </div>
@@ -136,7 +156,7 @@ function thaiMonth($month) {
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-striped projects">
-                            <thead>
+                            <thead >
                                 <tr>
                                     <th class="text-center">
                                         #
@@ -170,7 +190,7 @@ function thaiMonth($month) {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tableBody">
                                 <?php $sql = "SELECT * FROM durable_articles";
                 $result = mysqli_query($conn, $sql); 
                
