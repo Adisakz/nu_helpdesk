@@ -64,6 +64,7 @@ function thaiMonth($month) {
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -107,55 +108,14 @@ function thaiMonth($month) {
             <section class="content">
 
                 <!-- Default box -->
-                <div class="card">
-                    <div class="card-header">
+                <div class="card" >
+                    <div class="card-header" >
                         <h3 class="card-title">รายการข้อมูลครุภัณฑ์</h3>
                         <a class="btn btn-success btn-sm" href="form_add_asset"
-                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>
-                        <div class="card-tools">
-                            <section class="content">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-10 offset-md-2">
-                                            <form action="simple-results.html">
-                                                <div class="input-group">
-                                                    <input type="search" class="form-control form-control-m"
-                                                    id="searchInput" placeholder="พิมพ์เพื่อค้นหา">
-                                                        <script>
-                                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                                        var keywordInput = document.querySelector("#searchInput");
-                                                                        var tableRows = document.querySelectorAll("#tableBody tr");
-
-                                                                        keywordInput.addEventListener("input", function () {
-                                                                            var keyword = this.value.trim().toLowerCase();
-
-                                                                            tableRows.forEach(function (row) {
-                                                                                var cells = row.getElementsByTagName("td");
-                                                                                var rowMatchesKeyword = false;
-
-                                                                                for (var i = 0; i < cells.length; i++) {
-                                                                                    var cellText = cells[i].textContent || cells[i].innerText;
-                                                                                    if (cellText.toLowerCase().indexOf(keyword) > -1) {
-                                                                                        rowMatchesKeyword = true;
-                                                                                        break;
-                                                                                    }
-                                                                                }
-
-                                                                                row.style.display = rowMatchesKeyword ? "" : "none";
-                                                                            });
-                                                                        });
-                                                                    });
-                                                                </script>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
+                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>                      
                     </div>
-                    <div class="card-body p-0">
-                        <table class="table table-striped projects">
+                    <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
+                        <table class="table table-striped projects" cellspacing="0" width="100%" id="dtBasicExample">
                             <thead >
                                 <tr>
                                     <th class="text-center">
@@ -170,27 +130,36 @@ function thaiMonth($month) {
                                     <th class="text-center">
                                         ชื่อครุภัณฑ์
                                     </th>
-                                    <th class="text-center" width="120px">
+                                    <th class="text-center" >
                                         ปีที่ซื้อ
                                     </th>
-                                    <th class="text-center" width="120px">
+                                    <th class="text-center" >
                                         ราคา(บาท)
                                     </th>
-                                    <th class="text-center" width="150px">
+                                    <th class="text-center" >
                                         แผนกที่รับผิดชอบ
                                     </th>
-                                    <th class="text-center" width="150px">
-                                        สถานะ
+                                    <th class="text-center">
+                                        Service ล่าสุด
                                     </th>
-                                    <th class="text-center" width="120px">
-                                        ตรวจสอบล่าสุด
+                                    <th class="text-center">
+                                        ซ่อมล่าสุด
                                     </th>
-                                    <th class="text-center" width="340px">
-
+                                    <th class="text-center">
+                                        ดูข้อมูล
+                                    </th>
+                                    <th class="text-center">
+2
+                                    </th>
+                                    <th class="text-center">
+                                        แจ้งซ่อม
+                                    </th>
+                                    <th class="text-center">
+                                        ลบ
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="tableBody">
+                            <tbody>
                                 <?php $sql = "SELECT * FROM durable_articles";
                 $result = mysqli_query($conn, $sql); 
                
@@ -213,26 +182,32 @@ function thaiMonth($month) {
                         // หากไม่พบข้อมูล, กำหนดค่าเป็น N/A หรืออื่น ๆ ตามที่ต้องการ
                         echo '<td class="text-center">N/A</td>';
                     }
-                      $stauts_res=getStatusColorFromDurableCheck($conn, $row['asset_id']);
-                      echo '<td class="text-center" style="color: ' . getStatusColor($stauts_res) . ';">' . $stauts_res . '</td>';
-                      
                       // ดึงข้อมูลจากตาราง durable_check
                       $asset_id = $row['asset_id'];
-                      $sql_check = "SELECT date_update FROM durable_check WHERE asset_id = '$asset_id' ORDER BY id DESC LIMIT 1";
+                      $sql_service = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$asset_id' AND type = 'service' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
+                      $result_service = mysqli_query($conn, $sql_service);
+                      
+                      if ($result_service && $row_service = mysqli_fetch_assoc($result_service)) {
+                        echo '<td class="text-center">' . date('d', strtotime($row_service['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_service['date_report_in']))) . ' ' . (date('Y', strtotime($row_service['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_service['date_report_in'])) . '</td>';
+                      } else {
+                          echo '<td class="text-center">N/A</td>';
+                      }
+
+                      $sql_check = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$asset_id' AND type = 'ซ่อม' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
                       $result_check = mysqli_query($conn, $sql_check);
                       
                       if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
-                        echo '<td class="text-center">' . date('d', strtotime($row_check['date_update'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_update']))) . ' ' . (date('Y', strtotime($row_check['date_update'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_update'])) . '</td>';
+                        echo '<td class="text-center">' . date('d', strtotime($row_check['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_report_in']))) . ' ' . (date('Y', strtotime($row_check['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_report_in'])) . '</td>';
                       } else {
                           echo '<td class="text-center">N/A</td>';
                       }
               
-                      echo '<td class="project-actions text-right">';
-                      echo '<a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fa fa-search-plus"></i> View</a>&nbsp;&nbsp;';
-                      echo '<a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a>&nbsp';
-                      echo '<a class="btn btn-warning btn-sm" href="#"><i class="fas fa-pencil-alt"></i> Repair</a>&nbsp';
-                      echo '<a class="btn btn-danger btn-sm del-asset" href="#" data-id="'. $row['asset_id'] ."-,". $row['name'] .'"><i class="fas fa-trash"></i> Delete</a>';
-                      echo '</td>';
+                      /*echo '<td class="project-actions text-right">';*/
+                      echo '<td class="project-actions text-right"><a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fa fa-search-plus"></i> View</a></td>';
+                      echo '<td class="project-actions text-right"><a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a></td>';
+                      echo '<td class="project-actions text-right"><a class="btn btn-warning btn-sm" href="./form_rapair?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fas fa-pencil-alt"></i> Repair</a></td>';
+                      echo '<td class="project-actions text-right"><a class="btn btn-danger btn-sm del-asset" href="#" data-id="'. $row['asset_id'] ."-,". $row['name'] .'"><i class="fas fa-trash"></i> Delete</a></td>';
+                     /* echo '</td>';*/
                       echo '</tr>';
                   }
                 } else {
@@ -275,6 +250,7 @@ function thaiMonth($month) {
     <script src="..//plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="..//dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
 </body>
 
 </html>
@@ -351,5 +327,34 @@ deleteAsset.forEach(button => {
         });
     });
 });
+
+
+
+$(document).ready(function () {
+    $('#dtBasicExample').DataTable({
+        autoWidth: false,
+        scrollX: true
+    });
+    $('.dataTables_length').addClass('bs-select');
+
+    // ปรับปรุงตำแหน่งของปุ่ม
+    $('#dtBasicExample tbody').on('mouseenter', 'td', function () {
+        $(this).find('.project-actions').css('right', '0');
+    });
+
+    $('#dtBasicExample tbody').on('mouseleave', 'td', function () {
+        $(this).find('.project-actions').css('right', '-100px'); // ปรับตำแหน่งตามที่คุณต้องการ
+    });
+});
+
 </script>
+<style>
+    .table .project-actions {
+    white-space: nowrap;
+}
+
+.table .project-actions a.btn {
+    margin-right: 5px;
+}
+</style>
 <?php require '../popup/popup.php'; ?>

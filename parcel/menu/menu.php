@@ -48,7 +48,7 @@
             <a href="./parcel" class="nav-link" name="parcel">
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
-                พัสดุ
+              ครุภัณฑ์
               </p>
             </a>
           </li>
@@ -56,7 +56,7 @@
             <a href="./type_repair" class="nav-link" name="type-repair">
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
-                จัดการประเภทการซ่อม
+                จัดการหมวดหมู่ครุภัณฑ์
               </p>
             </a>
           </li>

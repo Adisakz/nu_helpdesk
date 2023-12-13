@@ -68,16 +68,6 @@ if(isset($_REQUEST['submit'])) {
   $price = $_POST['price'];
   $image = $_FILES['image-asset']['name'];
   $price = ($price !== '') ? $price : 0;
-  echo $assetId.'-';
-  echo $assetIdNew ;
-  echo $nameAsset ;
-  echo $brand ;
-  echo $model ;
-  echo $building ;
-  echo $roomNumber ;
-  echo $year;
-  echo $price ;
-  echo $image ;
 
   $image = isset($_FILES["image-asset"]) ? $_FILES["image-asset"] : null;
     if ($image && $image["error"] == UPLOAD_ERR_OK) {
@@ -94,23 +84,30 @@ if(isset($_REQUEST['submit'])) {
             if ($img_size > 125000) {
                 // ทำการ resize และบันทึกภาพ
                 $resized_img_name = resizeImage($tmp_name, $img_name, $img_size, '../../image_asset/', 600);
-    
-                // INSERT into database
-                $sql = "UPDATE durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset,year,price) VALUES 
-                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$resized_img_name','$year','$price') ";
-                mysqli_query($conn, $sql);
-                header("location: ../parcel?success=success");
+                if ($year !== NULL) {
+                    $sql = "UPDATE durable_articles SET name='$nameAsset', asset_id='$assetIdNew', brand='$brand', model='$model', building='$building', room_number='$roomNumber',image_asset='$resized_img_name', year=$year, price='$price' WHERE id_durable = $assetId";
+                } else {
+                    $sql = "UPDATE durable_articles SET name='$nameAsset', asset_id='$assetIdNew', brand='$brand', model='$model', building='$building', room_number='$roomNumber',image_asset='$resized_img_name', price='$price' WHERE id_durable = $assetId";
+                }
+                  $insert_result = mysqli_query($conn, $sql);
+                  if ($insert_result) {   echo '<script>window.location.href = "../view_asset?id=' . urlencode($assetIdNew) . '&id_durable=' . $assetId . '";</script>';
+                    exit();
+                  }
             } else {
                 // ทำการบันทึกไฟล์ที่ไม่ต้อง resize
                 $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
                 $dir = '../../image_asset/' . $new_img_name;
                 move_uploaded_file($tmp_name, $dir);
     
-                // INSERT into database
-                $sql = "UPDATE durable_articles (name,type_durable,department,asset_id,brand,model,building,room_number,image_asset,year,price) VALUES 
-                ('$assetName','$typeAsset','$departmentId','$assetId','$brand','$model','$building','$roomNumber','$new_img_name',$year,'$price') ";
-                mysqli_query($conn, $sql);
-                header("location: ../parcel?success=success");
+                if ($year !== NULL) {
+                    $sql = "UPDATE durable_articles SET name='$nameAsset', asset_id='$assetIdNew', brand='$brand', model='$model', building='$building', room_number='$roomNumber',image_asset='$new_img_name', year=$year, price='$price' WHERE id_durable = $assetId";
+                } else {
+                    $sql = "UPDATE durable_articles SET name='$nameAsset', asset_id='$assetIdNew', brand='$brand', model='$model', building='$building', room_number='$roomNumber',image_asset='$new_img_name', price='$price' WHERE id_durable = $assetId";
+                }
+                  $insert_result = mysqli_query($conn, $sql);
+                  if ($insert_result) {   echo '<script>window.location.href = "../view_asset?id=' . urlencode($assetIdNew) . '&id_durable=' . $assetId . '";</script>';
+                    exit();
+                  }
             }
         } else {
             echo "สกุลไม่ถูกต้อง";

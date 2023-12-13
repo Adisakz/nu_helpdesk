@@ -148,7 +148,7 @@ require_once '../dbconfig.php';
                                         <div class="form-group">
                                             <label for="price">ราคา(บาท)</label>
                                             <input type="text" name="price" class="form-control" id="price"
-                                                >
+                                               required >
                                         </div>
                                         <div class="form-group">
                                             <label for="image">อัพโหลดรูปภาพครุภัณฑ์ : </label>

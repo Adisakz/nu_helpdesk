@@ -2,21 +2,20 @@
 session_start();
 require_once '../dbconfig.php';
 
-$id_repair = $_GET['id'];
-$sql = "SELECT * FROM repair_report_pd05 WHERE id_repair = $id_repair";
+$id_asset = urldecode($_GET['id']);
+$sql = "SELECT * FROM durable_articles WHERE asset_id = '$id_asset'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
-$typeRepair = $row['type_repair'];
-$departmentName = $row['department_id'];
-$assetName = $row['asset_name'];
+$typeRepair = $row['type_durable'];
+$departmentName = $row['department'];
+$assetName = $row['name'];
 $assetId = $row['asset_id'];
-$assetDetail = $row['asset_detail'];
 $building = $row['building'];
 $room_number = $row['room_number'];
+$assetDetail = $row['asset_detail'];
 $neet = $row['neet'];
 $reportSignature = $row['report_signature'];
 $reportName = $row['report_name'];
-$status = $row['status'];
 ?>
 
 <!DOCTYPE html>
@@ -105,8 +104,8 @@ $status = $row['status'];
                     <input type="text" name="asset-detail" class="form-control" id="asset-detail" value="<?php echo $assetDetail?>" readonly>
                   </div>
                   <div class="form-group">
-                    <label for="building">อาคาร</label>
-                    <input type="text" name="building" class="form-control" id="building" value="<?php echo $building?>" readonly>
+                    <label for="location">ที่ตั้ง</label>
+                    <input type="text" name="location" class="form-control" id="location" value="<?php echo $location?>" readonly>
                   </div>
                   <div class="form-group">
                       <img src="../image_signature/<?php echo $reportSignature; ?>" alt="signature_report" width="180px">

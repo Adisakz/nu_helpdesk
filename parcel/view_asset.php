@@ -30,19 +30,46 @@ if ($row_department = mysqli_fetch_assoc($result_department)) {
 }                                                               
 
 
-$sql_status = "SELECT status FROM durable_check WHERE asset_id = '$id_asset' ORDER BY date_update DESC LIMIT 1";
-$result_status = mysqli_query($conn, $sql_status);
 
-// ตรวจสอบว่ามีข้อมูลหรือไม่
-if ($result_status) {
-    $row_status = mysqli_fetch_assoc($result_status);
-
-    // ตรวจสอบว่ามี status หรือไม่
-    $status = isset($row_status['status']) ? $row_status['status'] : 'N/A';
+$sql_service = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$id_asset' AND type = 'service' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
+$result_service = mysqli_query($conn, $sql_service);
+                      
+if ($result_service && $row_service = mysqli_fetch_assoc($result_service)) {
+    $date_service = date('d', strtotime($row_service['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_service['date_report_in']))) . ' ' . (date('Y', strtotime($row_service['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_service['date_report_in']));
 } else {
-    // กรณีไม่มีผลลัพธ์
-    $status = 'N/A';
+    $date_service = 'N/A';
 }
+
+$sql_check = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$id_asset' AND type = 'ซ่อม' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
+$result_check = mysqli_query($conn, $sql_check);
+if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
+    $date_repair = date('d', strtotime($row_check['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_report_in']))) . ' ' . (date('Y', strtotime($row_check['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_report_in']));
+} else {
+    $date_repair = 'N/A';
+}
+
+
+function getStatusText($status) {
+    if ($status == 0) {
+        $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
+        return '<span ' . $style .  ' >รอซ่อม</span>';
+    } else if ($status == 1){
+        $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
+        return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
+    }
+    else if ($status == 2){
+      $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
+      return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
+    }
+    else if ($status == 3){
+      $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;"';
+      return '<span ' . $style . '  class="text-white">ซ่อมเสร็จ</span>';
+    }
+    else if ($status == 4){
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
+      return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
+    }
+  }
 
 
 function getStatusColor($status) {
@@ -85,7 +112,7 @@ function thaiMonth($month) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Help Desk | Admin</title>
+    <title>Help Desk | Parcel</title>
     <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
@@ -96,6 +123,8 @@ function thaiMonth($month) {
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -137,7 +166,7 @@ function thaiMonth($month) {
 
             <!-- Main content -->
             <section class="content">
-                
+
                 <div class="container-fluid">
                     <div class="row">
                         <!-- left column -->
@@ -243,17 +272,6 @@ function thaiMonth($month) {
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="mb-3 row">
-                                                        <label for="status"
-                                                            class="col-sm-4 col-form-label">สถานะ</label></label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control" id="status"
-                                                                style="color: <?php echo getStatusColor($status); ?>;"
-                                                                value="<?php echo ($status); ?>">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="mb-3 row">
                                                         <label for="year"
                                                             class="col-sm-4 col-form-label">ปีที่ซื้อ</label></label>
                                                         <div class="col-sm-8">
@@ -270,6 +288,24 @@ function thaiMonth($month) {
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control" id="price"
                                                                 name="price" value="<?php echo ($price); ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="mb-3 row">
+                                                        <label for="service-date" class="col-sm-4 col-form-label">Service
+                                                            ล่าสุด</label></label>
+                                                        <div class="col-sm-8">
+                                                            <p><?php echo ($date_service); ?></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="mb-3 row">
+                                                        <label for="repair-date"
+                                                            class="col-sm-4 col-form-label">ซ่อมล่าสุด</label></label>
+                                                        <div class="col-sm-8">
+                                                        <p><?php echo ($date_repair); ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -300,82 +336,40 @@ function thaiMonth($month) {
 
                             </div>
                             <!-- เพิ่มการ์ดหัวข้อ -->
+
                             <div class="card card-primary">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3>
-                                        <div class="card-tools">
-                                            <section class="content">
-                                                <div class="container-fluid">
-                                                    <div class="row">
-                                                        <div class="col-md-10 offset-md-2">
-                                                            <form action="simple-results.html">
-                                                                <div class="input-group">
-                                                                    <input type="search" class="form-control form-control-m" id="searchInput" placeholder="พิมพ์เพื่อค้นหา" style="width :400px;">
+                                <div class="card-header">
+                                    <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3>
+                                </div>
+                                <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
+                                    <table class="table table-striped projects" cellspacing="0" width="100%"
+                                        id="dtBasicExample">
 
-                                                                </div>
-                                                                <script>
-                                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                                        var keywordInput = document.querySelector("#searchInput");
-                                                                        var tableRows = document.querySelectorAll("#tableBody tr");
-
-                                                                        keywordInput.addEventListener("input", function () {
-                                                                            var keyword = this.value.trim().toLowerCase();
-
-                                                                            tableRows.forEach(function (row) {
-                                                                                var cells = row.getElementsByTagName("td");
-                                                                                var rowMatchesKeyword = false;
-
-                                                                                for (var i = 0; i < cells.length; i++) {
-                                                                                    var cellText = cells[i].textContent || cells[i].innerText;
-                                                                                    if (cellText.toLowerCase().indexOf(keyword) > -1) {
-                                                                                        rowMatchesKeyword = true;
-                                                                                        break;
-                                                                                    }
-                                                                                }
-
-                                                                                row.style.display = rowMatchesKeyword ? "" : "none";
-                                                                            });
-                                                                        });
-                                                                    });
-                                                                </script>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped projects" style="width: 100%;"> 
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">
-                                                        #
-                                                    </th>
-                                                    <th class="text-center">
-                                                        ประเภทการแจ้ง
-                                                    </th>
-                                                    <th class="text-center">
-                                                        หมวดหมู่ครุภัณฑ์
-                                                    </th>
-                                                    <th class="text-center">
-                                                        เลขที่ครุภัณฑ์
-                                                    </th>
-                                                    <th class="text-center">
-                                                        ชื่อครุภัณฑ์
-                                                    </th>
-                                                    <th class="text-center" width="120px">
-                                                        สภาพการชำรุด
-                                                    </th>
-                                                    <th class="text-center" width="150px">
-                                                        วันที่ดำเนินการ
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tableBody">
-                                                <?php $sql = "SELECT * FROM repair_report_pd05";
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" width="120px">
+                                                    #
+                                                </th>
+                                                <th class="text-center" width="120px">
+                                                    ประเภทการแจ้ง
+                                                </th>
+                                                <th class="text-center" width="300px">
+                                                    สภาพการชำรุด
+                                                </th>
+                                                <th class="text-center" width="150px">
+                                                    ผู้แจ้ง
+                                                </th>
+                                                <th class="text-center" width="150px">
+                                                    วันที่ดำเนินการ
+                                                </th>
+                                                <th class="text-center" width="150px">
+                                                    สถานะ
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            <?php 
+                                                    $sql = "SELECT * FROM repair_report_pd05 WHERE asset_id = '$id_asset'";
                                                     $result = mysqli_query($conn, $sql); 
                                                 
                                                     if ($result) {
@@ -384,11 +378,10 @@ function thaiMonth($month) {
                                                         echo '<tr>';
                                                         echo '<td class="text-center">' . $row['id_repair'] . '</td>';
                                                         echo '<td class="text-center">' . $row['type'] . '</td>';
-                                                        echo '<td class="text-center">' . $row['type_repair'] . '</td>';
-                                                        echo '<td class="text-center">' . $row['asset_id'] . '</td>';
-                                                        echo '<td class="text-center">' . $row['asset_name'] . '</td>';
                                                         echo '<td class="text-center">' . $row['asset_detail'] . '</td>';
+                                                        echo '<td class="text-center">' . $row['report_name'] . '</td>';
                                                         echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
+                                                        echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
                                                         echo '</tr>';
                                                     }
                                                     } else {
@@ -399,24 +392,24 @@ function thaiMonth($month) {
                                                     mysqli_close($conn);
                                                 
                                                     ?>
-                                            </tbody>
-                                        </table>
-                                        </div>                 
-                                    </div>
+                                        </tbody>
+                                    </table>
 
-                                    <!-- /.card-body -->
                                 </div>
-                                <!-- /.card -->
 
+                                <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
 
                         </div>
+                        <!-- /.card -->
+
+
                         <!--/.col (right) -->
                     </div>
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
-                                                
+
             </section>
 
             <!-- /.content -->
@@ -443,30 +436,39 @@ function thaiMonth($month) {
     <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.min.js"></script>
     <!-- Page specific script -->
-
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </body>
 
 </html>
 <style>
+.form-group img {
+    width: 100%;
+    /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
+    max-width: 400px;
+    /* กำหนดความกว้างสูงสุดเพื่อไม่ให้รูปภาพมีขนาดใหญ่เกินไป */
+    height: auto;
+    /* ให้ความสูงปรับตามอัตราส่วนของรูปภาพ */
+    display: block;
+    /* แสดงรูปภาพเป็น block element เพื่อให้ขยับไปอยู่บนบรรทัดใหม่ */
+    margin: 0 auto;
+    /* กำหนดให้รูปภาพอยู่ตรงกลาง */
+}
+
+/* Media Query เมื่อขนาดหน้าจอเล็กกว่าหรือเท่ากับ 767px (tablet และมือถือ) */
+@media (max-width: 767px) {
     .form-group img {
-        width: 100%; /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
-        max-width: 400px; /* กำหนดความกว้างสูงสุดเพื่อไม่ให้รูปภาพมีขนาดใหญ่เกินไป */
-        height: auto; /* ให้ความสูงปรับตามอัตราส่วนของรูปภาพ */
-        display: block; /* แสดงรูปภาพเป็น block element เพื่อให้ขยับไปอยู่บนบรรทัดใหม่ */
-        margin: 0 auto; /* กำหนดให้รูปภาพอยู่ตรงกลาง */
+        max-width: 100%;
+        /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
     }
-
-    /* Media Query เมื่อขนาดหน้าจอเล็กกว่าหรือเท่ากับ 767px (tablet และมือถือ) */
-    @media (max-width: 767px) {
-        .form-group img {
-            max-width: 100%; /* กำหนดให้รูปภาพเต็มความกว้างของพื้นที่ที่รูปภาพอยู่ */
-        }
-        #searchInput {
-        width: 100%; /* ทำให้เต็มความกว้างของพื้นที่ที่เป็นคอนเทนเนอร์ */
-        max-width: 300px; /* ตั้งขนาดสูงสุด */
-        margin-bottom: 10px; /* เพิ่มขอบล่าง */
-    }
-
-    }
-    
+}
 </style>
+<script>
+$(document).ready(function() {
+    $('#dtBasicExample').DataTable({
+        "order": [
+            [4, "desc"]
+        ] // Assuming the date column is at index 4, change it if needed
+    });
+    $('.dataTables_length').addClass('bs-select');
+});
+</script>
