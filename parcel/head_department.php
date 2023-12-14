@@ -3,14 +3,46 @@ session_start();
 require_once '../dbconfig.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับข้อมูลจากฟอร์ม
-    $typeRepair = $_POST['type-repair'];
-    $departmentId = $_POST['department-id'];
+    $idRepair = $_POST['id-repair'];
+    
+    $type = $_POST['type'];
+    $repair_type = $_POST['type-repair'];
+    $departmentid = $_POST['department-id'];
     $assetName = $_POST['asset-name'];
     $assetId = $_POST['asset-id'];
     $assetDetail = $_POST['asset-detail'];
-    $location = $_POST['location'];
-    $neet = $_POST['neet'];
+    $building= $_POST['building'];
+    $room_number= $_POST['room-number'];
+    $reportName = $_POST['report_name'];
+    $reasons = $_POST['reasons'];
+    $recomment = $_POST['recomment'];
+    $repair_type_tech = $_POST['repair-type'];
+    $amount = $_POST['amount'];
+    $amountLast = $_POST['amount_last'];
+    $inspectorName1 = $_POST['inspector_name1'];
+    $inspectorName2 = $_POST['inspector_name2'];
+    $inspectorName3 = $_POST['inspector_name3'];
 
+    /*echo "idRepair: $idRepair<br>";
+    
+    echo "type: $type<br>";
+    echo "repair_type: $repair_type<br>";
+    echo "departmentid: $departmentid<br>";
+    echo "assetName: $assetName<br>";
+    echo "assetId: $assetId<br>";
+    echo "assetDetail: $assetDetail<br>";
+    echo "location: $building<br>";
+    echo "location: $room_number<br>";
+    echo "reportName: $reportName<br>";
+    echo "reasons: $reasons<br>";
+    echo "recomment: $recomment<br>";
+    echo "repair_type_tech: $repair_type_tech<br>";
+    echo "amount: $amount<br>";
+    echo "amountLast: $amountLast<br>";   
+    echo "inspectorName1: $inspectorName1<br>";
+    echo "inspectorName2: $inspectorName2<br>";
+    echo "inspectorName3: $inspectorName3<br>";*/
+    
 }
 ?>
 
@@ -69,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="card-body pb-0">
           <div class="row">
             <?php
-               $sqlCount = "SELECT COUNT(*) AS total FROM account WHERE urole = 'ช่าง'";
+               $sqlCount = "SELECT COUNT(*) AS total FROM account WHERE urole = 'หัวหน้าหน่วย'AND department = '$departmentid'";
                $resultCount = mysqli_query($conn, $sqlCount);
                $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
                
@@ -83,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                $offset = ($page - 1) * $recordsPerPage;
            
                // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-               $sql = "SELECT * FROM account WHERE urole = 'ช่าง' LIMIT $offset, $recordsPerPage";
+               $sql = "SELECT * FROM account WHERE urole = 'หัวหน้าหน่วย' AND department = '$departmentid' LIMIT $offset, $recordsPerPage";
                $result = mysqli_query($conn, $sql);
 
                 // ตรวจสอบว่ามีข้อมูลหรือไม่
@@ -107,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo '    </div>';
                         echo '    <div class="card-footer">';
                         echo '      <div class="text-right">';
-                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $row['name_title'] . '\', \'' . $row['first_name'] . '\', \'' . $row['last_name'] . '\')">';
+                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $idRepair. '\', \'' . $type. '\', \'' . $repair_type. '\', \'' . $departmentid. '\', \'' . $assetName . '\',\'' . $assetId. '\', \'' . $assetDetail. '\', \'' . $building. '\', \'' . $room_number. '\', \'' . $reportName. '\', \'' . $reasons. '\', \'' . $recomment . '\', \'' . $repair_type_tech. '\', \'' . $amount. '\', \'' . $amountLast. '\', \'' . $inspectorName1. '\', \'' .$inspectorName2. '\', \'' . $inspectorName3. '\')">';
                         echo '  <i class="fas fa-user"></i> เลือก';
                         echo '</a>';
                         echo '      </div>';
@@ -170,79 +202,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 </html>
 <script>
-function selectUser(userId, titleName, firstName, lastName) {
+function selectUser(userId, idRepair, type, repairType,departmentID, assetName, assetId, assetDetail, building, roomNumber, reportName, reasons, recomment, repairTypeTech, amount, amountLast, inspectorName1, inspectorName2, inspectorName3) {
     var form = document.createElement('form');
-    form.action = 'save_repair';
+    form.action = 'confirm_repair_save.php';  // ปรับที่นี่เป็นไฟล์ PHP ที่จะรับค่า
     form.method = 'post';
 
-    var typeRepairInput = document.createElement('input');
-    typeRepairInput.type = 'hidden';
-    typeRepairInput.name = 'type-repair';
-    typeRepairInput.value = '<?php echo $typeRepair; ?>'; // Add the actual value
-    form.appendChild(typeRepairInput);
+    // สร้าง input สำหรับแต่ละพารามิเตอร์
+    function createInput(name, value) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    }
 
-    var departmentIdInput = document.createElement('input');
-    departmentIdInput.type = 'hidden';
-    departmentIdInput.name = 'department-id';
-    departmentIdInput.value = '<?php echo $departmentId; ?>'; // Add the actual value
-    form.appendChild(departmentIdInput);
+    createInput('id_person_send', userId);
+    createInput('id-repair', idRepair);
+    createInput('type', type);
+    createInput('repair-type', repairType);
+    createInput('department-id', departmentID);
+    createInput('asset-name', assetName);
+    createInput('asset-id', assetId);
+    createInput('asset-detail', assetDetail);
+    createInput('building', building);
+    createInput('room-number', roomNumber);
+    createInput('report-name', reportName);
+    createInput('reasons', reasons);
+    createInput('recomment', recomment);
+    createInput('repair-type-tech', repairTypeTech);
+    createInput('amount', amount);
+    createInput('amount-last', amountLast);
+    createInput('inspector-name-1', inspectorName1);
+    createInput('inspector-name-2', inspectorName2);
+    createInput('inspector-name-3', inspectorName3);
 
-    var assetNameInput = document.createElement('input');
-    assetNameInput.type = 'hidden';
-    assetNameInput.name = 'asset-name';
-    assetNameInput.value = '<?php echo $assetName; ?>'; // Add the actual value
-    form.appendChild(assetNameInput);
-
-    var assetIdInput = document.createElement('input');
-    assetIdInput.type = 'hidden';
-    assetIdInput.name = 'asset-id';
-    assetIdInput.value = '<?php echo $assetId; ?>'; // Add the actual value
-    form.appendChild(assetIdInput);
-
-    var assetDetailInput = document.createElement('input');
-    assetDetailInput.type = 'hidden';
-    assetDetailInput.name = 'asset-detail';
-    assetDetailInput.value = '<?php echo $assetDetail; ?>'; // Add the actual value
-    form.appendChild(assetDetailInput);
-
-    var locationInput = document.createElement('input');
-    locationInput.type = 'hidden';
-    locationInput.name = 'location';
-    locationInput.value = '<?php echo $location; ?>';
-    form.appendChild(locationInput);
-
-    var neetInput = document.createElement('input');
-    neetInput.type = 'hidden';
-    neetInput.name = 'neet';
-    neetInput.value = '<?php echo $neet; ?>'; // Add the actual value
-    form.appendChild(neetInput);
-
-    var userIDInput = document.createElement('input');
-    userIDInput.type = 'hidden';
-    userIDInput.name = 'id-person';
-    userIDInput.value = userId; // ค่า userID ที่ถูกส่งมาจากพารามิเตอร์ของฟังก์ชัน
-    form.appendChild(userIDInput);
-
-    var titleNameInput = document.createElement('input');
-    titleNameInput.type = 'hidden';
-    titleNameInput.name = 'title-name';
-    titleNameInput.value = titleName;
-    form.appendChild(titleNameInput);
-
-    var firstNameInput = document.createElement('input');
-    firstNameInput.type = 'hidden';
-    firstNameInput.name = 'first-name';
-    firstNameInput.value = firstName;
-    form.appendChild(firstNameInput);
-
-    var lastNameInput = document.createElement('input');
-    lastNameInput.type = 'hidden';
-    lastNameInput.name = 'last-name';
-    lastNameInput.value = lastName;
-    form.appendChild(lastNameInput);
-
+    // เพิ่ม form ลงใน body และทำการ submit
     document.body.appendChild(form);
-    
     form.submit();
 }
 </script>

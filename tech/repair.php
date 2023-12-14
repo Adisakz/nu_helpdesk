@@ -43,7 +43,7 @@ function getStatusText($status) {
   else if ($status == 4){
     $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
     return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
-  }
+  }  
 }
 
 ?>

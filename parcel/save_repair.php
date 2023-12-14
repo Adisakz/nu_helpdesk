@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
   $singature_report = $_POST['image-signature-report'];
   $name_report = $_POST['name-report'];
   $data1 = $_POST['department-option'];
-  echo $id_durable;
+ /* echo $id_durable;
   echo 'Type: ' . $type . '<br>';
 echo 'Type Repair: ' . $type_Repair . '<br>';
 echo 'Asset ID: ' . $assetId . '<br>';
@@ -82,7 +82,7 @@ echo 'Building: ' . $building . '<br>';
 echo 'Room Number: ' . $room_number . '<br>';
 echo 'Signature Report: ' . $singature_report . '<br>';
 echo 'Name Report: ' . $name_report . '<br>';
-echo 'Department Option: ' . $data1 . '<br>';
+echo 'Department Option: ' . $data1 . '<br>';*/
 /*<input type="hidden" name="data1" value="<?php echo htmlspecialchars($type); ?>">
 <input type="hidden" name="data2" value="<?php echo htmlspecialchars($type_Repair); ?>">
 <input type="hidden" name="data3" value="<?php echo htmlspecialchars($assetId); ?>">
@@ -135,11 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
             move_uploaded_file($resized_img_name, $dir);
 
             // INSERT into database
-            $sql = "INSERT INTO repair_report_pd05 (type_repair, department_id, asset_name, asset_id, asset_detail, neet, location, tech_id, id_person_report, report_signature, report_name, date_report_in,
-             status) 
-                    VALUES ('$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$neet','$location','$name_tech','$id_person','$resized_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
+            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status) 
+                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$resized_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location: ./save_repair?success=success&id=$assetId&id_durable=$id_durable");
         } else {
             // ทำการบันทึกไฟล์ที่ไม่ต้อง resize
             $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
@@ -147,10 +146,10 @@ document.addEventListener('DOMContentLoaded', function() {
             move_uploaded_file($tmp_name, $dir);
 
             // INSERT into database
-            $sql = "INSERT INTO repair_report_pd05 (type_repair,department_id,asset_name,asset_id,asset_detail,neet,location,tech_id, id_person_report ,report_signature,report_name,date_report_in,status) 
-                    VALUES ('$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$neet','$location','$name_tech','$id_person','$new_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
+            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status) 
+                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$new_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location: ./save_repair?success=success&id=$assetId&id_durable=$id_durable");
         }
     } else {
       echo "สกุลไม่ถูกต้อง";
@@ -470,6 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 <?php
 if (isset($_REQUEST['success'])) {
+  $id=$_GET['id'];
   ?>
 setTimeout(function() {
     Swal.fire({
@@ -481,7 +481,7 @@ setTimeout(function() {
         allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "./view_asset?id=";
+            window.location.href = "./repair_me";
         }
     });
 });
@@ -503,7 +503,7 @@ setTimeout(function() {
         allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "./form_rapair";
+            window.location.href = "./repair_me";
         }
     });
 });

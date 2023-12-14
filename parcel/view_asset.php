@@ -330,6 +330,7 @@ function thaiMonth($month) {
                                     <div class="card-footer">
                                         <div aria-label="Contacts Page Navigation">
                                             <button type="submit" name="submit" class="btn btn-success">บันทึก</button>
+                                            <button type="button" class="btn btn-warning" onclick="submitFormAndNavigate()">แจ้งซ่อม</button>
                                         </div>
                                     </div>
                                 </form>
@@ -471,4 +472,17 @@ $(document).ready(function() {
     });
     $('.dataTables_length').addClass('bs-select');
 });
+
+function submitFormAndNavigate() {
+    // ดึงค่า id และ id_durable จาก URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var idValue = urlParams.get('id');
+    var idDurableValue = urlParams.get('id_durable');
+
+    // สร้าง URL
+    var url = 'form_rapair?id=' + idValue + '&id_durable=' + idDurableValue;
+
+    // ทำการนำทางไปยัง URL ที่สร้าง
+    window.location.href = url;
+}
 </script>

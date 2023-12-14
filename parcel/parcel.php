@@ -65,6 +65,8 @@ function thaiMonth($month) {
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -112,10 +114,27 @@ function thaiMonth($month) {
                     <div class="card-header" >
                         <h3 class="card-title">รายการข้อมูลครุภัณฑ์</h3>
                         <a class="btn btn-success btn-sm" href="form_add_asset"
-                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>                      
+                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>        
+                                          
                     </div>
                     <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
+                    <div class="form-group">
+                                    <label for="departmentFilter">เลือกแผนก:</label>
+                                    <select class="form-control" id="departmentFilter">
+                                    <option value="">ทั้งหมด</option>
+                                            <!-- เพิ่มตัวเลือกแผนกจากฐานข้อมูลหรือวงเล็บ PHP -->
+                                            <?php
+                                            $sql_departments = "SELECT * FROM department";
+                                            $result_departments = mysqli_query($conn, $sql_departments);
+                                            while ($row_department = mysqli_fetch_assoc($result_departments)) {
+                                                echo '<option value="' . $row_department['name'] . '">' . $row_department['name'] . '</option>';
+                                            }
+                                            ?>
+                                    </select>
+                                </div>
+                                <div class="table-responsive">
                         <table class="table table-striped projects" cellspacing="0" width="100%" id="dtBasicExample">
+                            
                             <thead >
                                 <tr>
                                     <th class="text-center">
@@ -149,7 +168,7 @@ function thaiMonth($month) {
                                         ดูข้อมูล
                                     </th>
                                     <th class="text-center">
-2
+                                        โอนย้าย
                                     </th>
                                     <th class="text-center">
                                         แจ้งซ่อม
@@ -201,10 +220,10 @@ function thaiMonth($month) {
                       } else {
                           echo '<td class="text-center">N/A</td>';
                       }
-              
+        
                       /*echo '<td class="project-actions text-right">';*/
                       echo '<td class="project-actions text-right"><a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fa fa-search-plus"></i> View</a></td>';
-                      echo '<td class="project-actions text-right"><a class="btn btn-secondary btn-sm" href="./check?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-wrench"></i> Check</a></td>';
+                      echo '<td class="project-actions text-right"><a class="btn btn-secondary btn-sm" href="./change?id=' . urlencode($row['asset_id']) . '"><i class="fa fa-exchange"></i> Change</a></td>';
                       echo '<td class="project-actions text-right"><a class="btn btn-warning btn-sm" href="./form_rapair?id=' . urlencode($row['asset_id']) . '&id_durable='.$row['id_durable'].'"><i class="fas fa-pencil-alt"></i> Repair</a></td>';
                       echo '<td class="project-actions text-right"><a class="btn btn-danger btn-sm del-asset" href="#" data-id="'. $row['asset_id'] ."-,". $row['name'] .'"><i class="fas fa-trash"></i> Delete</a></td>';
                      /* echo '</td>';*/
@@ -220,7 +239,7 @@ function thaiMonth($month) {
                 ?>
                             </tbody>
                         </table>
-
+                        </div>
                     </div>
 
                     <!-- /.card-body -->
@@ -331,19 +350,28 @@ deleteAsset.forEach(button => {
 
 
 $(document).ready(function () {
-    $('#dtBasicExample').DataTable({
-        autoWidth: false,
-        scrollX: true
-    });
-    $('.dataTables_length').addClass('bs-select');
-
-    // ปรับปรุงตำแหน่งของปุ่ม
-    $('#dtBasicExample tbody').on('mouseenter', 'td', function () {
-        $(this).find('.project-actions').css('right', '0');
+    var table = $('#dtBasicExample').DataTable({
+        // ... ตั้งค่า DataTables ตามต้องการ ...
     });
 
-    $('#dtBasicExample tbody').on('mouseleave', 'td', function () {
-        $(this).find('.project-actions').css('right', '-100px'); // ปรับตำแหน่งตามที่คุณต้องการ
+    // การให้ความสามารถ Show/Hide Columns
+    $('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+    });
+
+    // การให้ความสามารถค้นหา (Search)
+    $('#dtBasicExample_filter input').unbind().bind('input', function () {
+        table.search(this.value).draw();
+    });
+
+    // การกรองตารางโดยใช้ Dropdown แผนก
+    $('#departmentFilter').on('change', function () {
+        var selectedDepartment = $(this).val();
+        table.column(6) // 6 คือ index ของคอลัมน์ที่ต้องการกรอง (index นับตั้งแต่ 0)
+            .search(selectedDepartment)
+            .draw();
     });
 });
 

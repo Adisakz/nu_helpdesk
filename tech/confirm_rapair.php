@@ -6,6 +6,7 @@ $id_repair = $_GET['id'];
 $sql = "SELECT * FROM repair_report_pd05 WHERE id_repair = $id_repair";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
+$type = $row['type'];
 $typeRepair = $row['type_repair'];
 $departmentName = $row['department_id'];
 $assetName = $row['asset_name'];
@@ -80,11 +81,16 @@ $status = $row['status'];
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form id="quickForm" action="head_department" method="post" >
+              <form id="quickForm" action="./confirm_repair_save" method="post" >
                 <div class="card-body">
                   <div class="form-group">
 
-                    <label for="type-rapair">ประเภท</label>
+                    <label for="type-rapair">ประเภท : </label>
+                    <input type="text" name="type" class="form-control" id="type" value="<?php echo $type?>" readonly>
+                  </div>
+                  <div class="form-group">
+
+                    <label for="type-rapair">หมวดหมู่ครุภัณฑ์</label>
                     <input type="text" name="id-repair" class="form-control" id="id-repair" value="<?php echo $id_repair?>" hidden >
                     <input type="text" name="type-repair" class="form-control" id="type-repair" value="<?php echo $typeRepair?>" readonly>
                   </div>
@@ -98,7 +104,7 @@ $status = $row['status'];
                   </div>
                   <div class="form-group">
                   <label for="asset-id">หมายเลขครุภัณฑ์</label>
-                  <input type="text" name="asset-id" class="form-control" id="asset-id" value="<?php echo $assetId?>">
+                  <input type="text" name="asset-id" class="form-control" id="asset-id" value="<?php echo $assetId?>" readonly>
                   </div>
                   <div class="form-group">
                     <label for="asset-detail">สภาพการชำรุด</label>
@@ -107,6 +113,10 @@ $status = $row['status'];
                   <div class="form-group">
                     <label for="building">อาคาร</label>
                     <input type="text" name="building" class="form-control" id="building" value="<?php echo $building?>" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="room-number">ห้อง</label>
+                    <input type="text" name="room-number" class="form-control" id="room-number" value="<?php echo $room_number?>" readonly>
                   </div>
                   <div class="form-group">
                       <img src="../image_signature/<?php echo $reportSignature; ?>" alt="signature_report" width="180px">
@@ -120,28 +130,12 @@ $status = $row['status'];
                     <input type="text" name="reasons" class="form-control" id="reasons"  required>
                   </div>
                   <div class="form-group">
-                    <label for="amount">วงเงินที่จะซ่อม</label>
-                    <input type="number" name="amount" class="form-control" id="amount"  required>
-                    <small class="text-danger" id="amount-error" style="display: none;">กรุณากรอกค่าที่ไม่ติดลบ</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="amount_last">ราคาที่ซ่อมครั้งสุดท้าย</label>
-                    <input type="number" name="amount_last" class="form-control" id="amount_last"  required>
-                    <small class="text-danger" id="amount-last-error" style="display: none;">กรุณากรอกค่าที่ไม่ติดลบ</small>
-                  </div>
-                  <div class="form-group">
                     <label for="recomment">งานช่างได้ตรวจสอบการชำรุดแล้วปรากกฏว่า</label>
                     <textarea type="text" name="recomment" class="form-control" id="recomment"  required></textarea>
                   </div>
                   <div class="form-group">
-                    <label for="inspector">ขอเสนอรายชื่อเพื่อแต่งตั้งเป็นคณะกรรมการตรวจรับพัสดุ</label>
-                    <input type="text" name="inspector_name1" class="form-control" id="inspector_name1" placeholder="ชื่อตรวจรับคนที่ 1"><br>
-                    <input type="text" name="inspector_name2" class="form-control" id="inspector_name2" placeholder="ชื่อตรวจรับคนที่ 2"><br>
-                    <input type="text" name="inspector_name3" class="form-control" id="inspector_name3" placeholder="ชื่อตรวจรับคนที่ 3">
-                  </div>
-                  <div class="form-group">
                     <label for="repairType">ประเภทการซ่อม</label>
-                    <select name="repairType" class="form-control" id="repairType" required>
+                    <select name="repair-typetech" class="form-control" id="repair-typetech" required>
                         <option value="" disabled selected>--- เลือกประเภทการซ่อม ---</option>
                         <option value="ส่งซ่อมภายนอก">ส่งซ่อมภายนอก</option>
                         <option value="ซ่อมด้วยตนเอง">ซ่อมด้วยตนเอง</option>
@@ -191,7 +185,9 @@ $status = $row['status'];
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
 <!-- Page specific script -->
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
 </body>
@@ -261,7 +257,7 @@ function cancelRepair() {
   var idRepair = document.getElementById('id-repair').value;
 
   // ส่งค่า id-repair และ cancelReason ไปยังหน้าที่ต้องการ
-  window.location.href = "update_cancel.php?id_repair=" + idRepair + "&cancelReason=" + cancelReason;
+  window.location.href = "./controller/update_cancel.php?id_repair=" + idRepair + "&cancelReason=" + cancelReason;
 }
 
 </script>

@@ -53,6 +53,22 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="./repair_me" class="nav-link" name="list-me" >
+              <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+              รายการแจ้งซ่อม
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./repair" class="nav-link" name="check-repair">
+              <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+                ตรวจสอบการแจ้งซ่อม
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="./type_repair" class="nav-link" name="type-repair">
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>

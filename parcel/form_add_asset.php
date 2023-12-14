@@ -106,18 +106,18 @@ require_once '../dbconfig.php';
                                             required>
                                                 <option value="" disabled selected>--- เลือกหน่วยงาน ---</option>
                                                 <?php
-                        // ทำการดึงข้อมูลจากฐานข้อมูล
-                        $sql = "SELECT * FROM department"; // แทน your_table_name ด้วยชื่อตารางของคุณ
-                        $result = mysqli_query($conn, $sql);
+                                                    // ทำการดึงข้อมูลจากฐานข้อมูล
+                                                    $sql = "SELECT * FROM department"; // แทน your_table_name ด้วยชื่อตารางของคุณ
+                                                    $result = mysqli_query($conn, $sql);
 
-                        // ตรวจสอบว่ามีข้อมูลหรือไม่
-                        if ($result) {
-                            // วนลูปเพื่อแสดงข้อมูลใน dropdown
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<option value="' . $row['id_department'] . '">' . $row['name'] . '</option>';
-                            }
-                        }
-                        ?>
+                                                    // ตรวจสอบว่ามีข้อมูลหรือไม่
+                                                    if ($result) {
+                                                        // วนลูปเพื่อแสดงข้อมูลใน dropdown
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            echo '<option value="' . $row['id_department'] . '">' . $row['name'] . '</option>';
+                                                        }
+                                                    }
+                                                    ?>
                                             </select>
                                         </div>
                                         <div class="form-group">

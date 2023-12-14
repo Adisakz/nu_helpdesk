@@ -9,15 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $assetName = $_POST['asset-name'];
     $assetId = $_POST['asset-id'];
     $assetDetail = $_POST['asset-detail'];
-    $location = $_POST['location'];
     $reportName = $_POST['report_name'];
     $reasons = $_POST['reasons'];
-    $amount = $_POST['amount'];
-    $amountLast = $_POST['amount_last'];
     $recomment = $_POST['recomment'];
-    $inspectorName1 = $_POST['inspector_name1'];
-    $inspectorName2 = $_POST['inspector_name2'];
-    $inspectorName3 = $_POST['inspector_name3'];
     $repair_type_tech = $_POST['repairType'];
 
    /* echo "idRepair: $idRepair<br>";
@@ -132,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo '    </div>';
                         echo '    <div class="card-footer">';
                         echo '      <div class="text-right">';
-                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $idRepair . '\', \'' . $departmentid . '\', \'' . $assetName . '\',\'' . $assetId . '\',\'' . $assetDetail . '\',\'' . $location . '\', \'' . $reportName . '\', \'' . $reasons . '\', \'' . $amount . '\', \'' . $amountLast . '\', \'' . $recomment . '\', \'' . $inspectorName1 . '\', \'' . $inspectorName2 . '\', \'' . $inspectorName3 . '\', \'' . $repair_type . '\', \'' . $repair_type_tech . '\')">';
+                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $idRepair . '\', \'' . $departmentid . '\', \'' . $assetName . '\',\'' . $assetId . '\',\'' . $assetDetail . '\', \'' . $reportName . '\', \'' . $reasons . '\', \'' . $recomment . '\', \'' . $repair_type . '\', \'' . $repair_type_tech . '\')">';
                         echo '  <i class="fas fa-user"></i> เลือก';
                         echo '</a>';
                         echo '      </div>';

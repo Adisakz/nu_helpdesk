@@ -22,11 +22,6 @@ $recomment = $row['recomment'];
 $reasons = $row['reasons'];
 $techSignature = $row['signature_tech'];
 $tech_id = $row['tech_id'];
-$amount = $row['amount'];
-$last_amount = $row['last_amount'];
-$inspector_name_1 = $row['inspector_name1'];
-$inspector_name_2 = $row['inspector_name2'];
-$inspector_name_3 = $row['inspector_name3'];
 $tech_repair_type = $row['repair_type'];
 
 
@@ -186,7 +181,7 @@ function name_person($id) {
                                         <div class="form-group">
                                             <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน</label>
                                             <input type="text" name="reasons" class="form-control" id="reasons"
-                                            value="<?php echo $reasons?>" readonly>
+                                            value="<?php echo $reasons?>" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="recomment">งานช่างได้ตรวจสอบการชำรุดแล้วปรากกฏว่า</label>
@@ -209,14 +204,14 @@ function name_person($id) {
                                         <div class="form-group">
                                             <label for="amount">วงเงินที่จะซ่อม</label>
                                             <input type="number" name="amount" class="form-control" id="amount"
-                                            value="<?php echo $amount?>"readonly>
+                                                required>
                                             <small class="text-danger" id="amount-error"
                                                 style="display: none;">กรุณากรอกค่าที่ไม่ติดลบ</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="amount_last">ราคาที่ซ่อมครั้งสุดท้าย</label>
                                             <input type="number" name="amount_last" class="form-control"
-                                                id="amount_last" value="<?php echo $last_amount?>"readonly>
+                                                id="amount_last" required>
                                             <small class="text-danger" id="amount-last-error"
                                                 style="display: none;">กรุณากรอกค่าที่ไม่ติดลบ</small>
                                         </div>
@@ -224,11 +219,11 @@ function name_person($id) {
                                             <label
                                                 for="inspector">ขอเสนอรายชื่อเพื่อแต่งตั้งเป็นคณะกรรมการตรวจรับพัสดุ</label>
                                             <input type="text" name="inspector_name1" class="form-control"
-                                                id="inspector_name1" value="<?php echo $inspector_name_1?>"readonly><br>
+                                                id="inspector_name1" placeholder="ชื่อตรวจรับคนที่ 1"><br>
                                             <input type="text" name="inspector_name2" class="form-control"
-                                                id="inspector_name2"value="<?php echo $inspector_name_2?>"readonly><br>
+                                                id="inspector_name2" placeholder="ชื่อตรวจรับคนที่ 2"><br>
                                             <input type="text" name="inspector_name3" class="form-control"
-                                                id="inspector_name3" value="<?php echo $inspector_name_3?>"readonly>
+                                                id="inspector_name3" placeholder="ชื่อตรวจรับคนที่ 3">
                                         </div>
                                     </div>
                                     <!-- /.card-body -->

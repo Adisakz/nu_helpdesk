@@ -52,42 +52,34 @@ $dateTh = ThDate();
 
 if (isset($_POST['submit'])) {
     $idRepair = $_POST['id_repair'];
+    $type = $_POST['type'];
     $typeRepair = $_POST['type-repair'];
     $departmentId = $_POST['department-id'];
     $asset_name = $_POST['asset-name'];
     $assetId = $_POST['asset-id'];
     $asset_detail = $_POST['asset-detail'];
-    $location = $_POST['location'];
+    $building = $_POST['building'];
+    $room_number = $_POST['room-number'];
     $namereport = $_POST['report_name'];
     $reasons = $_POST['reasons'];
-    $amount = $_POST['amount'];
-    $amountLast = $_POST['amount_last'];
     $recomment = $_POST['recomment'];
-    $inspectorName1 = $_POST['inspector_name1'];
-    $inspectorName2 = $_POST['inspector_name2'];
-    $inspectorName3 = $_POST['inspector_name3'];
     $repairTypeTech = $_POST['repair-typetech'];
-    $id_person_send = $_POST['id_person_send'];
+    $id_person_send = 'พัสดุ';
     $Option = $_POST['signature-tech'];
 
-    /*echo "<h2>Received Data:</h2>";    
+    /*echo "<h2>Received Data: $type</h2>";    
     echo "<p>ID Repair: $idRepair</p>";
-    //echo "<p>Type Repair: $typeRepair</p>";
-    //echo "<p>Department ID: $departmentId</p>";
-    //echo "<p>Asset Name: $asset_name</p>";
+    echo "<p>Type Repair: $typeRepair</p>";
+    echo "<p>Department ID: $departmentId</p>";
+    echo "<p>Asset Name: $asset_name</p>";
     echo "<p>Asset ID: $assetId</p>";
-    //echo "<p>Asset Detail: $asset_detail</p>";
-    //echo "<p>Location: $location</p>";
-    //echo "<p>Name Report: $namereport</p>";
-    echo "<p>Reasons: $reasons</p>";
-    echo "<p>Amount: $amount</p>";
-    echo "<p>Amount Last: $amountLast</p>";
-    echo "<p>Recomment: $recomment</p>";
-    echo "<p>Inspector Name 1: $inspectorName1</p>";
-    echo "<p>Inspector Name 2: $inspectorName2</p>";
-    echo "<p>Inspector Name 3: $inspectorName3</p>";
-    echo "<p>Repair Type Tech: $repairTypeTech</p>";
-    echo "<p>ID Person Send: $id_person_send</p>";
+    echo "<p>Asset Detail: $asset_detail</p>";
+    echo "<p>Location: $building</p>";
+    echo "<p>Reasons: $room_number</p>";
+    echo "<p>Name Report: $namereport</p>";  
+    echo "<p>Recomment: $recomment</p>";--
+    echo "<p>Repair Type Tech: $repairTypeTech</p>";--
+    echo "<p>ID Person Send: $id_person_send</p>";---
     echo "<p>Department Option: $Option</p>";*/
 
  if ($Option == 2) {
@@ -96,7 +88,7 @@ if (isset($_POST['submit'])) {
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: '<h4 class="t1"><strong>ลงนามผู้รับรอง</strong></h4>',
-                html: '<center><div class="mb-3"><div class="mb-3"><label class="form-label" for="imp_sig"></label><div id="canvasDiv"></div><br><button type="button" class="btn btn-danger" id="reset-btn">Clear</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="btn-save">Save</button></div> <form id="signatureform" action="confirm_repair_save" style="display:none" method="post"><input type="hidden" id="signature" name="signature"><input type="hidden" name="signaturesubmit" value="1"><input type="hidden" name="data1" value="<?php echo htmlspecialchars($idRepair); ?>"><input type="hidden" name="data2" value="<?php echo htmlspecialchars($assetId); ?>"><input type="hidden" name="data3" value="<?php echo htmlspecialchars($reasons); ?>"><input type="hidden" name="data4" value="<?php echo htmlspecialchars($amount); ?>"><input type="hidden" name="data5" value="<?php echo htmlspecialchars($amountLast); ?>"><input type="hidden" name="data6" value="<?php echo htmlspecialchars($recomment); ?>"><input type="hidden" name="data7" value="<?php echo htmlspecialchars($inspectorName1); ?>"><input type="hidden" name="data8" value="<?php echo htmlspecialchars($inspectorName2); ?>"><input type="hidden" name="data9" value="<?php echo htmlspecialchars($inspectorName3); ?>"><input type="hidden" name="data10" value="<?php echo htmlspecialchars($repairTypeTech); ?>"><input type="hidden" name="data11" value="<?php echo htmlspecialchars($id_person_send); ?>"></form></div></center>',
+                html: '<center><div class="mb-3"><div class="mb-3"><label class="form-label" for="imp_sig"></label><div id="canvasDiv"></div><br><button type="button" class="btn btn-danger" id="reset-btn">Clear</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="btn-save">Save</button></div> <form id="signatureform" action="confirm_repair_save" style="display:none" method="post"><input type="hidden" id="signature" name="signature"><input type="hidden" name="signaturesubmit" value="1"><input type="hidden" name="data1" value="<?php echo htmlspecialchars($recomment); ?>"><input type="hidden" name="data2" value="<?php echo htmlspecialchars($repairTypeTech); ?>"><input type="hidden" name="data3" value="<?php echo htmlspecialchars($id_person_send); ?>"><input type="hidden" name="data4" value="<?php echo htmlspecialchars($idRepair); ?>"></form></div></center>',
                 confirmButtonText: '<div class="text t1">ออก</div>',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
@@ -127,9 +119,9 @@ if (isset($_POST['submit'])) {
             move_uploaded_file($resized_img_name, $dir);
 
             // INSERT into database
-            $sql = "UPDATE repair_report_pd05 SET asset_id = '$assetId', reasons = '$reasons',amount = $amount, last_amount = $amountLast, recomment = '$recomment', inspector_name1='$inspectorName1',inspector_name2='$inspectorName2',inspector_name3='$inspectorName3',repair_type='$repairTypeTech',send_to='$id_person_send',status='4',signature_tech= '$resized_img_name', date_tech_confirm = CURRENT_TIMESTAMP WHERE id_repair=$idRepair";
+            $sql = "UPDATE repair_report_pd05 SET recomment = '$recomment', repair_type = '$repairTypeTech',send_to = '$id_person_send',signature_tech= '$resized_img_name', date_tech_confirm = CURRENT_TIMESTAMP , status='4' WHERE id_repair=$idRepair";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location: ./confirm_repair_save?success=success");
         } else {
             // ทำการบันทึกไฟล์ที่ไม่ต้อง resize
             $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
@@ -137,13 +129,13 @@ if (isset($_POST['submit'])) {
             move_uploaded_file($tmp_name, $dir);
 
             // INSERT into database
-            $sql = "UPDATE repair_report_pd05 SET asset_id = '$assetId', reasons = '$reasons',amount = $amount, last_amount = $amountLast, recomment = '$recomment', inspector_name1='$inspectorName1',inspector_name2='$inspectorName2',inspector_name3='$inspectorName3',repair_type='$repairTypeTech',send_to='$id_person_send',status='4',signature_tech= '$new_img_name', date_tech_confirm = CURRENT_TIMESTAMP WHERE id_repair=$idRepair";
+            $sql = "UPDATE repair_report_pd05 SET recomment = '$recomment', repair_type = '$repairTypeTech',send_to = '$id_person_send',signature_tech= '$new_img_name', date_tech_confirm = CURRENT_TIMESTAMP , status='4' WHERE id_repair=$idRepair";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location:./confirm_repair_save?success=success");
         }
     } else {
       echo "สกุลไม่ถูกต้อง";
-      header("location: ./save_repair?error=error");
+      header("location: ./confirm_repair_save?error=error");
   }
     }
 }
@@ -162,15 +154,9 @@ if (isset($_POST['signaturesubmit'])) {
     $data2 = $_POST['data2'];    
     $data3 = $_POST['data3'];    
     $data4 = $_POST['data4'];    
-    $data5 = $_POST['data5'];    
-    $data6 = $_POST['data6'];   
-    $data7 = $_POST['data7'];    
-    $data8 = $_POST['data8'];
-    $data9 = $_POST['data9'];
-    $data10 = $_POST['data10'];
-    $data11 = $_POST['data11'];
 
-     /*echo "Type Repair: $data1 <br>";
+
+    /*echo "Type Repair: $data1 <br>";
      echo "Asset ID: $data2 <br>";
      echo "Reasons: $data3 <br>";
      echo "Amount: $data4 <br>";
@@ -182,9 +168,9 @@ if (isset($_POST['signaturesubmit'])) {
      echo "Type_send_repair: $data10 <br>";
      echo "send_to : $data11 <br>";*/
   // INSERT into database
-    $sql = "UPDATE repair_report_pd05 SET asset_id = '$data2', reasons = '$data3',amount = $data4, last_amount = $data5, recomment = '$data6', inspector_name1='$data7',inspector_name2='$data8',inspector_name3='$data9',repair_type='$data10',send_to='$data11',status='4',signature_tech= '$signatureFileName', date_tech_confirm = CURRENT_TIMESTAMP WHERE id_repair=$data1";
+    $sql = "UPDATE repair_report_pd05 SET recomment = '$data1', repair_type = '$data2',send_to = '$data3',signature_tech= '$signatureFileName', date_tech_confirm = CURRENT_TIMESTAMP , status='4' WHERE id_repair=$data4";
     mysqli_query($conn, $sql);
-    header("location: ./repair?success=success");
+    header("location: ./confirm_repair_save?success=success");
 }
 
 function ThDate()
@@ -207,22 +193,19 @@ function ThDate()
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $type = $_POST['type'];
   $idRepair = $_POST['id-repair'];
-  $repairType = $_POST['repairType'];
-  $departmentId = $_POST['department-name'];
+  $repairType = $_POST['type-repair'];
+  $departmentId = $_POST['department-id'];
   $asset_name = $_POST['asset-name'];
   $assetId = $_POST['asset-id'];
   $asset_detail = $_POST['asset-detail'];
-  $location = $_POST['location'];
-  $namereport = $_POST['name-report'];
+  $building = $_POST['building'];
+  $room_number = $_POST['room-number'];
+  $namereport = $_POST['report_name'];
   $reasons = $_POST['reasons'];
-  $amount = $_POST['amount'];
-  $amountLast = $_POST['amount_last'];
   $recomment = $_POST['recomment'];
-  $inspectorName1 = $_POST['inspector_name1'];
-  $inspectorName2 = $_POST['inspector_name2'];
-  $inspectorName3 = $_POST['inspector_name3'];
-  $repairTypeTech = $_POST['repairTypeTech'];
+  $repairTypeTech = $_POST['repair-typetech'];
   $id_person_send = $_POST['id-person-send'];
 
   
@@ -291,9 +274,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <!-- form start -->
               <form id="quickForm" action="" method="post" enctype="multipart/form-data">
                 <div class="card-body">
+                <div class="form-group">
+                    <input type="text" name="type" value="<?php echo  $type?>" style="display: none; ">
+                    <label for="type">ประเภท : <span style="font-weight: normal;"><?php echo htmlspecialchars( $type); ?></span></label>
+                  </div>
                   <div class="form-group">
                     <input type="text" name="type-repair" value="<?php echo $repairType?>" style="display: none; ">
-                    <label for="type-repair">ประเภท : <span style="font-weight: normal;"><?php echo htmlspecialchars($repairType); ?></span></label>
+                    <label for="type-repair">หมวดหมู่ครุภัณฑ์ : <span style="font-weight: normal;"><?php echo htmlspecialchars($repairType); ?></span></label>
                   </div>
                   <div class="form-group">
                   <input type="text" name="department-id" value="<?php echo $departmentId?>" style="display: none; ">
@@ -305,15 +292,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </div>
                   <div class="form-group">
                   <input type="text" name="asset-id" value="<?php echo $assetId?>" style="display: none; ">
-                    <label for="asset-id">หมายเลขครุภัณฑ์ : <span style="color: #28a745;"><?php echo htmlspecialchars($assetId); ?></span></label>
+                    <label for="asset-id">หมายเลขครุภัณฑ์ : <span style="font-weight: normal;"><?php echo htmlspecialchars($assetId); ?></span></label>
                   </div>
                   <div class="form-group">
                   <input type="text" name="asset-detail" value="<?php echo $asset_detail ?>" style="display: none; ">
                     <label for="asset-detail">สภาพการชำรุด : <span style="font-weight: normal; "><?php echo htmlspecialchars($asset_detail); ?></span></label>
                   </div>
                   <div class="form-group">
-                  <input type="text" name="location" value="<?php echo $location?>" style="display: none; ">
-                    <label for="location">ที่ตั้ง : <span style="font-weight: normal;"><?php echo htmlspecialchars($location); ?></span></label>
+                  <input type="text" name="building" value="<?php echo $building?>" style="display: none; ">
+                    <label for="building">อาคาร : <span style="font-weight: normal;"><?php echo htmlspecialchars($building); ?></span></label>
+                  </div>
+                  <div class="form-group">
+                  <input type="text" name="room-number" value="<?php echo $room_number?>" style="display: none; ">
+                    <label for="room-number">ห้อง : <span style="font-weight: normal;"><?php echo htmlspecialchars($room_number); ?></span></label>
                   </div>
                   <div class="form-group">
                   <input type="text" name="report_name" value="<?php echo $namereport?>" style="display: none; ">
@@ -324,31 +315,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อม : <span style="color: #28a745;"><?php echo htmlspecialchars($reasons); ?></span></label>
                   </div>
                   <div class="form-group">
-                  <input type="text" name="amount" value="<?php echo $amount?>" style="display: none; ">
-                    <label for="amount">วงเงินที่จะซ่อม : <span style="color: #28a745;"><?php echo htmlspecialchars($amount); ?></span></label>
-                  </div>
-                  <div class="form-group">
-                  <input type="text" name="amount_last" value="<?php echo $amountLast?>" style="display: none; ">
-                    <label for="amount_last">ราคาที่ซ่อมครั้งสุดท้าย : <span style="color: #28a745;"><?php echo htmlspecialchars($amountLast); ?></span></label>
-                  </div>
-                  <div class="form-group">
                   <input type="text" name="recomment" value="<?php echo $recomment?>" style="display: none; ">
                     <label for="recomment">งานช่างได้ตรวจสอบการชำรุดแล้วปรากกฏว่า : <span style="color: #28a745;"><?php echo htmlspecialchars($recomment); ?></span></label>
-                  </div>
-                  <div class="form-group">
-                  <input type="text" name="inspector_name1" value="<?php echo $inspectorName1?>" style="display: none; ">
-                  <input type="text" name="inspector_name2" value="<?php echo $inspectorName2?>" style="display: none; ">
-                  <input type="text" name="inspector_name3" value="<?php echo $inspectorName3?>" style="display: none; ">
-                    <label for="inspector">ขอเสนอรายชื่อเพื่อแต่งตั้งเป็นคณะกรรมการตรวจรับพัสดุ : </label><br>
-                    <span style="font-weight: bold; color: #28a745;">1. <?php echo htmlspecialchars($inspectorName1); ?></span><br>
-                    <span style="font-weight: bold; color: #28a745;">2. <?php echo htmlspecialchars($inspectorName2); ?></span><br>
-                    <span style="font-weight: bold; color: #28a745;">3. <?php echo htmlspecialchars($inspectorName3); ?></span>
                   </div>
                   <div class="form-group">
                   <input type="text" name="repair-typetech" value="<?php echo $repairTypeTech?>" style="display: none; ">
                     <label for="repair-typetech">ประเภทการซ่อม : <span style="color: #28a745;"><?php echo htmlspecialchars($repairTypeTech); ?></span></label>
                   </div>
-                  <input type="text" name="id_person_send" value="<?php echo $id_person_send?>" style="display: none; ">
                   <input type="text" name="id_repair" value="<?php echo $idRepair?>" style="display: none; ">
                   <div class="form-group">
                     <p>-------------------------------------------------------------------------------------------------------------------------------</p>
@@ -442,7 +415,7 @@ if (isset($_REQUEST['success'])) {
   ?>
  setTimeout(function() {
               Swal.fire({
-                  title: 'แจ้งซ่อมเรียบร้อย',
+                  title: 'ดำเนินการเรียบร้อย',
                   icon: 'success',
                   confirmButtonText: 'ตกลง',
                   allowOutsideClick: false, // ไม่อนุญาตให้คลิกนอก popup ปิด
@@ -450,7 +423,7 @@ if (isset($_REQUEST['success'])) {
                   allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
               }).then((result) => {
                   if (result.isConfirmed) {
-                      window.location.href = "./form_rapair";
+                      window.location.href = "./repair";
                   }
               });
           });
@@ -463,7 +436,7 @@ if (isset($_REQUEST['error'])) {
   ?>
  setTimeout(function() {
               Swal.fire({
-                  title: 'ไม่สามารถแจ้งซ่อมได้',
+                  title: 'ไม่สามารถดำเนินการได้',
                   text: 'เนื่องจากข้อมูลลายเซ็นไม่ถูกต้อง',
                   icon: 'error',
                   confirmButtonText: 'ตกลง',
@@ -472,7 +445,7 @@ if (isset($_REQUEST['error'])) {
                   allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
               }).then((result) => {
                   if (result.isConfirmed) {
-                      window.location.href = "./form_rapair";
+                      window.location.href = "./repair";
                   }
               });
           });

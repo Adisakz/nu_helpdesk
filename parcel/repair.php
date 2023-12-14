@@ -3,7 +3,7 @@
 <?php 
 session_start();
 require_once '../dbconfig.php';
-
+$select_name = $_SESSION["name_title"].$_SESSION["first_name"].' '.$_SESSION["last_name"];
 
 function thaiMonth($month) {
   $months = array(
@@ -43,15 +43,16 @@ function getStatusText($status) {
   else if ($status == 4){
     $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
     return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
-  }
+  }  
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Help Desk | Staff</title>
+  <title>Help Desk | Tech</title>
   <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
 
   <!-- Google Font: Source Sans Pro -->
@@ -76,7 +77,7 @@ function getStatusText($status) {
     // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
     document.addEventListener('DOMContentLoaded', function() {
         // เลือก element และเปลี่ยน class
-        document.querySelector('a[name="list-me"]').classList.add('nav-link', 'active');
+        document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
     });
 </script>
 
@@ -87,12 +88,12 @@ function getStatusText($status) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>รายการแจ้งซ่อมของคุณ <span style="color: blue;"><?php echo $first_name .' '. $last_name?></span></h1>
+            <h1>ตรวจสอบรายการแจ้งซ่อม</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./index">Home</a></li>
-              <li class="breadcrumb-item active">รายการแจ้งซ่อม</li>
+              <li class="breadcrumb-item active">ตรวจสอบรายการแจ้งซ่อม</li>
             </ol>
           </div>
         </div>
@@ -134,61 +135,66 @@ function getStatusText($status) {
                       <th  class="text-center">
                           สภาพการชำรุด
                       </th>
-                      <th class="text-center">
+                      <th class="text-center" width="150px">
                          วันที่
+                      </th>
+                      <th class="text-center" width="95px" >
+                         ความต้องการ
                       </th>
                       <th class="text-center" width="150px">
                          สถานะ
+                      </th>
+                      
+                      <th class="text-center" width="140px">
+                         
                       </th>
                   </tr>
               </thead>
               <tbody>
                 <?php
-                $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE id_person_report = '$id_person' ORDER BY date_report_in DESC";
-                $resultCount = mysqli_query($conn, $sqlCount);
-                $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-                
-                // กำหนดจำนวนรายการต่อหน้า
-                $recordsPerPage = 6;
-                
-                // รับค่าหน้าปัจจุบัน
-                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE send_to = 'พัสดุ' AND status = 4";
+                    $resultCount = mysqli_query($conn, $sqlCount);
+                    $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
+                    
+                    // กำหนดจำนวนรายการต่อหน้า
+                    $recordsPerPage = 6;
+                    
+                    // รับค่าหน้าปัจจุบัน
+                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-                // คำนวณ offset สำหรับคำสั่ง SQL
-                $offset = ($page - 1) * $recordsPerPage;
+                    // คำนวณ offset สำหรับคำสั่ง SQL
+                    $offset = ($page - 1) * $recordsPerPage;
 
-                // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                $sql = "SELECT * FROM repair_report_pd05 WHERE id_person_report = '$id_person'  ORDER BY date_report_in DESC LIMIT $offset, $recordsPerPage";
-                $result = mysqli_query($conn, $sql);
+                    // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
+                    $sql = "SELECT * FROM repair_report_pd05 WHERE send_to = 'พัสดุ' AND status = 4 LIMIT $offset, $recordsPerPage";
+                    $result = mysqli_query($conn, $sql);
 
-                if ($result) {
-                    // วนลูปเพื่อแสดงข้อมูล
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo '<tr>';
-                        echo '<td class="text-center">' .$row['type_repair'] . '</td>';
-                        echo '<td class="text-center">' . $row['department_id'] . '</td>';
-                        echo '<td class="text-center">' . $row['asset_name'] . '</td>';
-                        echo '<td class="text-center">' . $row['asset_id'] . '</td>';
-                        echo '<td class="text-center">' . $row['asset_detail'] . '</td>';
-                        echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
-                        echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
-                        echo '<td class="project-actions text-right">';
-                        if ($row['status'] == 0) {
-                            echo '<a class="btn btn-danger btn-sm del-repair" href="#" data-id="'. $row['id_repair'] ."-,". $row['asset_name'] ."-,". $row['asset_id']."-,". $row['asset_detail'] .'"><i class="fas fa-trash"></i> Delete</a>';
+                    if ($result) {
+                        // วนลูปเพื่อแสดงข้อมูล
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<tr>';
+                            echo '<td class="text-center">' .$row['type_repair'] . '</td>';
+                            echo '<td class="text-center">' . $row['department_id'] . '</td>';
+                            echo '<td class="text-center">' . $row['asset_name'] . '</td>';
+                            echo '<td class="text-center">' . $row['asset_id'] . '</td>';
+                            echo '<td class="text-center">' . $row['asset_detail'] . '</td>'; 
+                            echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
+                            echo '<td class="text-center">' . $row['neet'] . '</td>';
+                            echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
+                            echo '<td class="project-actions text-right">';
+                            if ($row['status'] == 4) {
+                              echo '<a class="btn btn-success btn-sm del-repair" href="confirm_rapair?id=' . $row['id_repair'] . '"><i class="fas fa-pencil-alt"></i> ตรวจสอบ</a>';
+                            }
+                            echo '</td>';
+                            echo '</tr>';
                         }
-                        echo '</td>';
-                        echo '</tr>';
                       }
-                  } else {
-                      echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-                  }
-
-                  // ปิดการเชื่อมต่อ
-                  mysqli_close($conn);
-              
-                  ?>
+                       
+                    // ปิดการเชื่อมต่อ
+                    mysqli_close($conn);
+                ?>
               </tbody>
-          </table>
+              </table>
         </div>
             <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
@@ -241,44 +247,12 @@ function getStatusText($status) {
 </body>
 </html>
 <script>
-const deleteRepair = document.querySelectorAll('.del-repair');
-
-deleteRepair.forEach(button => {
-   button.addEventListener('click', function (event) {
-       event.preventDefault();
-       const repairData = this.getAttribute('data-id').split('-,'); // แยกข้อมูลด้วยตัวแยก '-'
-       const repairId = repairData[0];
-       const repairName = repairData[1];
-       const repairAssetid = repairData[2];
-       const repairDetail = repairData[3];
-
-       Swal.fire({
-           title: '<h4><label class="label t1">คุณต้องการลบข้อมูล</label></h4>',
-           html: `<div><h6><label class="label t1">ทรัพย์สินที่ต้องการซ่อม : </label> ${repairName}<br><label class="label t1">เลขครุภัณฑ์ : </label>${repairAssetid}<br><label class="label t1">สภาพการชำรุด : </label>${repairDetail}</label></h6><br>`,
-           focusConfirm: false,
-           preConfirm: () => {
-               return [];
-           },
-           confirmButtonText: 'Delete',
-           showCancelButton: true,
-           allowOutsideClick: false,
-           allowEscapeKey: false,
-           allowEnterKey: false
-       }).then((result) => {
-           if (result.isConfirmed) {
-               // Modify the URL to include the uroleId
-               window.location.href = `./controller/del_repair?id_repair=${repairId}`;
-           }
-       });
-   });
-});
-
 <?php
 if (isset($_REQUEST['success'])) {
   ?>
  setTimeout(function() {
               Swal.fire({
-                  title: 'ลบข้อมูลแจ้งซ่อมเรียบร้อย',
+                  title: 'ดำเนินการเรียบร้อย',
                   icon: 'success',
                   confirmButtonText: 'ตกลง',
                   allowOutsideClick: false, // ไม่อนุญาตให้คลิกนอก popup ปิด
@@ -286,7 +260,7 @@ if (isset($_REQUEST['success'])) {
                   allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
               }).then((result) => {
                   if (result.isConfirmed) {
-                      window.location.href = "./repair_me";
+                      window.location.href = "./repair";
                   }
               });
           });

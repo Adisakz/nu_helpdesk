@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo '          <p class="text-muted text-sm"><b>About: </b>' . $row['about'] . '</p>';
                         echo '        </div>';
                         echo '        <div class="col-5 text-center">';
-                        echo '          <img src="../dist/img/' . $row['signature'] . '" alt="user-avatar" class="img-circle img-fluid">';
+                        echo '          <img src="../dist/img/avatar.png" alt="user-avatar" class="img-circle img-fluid">';
                         echo '        </div>';
                         echo '      </div>';
                         echo '    </div>';
