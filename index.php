@@ -31,9 +31,9 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
             }
             else {header("location: ./head/index");}
         } else if ($row['urole'] == 'ผู้อำนวยการ') {
-            header("location: ./head_klung/index");
+            header("location: ./director/index");
         } else if ($row['urole'] == 'คณบดี') {
-            echo 'คณบดี';
+            header("location: ./dean/index");
         } else if ($row['urole'] == 'พัสดุ') {
             header("location: ./parcel/index");
         }

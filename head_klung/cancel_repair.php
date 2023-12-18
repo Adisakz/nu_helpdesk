@@ -54,8 +54,8 @@ if (isset($_POST['submit'])) {
     $idRepair = $_POST['id_repair'];
     $headRecomment = $_POST['head_recomment'];
     $Option = $_POST['signature-tech'];
-
-   /* echo "<h2>Received Data:$idRepair</h2>";    
+    $id_person = $_SESSION['id'] ;
+    /*echo "<h2>Received Data:$idRepair</h2>";    
     echo "<p>headRecomment: $headRecomment</p>";
     echo "<p>Option: $Option</p>";*/
  if ($Option == 2) {
@@ -95,9 +95,9 @@ if (isset($_POST['submit'])) {
             move_uploaded_file($resized_img_name, $dir);
 
             // INSERT into database
-            $sql = "UPDATE repair_report_pd05 SET cancel_comment_head = '$headRecomment', date_update_head=CURRENT_TIMESTAMP,status='2',signature_head='$resized_img_name',send_to='' WHERE id_repair=$idRepair";
+            $sql = "UPDATE repair_report_pd05 SET cancel_comment_head_klung = '$headRecomment', date_head_klung_update=CURRENT_TIMESTAMP,status='2',signature_head_klung='$resized_img_name',id_head_klung='$id_person',send_to='' WHERE id_repair=$idRepair";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location: ./repair?success=success");
         } else {
             // ทำการบันทึกไฟล์ที่ไม่ต้อง resize
             $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
@@ -105,13 +105,13 @@ if (isset($_POST['submit'])) {
             move_uploaded_file($tmp_name, $dir);
 
             // INSERT into database
-            $sql = "UPDATE repair_report_pd05 SET cancel_comment_head = '$headRecomment', date_update_head=CURRENT_TIMESTAMP,status='2',signature_head='$new_img_name',send_to='' WHERE id_repair=$idRepair";
+            $sql = "UPDATE repair_report_pd05 SET cancel_comment_head_klung = '$headRecomment', date_head_klung_update=CURRENT_TIMESTAMP,status='2',signature_head_klung='$new_img_name',id_head_klung='$id_person',send_to='' WHERE id_repair=$idRepair";
             mysqli_query($conn, $sql);
-            header("location: ./save_repair?success=success");
+            header("location: ./repair?success=success");
         }
     } else {
       echo "สกุลไม่ถูกต้อง";
-      header("location: ./save_repair?error=error");
+      header("location: ./repair?error=error");
   }
     }
 }
@@ -128,9 +128,9 @@ if (isset($_POST['signaturesubmit'])) {
 
     $data1 = $_POST['data1'];    
     $data2 = $_POST['data2'];    
+    $id_person = $_SESSION['id'] ;
 
-
-     /*echo "Type Repair: $data1 <br>";
+    /* echo "Type Repair: $data1 <br>";
      echo "Asset ID: $data2 <br>";
      echo "Reasons: $data3 <br>";
      echo "Amount: $data4 <br>";
@@ -142,7 +142,7 @@ if (isset($_POST['signaturesubmit'])) {
      echo "Type_send_repair: $data10 <br>";
      echo "send_to : $data11 <br>";*/
   // INSERT into database
-    $sql = "UPDATE repair_report_pd05 SET cancel_comment_head = '$data2', date_update_head=CURRENT_TIMESTAMP,status='2',signature_head='$signatureFileName',send_to='' WHERE id_repair=$data1";
+    $sql = "UPDATE repair_report_pd05 SET cancel_comment_head_klung = '$data2', date_head_klung_update=CURRENT_TIMESTAMP,status='2',signature_head_klung='$signatureFileName',id_head_klung='$id_person',send_to='' WHERE id_repair=$data1";
     mysqli_query($conn, $sql);
     header("location: ./repair?success=success");
 }
@@ -264,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   </div>
                 <!-- /.card-body -->
                 <div class="card-footer d-flex justify-content-end">
-                  <button type="submit" name="submit" class="btn btn-primary" >ถัดไป</button>
+                  <button type="submit" name="submit" class="btn btn-primary" >ตกลง</button>
                 </div>
               </form>
             </div>

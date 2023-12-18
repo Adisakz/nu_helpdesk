@@ -17,7 +17,24 @@ $room_number = $row['room_number'];
 $neet = $row['neet'];
 $reportSignature = $row['report_signature'];
 $reportName = $row['report_name'];
+$reasons = $row['reasons'];
 $status = $row['status'];
+
+///////////  แสดงชื่อหน่วยงาน
+function name_department($id) {
+  global $conn; // Assuming $conn is your database connection variable
+
+  $sql_department = "SELECT name FROM department WHERE id_department = '$id' LIMIT 1";
+  $result_department = mysqli_query($conn, $sql_department);
+
+  if ($row_department = mysqli_fetch_assoc($result_department)) {
+      $department_durable = $row_department['name'];
+      return $department_durable;
+  } else {
+      $department_durable = '';
+      return $department_durable;
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +113,8 @@ $status = $row['status'];
                   </div>
                   <div class="form-group">
                     <label for="department-id">ชื่อหน่วยงาน</label>
-                    <input type="text" name="department-id" class="form-control" id="department-id" value="<?php echo $departmentName?>" readonly>
+                    <input type="text"  class="form-control"  value="<?php echo name_department($departmentName)?>" readonly>
+                    <input type="text" name="department-id" class="form-control" id="department-id" value="<?php echo $departmentName?>" hidden>
                   </div>
                   <div class="form-group">
                     <label for="asset-name">ทรัพย์สินที่ต้องการซ่อม</label>
@@ -127,7 +145,7 @@ $status = $row['status'];
                   </div>
                   <div class="form-group">
                     <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน</label>
-                    <input type="text" name="reasons" class="form-control" id="reasons"  required>
+                    <input type="text" name="reasons" class="form-control" id="reasons" value="<?php echo $reasons?>"  required>
                   </div>
                   <div class="form-group">
                     <label for="recomment">งานช่างได้ตรวจสอบการชำรุดแล้วปรากกฏว่า</label>
@@ -226,6 +244,9 @@ $status = $row['status'];
     </div>
   </div>
 </div>
+
+
+
 <script>
 document.getElementById('amount').addEventListener('input', function () {
     var amountInput = this.value;

@@ -24,12 +24,28 @@ function thaiMonth($month) {
   return $months[$month];
 }
 
+///////////  แสดงชื่อหน่วยงาน
+function name_department($id) {
+  global $conn; // Assuming $conn is your database connection variable
+
+  $sql_department = "SELECT name FROM department WHERE id_department = '$id' LIMIT 1";
+  $result_department = mysqli_query($conn, $sql_department);
+
+  if ($row_department = mysqli_fetch_assoc($result_department)) {
+      $department_durable = $row_department['name'];
+      return $department_durable;
+  } else {
+      $department_durable = '';
+      return $department_durable;
+  }
+}
+
 function getStatusText($status) {
   if ($status == 0) {
       $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
       return '<span ' . $style .  ' >รอซ่อม</span>';
   } else if ($status == 1){
-      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
+      $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;"';
       return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
   }
   else if ($status == 2){
@@ -87,7 +103,7 @@ function getStatusText($status) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-          <h1>รายการแจ้งซ่อมของคุณ <span style="color: blue;"><?php echo $first_name .' '. $last_name?></span></h1>
+          <h1>รายการแจ้งซ่อมของคุณ <span style="color: blue;"></span></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -116,6 +132,7 @@ function getStatusText($status) {
           </div>
         </div>
         <div class="card-body p-0">
+        <div class="table-responsive">
         <table class="table table-striped projects">
               <thead>
                   <tr>
@@ -144,7 +161,7 @@ function getStatusText($status) {
               </thead>
               <tbody>
                 <?php
-                 $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE id_person_report = '$id_person'";
+                 $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 ";
                 $resultCount = mysqli_query($conn, $sqlCount);
                 $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
                 // กำหนดจำนวนรายการต่อหน้า
@@ -157,7 +174,7 @@ function getStatusText($status) {
                 $offset = ($page - 1) * $recordsPerPage;
 
                 // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                $sql = "SELECT * FROM repair_report_pd05 WHERE id_person_report = '$id_person' LIMIT $offset, $recordsPerPage";
+                $sql = "SELECT * FROM repair_report_pd05 LIMIT $offset, $recordsPerPage";
                 $result = mysqli_query($conn, $sql);
 
                 if ($result) {
@@ -165,7 +182,7 @@ function getStatusText($status) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo '<tr>';
                         echo '<td class="text-center">' .$row['type_repair'] . '</td>';
-                        echo '<td class="text-center">' . $row['department_name'] . '</td>';
+                        echo '<td class="text-center">' .name_department( $row['department_id']) . '</td>';
                         echo '<td class="text-center">' . $row['asset_name'] . '</td>';
                         echo '<td class="text-center">' . $row['asset_id'] . '</td>';
                         echo '<td class="text-center">' . $row['asset_detail'] . '</td>';
@@ -188,6 +205,7 @@ function getStatusText($status) {
                   ?>
               </tbody>
           </table>
+                </div>
         </div>
         <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">

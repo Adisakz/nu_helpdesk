@@ -33,7 +33,7 @@ if (!isset($_SESSION['id'])) {
       </li>      
       <li class="nav-item d-none d-sm-inline-block">
       <a href="./index"class="" >
-      <img src="../image/logo.png" alt="AdminLTE Logo" style="width: 40px;margin-right: 3px; "> Help Desk | Head
+      <img src="../image/logo.png" alt="AdminLTE Logo" style="width: 40px;margin-right: 3px; "> Help Desk | Head Klung
       </a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">

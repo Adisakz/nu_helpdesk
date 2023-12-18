@@ -128,7 +128,7 @@ function name_person($id) {
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form id="quickForm" action="head_department" method="post">
+                                <form id="quickForm" action="head_department_klung" method="post">
                                     <div class="card-body">
                                         <div class="form-group">
 

@@ -26,24 +26,25 @@ function thaiMonth($month) {
 
 function getStatusText($status) {
   if ($status == 0) {
-      $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style .  ' >รอซ่อม</span>';
-  } else if ($status == 1){
-      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
-  }
+      $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รอซ่อม</button>';
+  }  else if ($status == 1){
+    $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">กำลังซ่อม</button>';
+}
   else if ($status == 2){
-    $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
+    $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">ยกเลิกการซ่อม</button>';
   }
   else if ($status == 3){
-    $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">ซ่อมเสร็จ</span>';
+    $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">ซ่อมเสร็จ</button>';
   }
   else if ($status == 4){
-    $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
-  }  
+    $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+  
+    return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
+  }
 }
 
 ?>
@@ -117,6 +118,7 @@ function getStatusText($status) {
           </div>
         </div>
         <div class="card-body p-0">
+        <div class="table-responsive">
         <table class="table table-striped projects">
               <thead>
                   <tr>
@@ -152,7 +154,7 @@ function getStatusText($status) {
               </thead>
               <tbody>
                 <?php
-                    $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE send_to = 'พัสดุ' AND status = 4";
+                    $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE send_to = 'พัสดุ'AND (status = '4' OR status = '1') ";
                     $resultCount = mysqli_query($conn, $sqlCount);
                     $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
                     
@@ -166,7 +168,7 @@ function getStatusText($status) {
                     $offset = ($page - 1) * $recordsPerPage;
 
                     // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                    $sql = "SELECT * FROM repair_report_pd05 WHERE send_to = 'พัสดุ' AND status = 4 LIMIT $offset, $recordsPerPage";
+                    $sql = "SELECT * FROM repair_report_pd05 WHERE send_to = 'พัสดุ'AND (status = '4' OR status = '1') LIMIT $offset, $recordsPerPage";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result) {
@@ -185,6 +187,9 @@ function getStatusText($status) {
                             if ($row['status'] == 4) {
                               echo '<a class="btn btn-success btn-sm del-repair" href="confirm_rapair?id=' . $row['id_repair'] . '"><i class="fas fa-pencil-alt"></i> ตรวจสอบ</a>';
                             }
+                            if ($row['status'] == 1) {
+                              echo '<a class="btn btn-success btn-sm success-repair" href="#" onclick="confirmCloseRepair(' . $row['id_repair'] . ', \'' . $row['asset_name'] . '\', \'' . $row['asset_id'] . '\', \'' . $row['asset_detail'] . '\')"><i class="fas fa-pencil-alt"></i> ปิดงาน</a>';
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -195,6 +200,7 @@ function getStatusText($status) {
                 ?>
               </tbody>
               </table>
+                  </div>
         </div>
             <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
@@ -246,6 +252,29 @@ function getStatusText($status) {
 <script src="../dist/js/adminlte.min.js"></script>
 </body>
 </html>
+
+<div class="modal fade" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="closeModalLabel">ปิดงาน</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <center>
+          <p id="closeModalContent">คุณต้องการปิดงานหรือไม่?</p>
+          <p id="equipmentInfo"></p>
+        </center>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+        <button type="button" class="btn btn-success" onclick="closeRepair()">ปิดงาน</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 <?php
 if (isset($_REQUEST['success'])) {
@@ -268,6 +297,53 @@ if (isset($_REQUEST['success'])) {
   <?php
   }
 ?>
+<?php
+if (isset($_REQUEST['error'])) {
+  ?>
+ setTimeout(function() {
+              Swal.fire({
+                  title: 'ไม่สามารถดำเนินการได้',
+                  icon: 'error',
+                  confirmButtonText: 'ตกลง',
+                  allowOutsideClick: false, // ไม่อนุญาตให้คลิกนอก popup ปิด
+                  allowEscapeKey: true, // ไม่อนุญาตให้กดปุ่ม ESC เพื่อปิด
+                  allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      window.location.href = "./form_rapair";
+                  }
+              });
+          });
+     
+  <?php
+  }
+?>
+
+
+var currentIdRepair; // Variable to store the current idRepair
+
+function confirmCloseRepair(idRepair, assetName, assetId, assetDetail) {
+  // Store the idRepair in the variable
+  currentIdRepair = idRepair;
+
+  // Display the information in the modal content
+  document.getElementById('closeModalContent').innerHTML = 'คุณต้องการปิดงานหรือไม่?';
+  document.getElementById('equipmentInfo').innerHTML =
+    'ชื่อครุภัณฑ์: ' + assetName + '<br>' +
+    'เลขครุภัณฑ์: ' + assetId + '<br>' +
+    'รายละเอียดครุภัณฑ์: ' + assetDetail;
+
+  // Show the modal
+  $('#closeModal').modal('show');
+}
+
+function closeRepair() {
+  // Redirect to save_close.php with the current idRepair
+  window.location.href = './controller/repair_close.php?id=' + currentIdRepair;
+
+  // Optionally, close the modal after completing the operation
+  $('#closeModal').modal('hide');
+}
 
 </script>
 <?php

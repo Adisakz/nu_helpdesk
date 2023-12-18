@@ -4,38 +4,45 @@ require_once '../dbconfig.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับข้อมูลจากฟอร์ม
     $idRepair = $_POST['id-repair'];
+    
+    $type = $_POST['type'];
     $repair_type = $_POST['type-repair'];
     $departmentid = $_POST['department-id'];
     $assetName = $_POST['asset-name'];
     $assetId = $_POST['asset-id'];
     $assetDetail = $_POST['asset-detail'];
-    $location = $_POST['location'];
+    $building= $_POST['building'];
+    $room_number= $_POST['room-number'];
     $reportName = $_POST['report_name'];
     $reasons = $_POST['reasons'];
+    $recomment = $_POST['recomment'];
+    $repair_type_tech = $_POST['repair-type'];
     $amount = $_POST['amount'];
     $amountLast = $_POST['amount_last'];
-    $recomment = $_POST['recomment'];
     $inspectorName1 = $_POST['inspector_name1'];
     $inspectorName2 = $_POST['inspector_name2'];
     $inspectorName3 = $_POST['inspector_name3'];
-    $repair_type_tech = $_POST['repair-typetech'];
 
-   // echo "idRepair: $idRepair<br>";
-    /*echo "repair_type: $repair_type<br>";
+    /*echo "idRepair: $idRepair<br>";
+    
+    echo "type: $type<br>";
+    echo "repair_type: $repair_type<br>";
     echo "departmentid: $departmentid<br>";
     echo "assetName: $assetName<br>";
     echo "assetId: $assetId<br>";
     echo "assetDetail: $assetDetail<br>";
-    echo "location: $location<br>";
+    echo "location: $building<br>";
+    echo "location: $room_number<br>";
     echo "reportName: $reportName<br>";
     echo "reasons: $reasons<br>";
-    echo "amount: $amount<br>";
-    echo "amountLast: $amountLast<br>";
     echo "recomment: $recomment<br>";
+    echo "repair_type_tech: $repair_type_tech<br>";
+    echo "amount: $amount<br>";
+    echo "amountLast: $amountLast<br>";   
     echo "inspectorName1: $inspectorName1<br>";
     echo "inspectorName2: $inspectorName2<br>";
-    echo "inspectorName3: $inspectorName3<br>";
-    echo "repair_type_tech: $repair_type_tech<br>";*/
+    echo "inspectorName3: $inspectorName3<br>";*/
+    
 }
 ?>
 
@@ -44,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Help Desk | Head</title>
+  <title>Help Desk | Staff</title>
   <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -126,13 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo '          <p class="text-muted text-sm"><b>About: </b>' . $row['about'] . '</p>';
                         echo '        </div>';
                         echo '        <div class="col-5 text-center">';
-                        echo '          <img src="../dist/img/' . $row['signature'] . '" alt="user-avatar" class="img-circle img-fluid">';
+                        echo '          <img src="../dist/img/avatar.png" alt="user-avatar" class="img-circle img-fluid">';
                         echo '        </div>';
                         echo '      </div>';
                         echo '    </div>';
                         echo '    <div class="card-footer">';
                         echo '      <div class="text-right">';
-                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $idRepair . '\', \'' . $departmentid . '\', \'' . $assetName . '\',\'' . $assetId . '\',\'' . $assetDetail . '\',\'' . $location . '\', \'' . $reportName . '\', \'' . $reasons . '\', \'' . $amount . '\', \'' . $amountLast . '\', \'' . $recomment . '\', \'' . $inspectorName1 . '\', \'' . $inspectorName2 . '\', \'' . $inspectorName3 . '\', \'' . $repair_type . '\', \'' . $repair_type_tech . '\')">';
+                        echo '<a href="#" class="btn btn-sm btn-success" onclick="selectUser(' . $row['id_person'] . ', \'' . $idRepair. '\', \'' . $type. '\', \'' . $repair_type. '\', \'' . $departmentid. '\', \'' . $assetName . '\',\'' . $assetId. '\', \'' . $assetDetail. '\', \'' . $building. '\', \'' . $room_number. '\', \'' . $reportName. '\', \'' . $reasons. '\', \'' . $recomment . '\', \'' . $repair_type_tech. '\', \'' . $amount. '\', \'' . $amountLast. '\', \'' . $inspectorName1. '\', \'' .$inspectorName2. '\', \'' . $inspectorName3. '\')">';
                         echo '  <i class="fas fa-user"></i> เลือก';
                         echo '</a>';
                         echo '      </div>';
@@ -195,115 +202,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 </html>
 <script>
-function selectUser(userId, idRepair, departmentId, assetName, assetId, assetDetail, location, namereport, reasons, amount, amountLast, recomment, inspectorName1, inspectorName2, inspectorName3, repairType, repairTypeTech) {
+function selectUser(userId, idRepair, type, repairType,departmentID, assetName, assetId, assetDetail, building, roomNumber, reportName, reasons, recomment, repairTypeTech, amount, amountLast, inspectorName1, inspectorName2, inspectorName3) {
     var form = document.createElement('form');
-    form.action = 'confirm_repair_save';
+    form.action = 'confirm_repair_save.php';  // ปรับที่นี่เป็นไฟล์ PHP ที่จะรับค่า
     form.method = 'post';
 
-    var idRepairInput = document.createElement('input');
-    idRepairInput.type = 'hidden';
-    idRepairInput.name = 'id-repair';
-    idRepairInput.value = idRepair;
-    form.appendChild(idRepairInput);
+    // สร้าง input สำหรับแต่ละพารามิเตอร์
+    function createInput(name, value) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    }
 
-    var departmentIdInput = document.createElement('input');
-    departmentIdInput.type = 'hidden';
-    departmentIdInput.name = 'department-name';
-    departmentIdInput.value = departmentId;
-    form.appendChild(departmentIdInput);
+    createInput('id_person_send', userId);
+    createInput('id-repair', idRepair);
+    createInput('type', type);
+    createInput('repair-type', repairType);
+    createInput('department-id', departmentID);
+    createInput('asset-name', assetName);
+    createInput('asset-id', assetId);
+    createInput('asset-detail', assetDetail);
+    createInput('building', building);
+    createInput('room-number', roomNumber);
+    createInput('report-name', reportName);
+    createInput('reasons', reasons);
+    createInput('recomment', recomment);
+    createInput('repair-type-tech', repairTypeTech);
+    createInput('amount', amount);
+    createInput('amount-last', amountLast);
+    createInput('inspector-name-1', inspectorName1);
+    createInput('inspector-name-2', inspectorName2);
+    createInput('inspector-name-3', inspectorName3);
 
-    var assetIdInput = document.createElement('input');
-    assetIdInput.type = 'hidden';
-    assetIdInput.name = 'asset-id';
-    assetIdInput.value = assetId;
-    form.appendChild(assetIdInput);
-
-    var assetNameInput = document.createElement('input');
-    assetNameInput.type = 'hidden';
-    assetNameInput.name = 'asset-name';
-    assetNameInput.value = assetName;
-    form.appendChild(assetNameInput);
-
-    var assetDetailInput = document.createElement('input');
-    assetDetailInput.type = 'hidden';
-    assetDetailInput.name = 'asset-detail';
-    assetDetailInput.value = assetDetail;
-    form.appendChild(assetDetailInput);
-
-    var locationInput = document.createElement('input');
-    locationInput.type = 'hidden';
-    locationInput.name = 'location';
-    locationInput.value = location;
-    form.appendChild(locationInput);
-
-    var namereportInput = document.createElement('input');
-    namereportInput.type = 'hidden';
-    namereportInput.name = 'name-report';
-    namereportInput.value = namereport;
-    form.appendChild(namereportInput);
-
-    var reasonsInput = document.createElement('input');
-    reasonsInput.type = 'hidden';
-    reasonsInput.name = 'reasons';
-    reasonsInput.value = reasons;
-    form.appendChild(reasonsInput);
-
-    var amountInput = document.createElement('input');
-    amountInput.type = 'hidden';
-    amountInput.name = 'amount';
-    amountInput.value = amount;
-    form.appendChild(amountInput);
-
-    var amountLastInput = document.createElement('input');
-    amountLastInput.type = 'hidden';
-    amountLastInput.name = 'amount_last';
-    amountLastInput.value = amountLast;
-    form.appendChild(amountLastInput);
-
-    var recommentInput = document.createElement('input');
-    recommentInput.type = 'hidden';
-    recommentInput.name = 'recomment';
-    recommentInput.value = recomment;
-    form.appendChild(recommentInput);
-
-    var inspectorName1Input = document.createElement('input');
-    inspectorName1Input.type = 'hidden';
-    inspectorName1Input.name = 'inspector_name1';
-    inspectorName1Input.value = inspectorName1;
-    form.appendChild(inspectorName1Input);
-
-    var inspectorName2Input = document.createElement('input');
-    inspectorName2Input.type = 'hidden';
-    inspectorName2Input.name = 'inspector_name2';
-    inspectorName2Input.value = inspectorName2;
-    form.appendChild(inspectorName2Input);
-
-    var inspectorName3Input = document.createElement('input');
-    inspectorName3Input.type = 'hidden';
-    inspectorName3Input.name = 'inspector_name3';
-    inspectorName3Input.value = inspectorName3;
-    form.appendChild(inspectorName3Input);
-
-    var repairTypeInput = document.createElement('input');
-    repairTypeInput.type = 'hidden';
-    repairTypeInput.name = 'repairType';
-    repairTypeInput.value = repairType;
-    form.appendChild(repairTypeInput);
-
-    var repairTypeTechInput = document.createElement('input');
-    repairTypeTechInput.type = 'hidden';
-    repairTypeTechInput.name = 'repairTypeTech';
-    repairTypeTechInput.value = repairTypeTech;
-    form.appendChild(repairTypeTechInput);
-
-    var userIDInput = document.createElement('input');
-    userIDInput.type = 'hidden';
-    userIDInput.name = 'id-person-send';
-    userIDInput.value = userId;
-    form.appendChild(userIDInput);
-
+    // เพิ่ม form ลงใน body และทำการ submit
     document.body.appendChild(form);
-
     form.submit();
 }
 </script>

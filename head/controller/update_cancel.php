@@ -6,8 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // รับข้อมูลจาก URL
     $id_repair = $_GET['id_repair'];
     $cancelReason = $_GET['cancelReason'];
+    $id_person = $_SESSION['id'] ;
     // ทำการอัปเดตข้อมูลในฐานข้อมูล
-    $sql = "UPDATE repair_report_pd05 SET cancel_comment = '$cancelReason', date_cancel = CURRENT_TIMESTAMP, status = '2' WHERE id_repair = $id_repair";
+    $sql = "UPDATE repair_report_pd05 SET cancel_comment = '$cancelReason', date_cancel = CURRENT_TIMESTAMP, status = '2',cancel_id='$id_person' WHERE id_repair = $id_repair";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: ../repair?success=ok");

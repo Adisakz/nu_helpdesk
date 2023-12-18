@@ -73,6 +73,7 @@ require_once '../dbconfig.php';
           </div>
         </div>
         <div class="card-body p-0">
+        <div class="table-responsive">
         <table class="table table-striped projects">
               <thead>
                   <tr>
@@ -149,6 +150,7 @@ require_once '../dbconfig.php';
                 ?>
               </tbody>
           </table>
+              </div>
         </div>
         <div class="card-footer">
           <nav aria-label="Contacts Page Navigation">

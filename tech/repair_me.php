@@ -28,10 +28,10 @@ function getStatusText($status) {
   if ($status == 0) {
       $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
       return '<span ' . $style .  ' >รอซ่อม</span>';
-  } else if ($status == 1){
-      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
-  }
+  }  else if ($status == 1){
+    $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;"';
+    return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
+}
   else if ($status == 2){
     $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
     return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
@@ -112,6 +112,7 @@ function getStatusText($status) {
           </div>
         </div>
         <div class="card-body p-0">
+        <div class="table-responsive">
         <table class="table table-striped projects">
               <thead>
                   <tr>
@@ -185,6 +186,7 @@ function getStatusText($status) {
                   ?>
               </tbody>
           </table>
+                </div>
         </div>
             <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">

@@ -71,6 +71,7 @@ require_once '../dbconfig.php';
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+              <div class="table-responsive">
                 <table class="table table-striped projects">
                   <thead>
                       <tr>
@@ -119,6 +120,7 @@ require_once '../dbconfig.php';
                 
                   </tbody>
                 </table>
+                  </div>
               </div><!-- /.card-body -->
               <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">

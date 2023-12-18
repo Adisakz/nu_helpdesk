@@ -3,14 +3,17 @@ session_start();
 require_once '../dbconfig.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับข้อมูลจากฟอร์ม
+    $id_durable = $_POST['id-durable'];
+    $type = $_POST['type'];
     $typeRepair = $_POST['type-repair'];
     $departmentId = $_POST['department-id'];
     $assetName = $_POST['asset-name'];
     $assetId = $_POST['asset-id'];
     $assetDetail = $_POST['asset-detail'];
-    $location = $_POST['location'];
+    $building = $_POST['building'];
+    $room_number = $_POST['room-number'];
     $neet = $_POST['neet'];
-
+    $reasons = $_POST['reasons'];
 }
 ?>
 
@@ -175,6 +178,18 @@ function selectUser(userId, titleName, firstName, lastName) {
     form.action = 'save_repair';
     form.method = 'post';
 
+    var idDurableInput = document.createElement('input');
+    idDurableInput.type = 'hidden';
+    idDurableInput.name = 'id-durable';
+    idDurableInput.value = '<?php echo $id_durable; ?>'; // Add the actual value
+    form.appendChild(idDurableInput);
+    
+    var typeInput = document.createElement('input');
+    typeInput.type = 'hidden';
+    typeInput.name = 'type';
+    typeInput.value = '<?php echo $type; ?>'; // Add the actual value
+    form.appendChild(typeInput);
+
     var typeRepairInput = document.createElement('input');
     typeRepairInput.type = 'hidden';
     typeRepairInput.name = 'type-repair';
@@ -205,12 +220,18 @@ function selectUser(userId, titleName, firstName, lastName) {
     assetDetailInput.value = '<?php echo $assetDetail; ?>'; // Add the actual value
     form.appendChild(assetDetailInput);
 
-    var locationInput = document.createElement('input');
-    locationInput.type = 'hidden';
-    locationInput.name = 'location';
-    locationInput.value = '<?php echo $location; ?>';
-    form.appendChild(locationInput);
+    var buildingInput = document.createElement('input');
+    buildingInput.type = 'hidden';
+    buildingInput.name = 'building';
+    buildingInput.value = '<?php echo $building; ?>';
+    form.appendChild(buildingInput);
 
+    var roomnumberInput = document.createElement('input');
+    roomnumberInput.type = 'hidden';
+    roomnumberInput.name = 'room-number';
+    roomnumberInput.value = '<?php echo $room_number; ?>';
+    form.appendChild(roomnumberInput);
+    
     var neetInput = document.createElement('input');
     neetInput.type = 'hidden';
     neetInput.name = 'neet';
@@ -240,6 +261,12 @@ function selectUser(userId, titleName, firstName, lastName) {
     lastNameInput.name = 'last-name';
     lastNameInput.value = lastName;
     form.appendChild(lastNameInput);
+
+    var reasonsInput = document.createElement('input');
+    reasonsInput.type = 'hidden';
+    reasonsInput.name = 'reasons';
+    reasonsInput.value = '<?php echo $reasons; ?>';
+    form.appendChild(reasonsInput);
 
     document.body.appendChild(form);
     

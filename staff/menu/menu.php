@@ -52,7 +52,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="./form_rapair" class="nav-link" name="form_rapair">
+            <a href="./repair" class="nav-link" name="form_rapair">
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 แจ้งซ่อม

@@ -179,11 +179,6 @@ function name_person($id) {
                                                 value="<?php echo $reportName?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน</label>
-                                            <input type="text" name="reasons" class="form-control" id="reasons"
-                                            value="<?php echo $reasons?>" required>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="recomment">งานช่างได้ตรวจสอบการชำรุดแล้วปรากกฏว่า</label>
                                             <textarea name="recomment" class="form-control" id="recomment" readonly><?php echo $recomment ?></textarea>
                                         </div>
@@ -200,6 +195,11 @@ function name_person($id) {
                                             <label for="tech-name">ช่างที่ตรวจสอบ</label>
                                             <input type="text" name="show_name_tech" class="form-control" value="<?php echo name_person($tech_id)?>" readonly>
                                             <input type="text" name="tech-name"  id="tech-name"value="<?php echo $tech_id?>" hidden>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน</label>
+                                            <input type="text" name="reasons" class="form-control" id="reasons"
+                                            value="<?php echo $reasons?>" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="amount">วงเงินที่จะซ่อม</label>
