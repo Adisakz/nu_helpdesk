@@ -1,0 +1,101 @@
+version: '3.9'
+name: nu_checklist
+services:
+  web:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "8092:80"
+    volumes:
+      - web_data:/var/www/html
+      - ./src:/var/www/html
+      - ./default.conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./default.conf/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      nursing_network:
+        ipv4_address: 192.168.20.2
+
+  php:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      nursing_network:
+        ipv4_address: 192.168.20.3
+
+  phpmyadmin:
+    restart: unless-stopped
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    ports:
+      - "8093:80"
+    networks:
+      nursing_network:
+        ipv4_address: 192.168.20.4
+
+  mysql:
+    restart: unless-stopped
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: adminkku
+      MYSQL_DATABASE: nu_service
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    networks:
+      nursing_network:
+        ipv4_address: 192.168.20.5
+
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=caching_sha2_password
+
+#  api-service-nu:
+#    restart: always
+#    build:
+#      context: ./backend
+#      dockerfile: Dockerfile
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - mysql
+#    environment:
+#      DB_HOST: mysql
+#      DB_USER: kku
+#      DB_PASSWORD: kku
+#      DB_DATABASE: nu_service
+#    networks:
+#      nursing_network:
+#        ipv4_address: 192.168.10.6
+
+  cloudflared:
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token eyJhIjoiOWE1YThkZTAxODQxYjUwZjJiYWIwZGQ1YTQzZjU4NzEiLCJ0IjoiMDk1NDU1ZDgtMDhmNC00MzVjLWJiY2ItYzgwYmI4MWUyZTMxIiwicyI6IlltWXdNR1JqTldNdFpUaGhOQzAwWldZM0xXRTRaRFV0TkdOaE1tSXhZV00zTURSayJ9
+    networks:
+      nursing_network:
+        ipv4_address: 192.168.20.7
+
+networks:
+  nursing_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24
+
+volumes:
+  web_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/srv/docker_data/web'  # เปลี่ยนเป็นที่อยู่ของโฟลเดอร์บนเครื่องโฮสต์ที่คุณต้องการเชื่อมต่อกับ container
