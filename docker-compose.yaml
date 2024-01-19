@@ -1,5 +1,5 @@
 version: '3.9'
-name: nu_checklist
+name: nu_helpdesk
 services:
   web:
     restart: unless-stopped
@@ -47,7 +47,7 @@ services:
     image: mysql:latest
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: adminkku
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: nu_service
       MYSQL_USER: root
       MYSQL_PASSWORD: 
