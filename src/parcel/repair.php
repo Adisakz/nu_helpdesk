@@ -70,7 +70,7 @@ function name_department($id) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Help Desk | Tech</title>
+  <title>Help Desk | Parcel</title>
   <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
 
   <!-- Google Font: Source Sans Pro -->
@@ -134,9 +134,11 @@ function name_department($id) {
             </button>
           </div>
         </div>
-        <div class="card-body p-0">
-        <div class="table-responsive">
-        <table class="table table-striped projects">
+        <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
+                    
+                        <div class="table-responsive">
+                        <table class="table table-striped projects" cellspacing="0" width="100%"
+                                            id="dtBasicExample">
               <thead>
                   <tr>
                       <th  class="text-center">
@@ -171,21 +173,8 @@ function name_department($id) {
               </thead>
               <tbody>
                 <?php
-                    $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1')";
-                    $resultCount = mysqli_query($conn, $sqlCount);
-                    $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-                    
-                    // กำหนดจำนวนรายการต่อหน้า
-                    $recordsPerPage = 6;
-                    
-                    // รับค่าหน้าปัจจุบัน
-                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-                    // คำนวณ offset สำหรับคำสั่ง SQL
-                    $offset = ($page - 1) * $recordsPerPage;
-
-                    // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                    $sql = "SELECT * FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1') LIMIT $offset, $recordsPerPage";
+                  
+                    $sql = "SELECT * FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1')";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result) {
@@ -200,7 +189,8 @@ function name_department($id) {
                             echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
                             echo '<td class="text-center">' . $row['neet'] . '</td>';
                             echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
-                            echo '<td class="project-actions text-right">';
+                            echo '<td class="project-actions text-right" style="display:flex;">';
+                            echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>&nbsp&nbsp';
                             if ($row['status'] == 4) {
                               echo '<a class="btn btn-success btn-sm del-repair" href="confirm_rapair?id=' . $row['id_repair'] . '"><i class="fas fa-pencil-alt"></i> ตรวจสอบ</a>';
                             }
@@ -219,28 +209,7 @@ function name_department($id) {
               </table>
                   </div>
         </div>
-            <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                    <?php
-                    $totalPages = ceil($totalRecords / $recordsPerPage);
-                    $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
-
-                    // กำหนดจำนวนหน้าที่จะแสดง
-                    $visiblePages = 7;
-
-                    // คำนวณหน้าเริ่มต้นและสิ้นสุดที่จะแสดง
-                    $startPage = max($currentPage - floor($visiblePages / 2), 1);
-                    $endPage = min($startPage + $visiblePages - 1, $totalPages);
-
-                    // ปรับค่าหน้าเริ่มต้นหากมีน้อยกว่า 1
-                    $startPage = max(1, $startPage - ($visiblePages - ($endPage - $startPage)));
-
-                    for ($i = $startPage; $i <= $endPage; $i++) {
-                        echo '<li class="page-item ' . ($i == $currentPage ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }
-                    ?>
-                </ul>
-              </div>
+           
       </div>
       <!-- /.card -->
 
@@ -267,6 +236,8 @@ function name_department($id) {
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </body>
 </html>
 
@@ -293,6 +264,25 @@ function name_department($id) {
   </div>
 </div>
 <script>
+  $(document).ready(function() {
+    $('#btn-next-step').hide();
+    var table = $('#dtBasicExample').DataTable({
+        // ... ตั้งค่า DataTables ตามต้องการ ...
+    });
+
+    // การให้ความสามารถ Show/Hide Columns
+    $('a.toggle-vis').on('click', function(e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+    });
+
+    // การให้ความสามารถค้นหา (Search)
+    $('#dtBasicExample_filter input').unbind().bind('input', function() {
+        table.search(this.value).draw();
+    });
+
+});
 <?php
 if (isset($_REQUEST['success'])) {
   ?>

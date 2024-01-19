@@ -238,7 +238,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  <?php include './navber/navber.php' ;?>
   <!-- /.navbar -->
   <?php include './menu/menu.php' ;?>
-  
+  <script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
+    });
+</script>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

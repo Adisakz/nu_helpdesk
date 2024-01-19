@@ -288,7 +288,7 @@ function name_person($id) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Help Desk | Parcel</title>
+    <title>Help Desk | Head</title>
     <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
     <!-- jQuery UI Signature core CSS -->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css"
@@ -313,7 +313,13 @@ function name_person($id) {
         <!-- /.navbar -->
         <?php include './menu/menu.php' ;?>
 
-
+        <script>
+        // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+        document.addEventListener('DOMContentLoaded', function() {
+            // เลือก element และเปลี่ยน class
+            document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
+        });
+        </script>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->

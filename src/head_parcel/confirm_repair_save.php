@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
   $idRepair = htmlspecialchars($_POST['id_repair']);
 
     // Echo the values
-    echo "ประเภท: $type<br>";
+    /*echo "ประเภท: $type<br>";
     echo "หมวดหมู่ครุภัณฑ์: $repairType<br>";
     echo "ชื่อหน่วยงาน:  $department_id  <br>";
     echo "ทรัพย์สินที่ต้องการซ่อม: $assetName<br>";
@@ -90,12 +90,12 @@ if (isset($_POST['submit'])) {
     echo "1. $inspectorName1<br>";
     echo "2. $inspectorName2<br>";
     echo "3. $inspectorName3<br>";
-    echo "ส่งต่อถึง:  send_to $id_person_send<br>";
+    echo "ส่งต่อถึง:  send_to $id_person_send<br>";*/
 
     // INSERT into database
     $sql = "UPDATE repair_report_pd05 SET reasons='$reasons',amount='$amount',last_amount='$amountLast',
     inspector_name1='$inspectorName1',inspector_name2='$inspectorName2',inspector_name3='$inspectorName3',send_to='$id_person_send', 
-    date_tech_confirm = CURRENT_TIMESTAMP WHERE id_repair=$idRepair";
+    date_tech_confirm = CURRENT_TIMESTAMP,status='5' WHERE id_repair=$idRepair";
     mysqli_query($conn, $sql);
     header("location: ./repair?success=success");
       
@@ -228,7 +228,13 @@ function name_person($id) {
         <?php include './navber/navber.php' ;?>
         <!-- /.navbar -->
         <?php include './menu/menu.php' ;?>
-
+        <script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
+    });
+</script>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

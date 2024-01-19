@@ -1,3 +1,27 @@
+<?php 
+require_once '../dbconfig.php';
+$sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1')";
+$resultRepair = mysqli_query($conn, $sqlCount);
+if (!$resultRepair) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultData = mysqli_fetch_assoc($resultRepair);
+$Count = $resultData['total'];
+mysqli_free_result($resultRepair);
+
+
+$sqlCountParcel = "SELECT COUNT(*) AS totalParcel FROM report_req_parcel WHERE status = '1' OR status = '3'";
+$resultRepairParcel = mysqli_query($conn, $sqlCountParcel);
+if (!$resultRepairParcel) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDataParcel = mysqli_fetch_assoc($resultRepairParcel);
+$CountParcel = $resultDataParcel['totalParcel'];
+mysqli_free_result($resultRepairParcel);
+
+
+?>
+
 <!-- Main Sidebar Container -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <style>
@@ -11,6 +35,12 @@
     margin-right: 10px;
     /* ปรับขนาดของวรรคตามที่คุณต้องการ */
 }
+img.img-circle1 {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;  /* เพิ่มบรรทัดนี้เพื่อทำให้รูปภาพเป็นวงกลม */
+}
 </style>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -19,7 +49,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            <img src="../image_profile/<?php echo $profile_img ?>" class="img-circle1 elevation-2 " alt="User Image" style="border-radius: 50%;">
             </div>
             <div class="info">
                 <a href="#" class="d-block"> <?php echo $first_name .' '.$last_name?>
@@ -36,6 +66,14 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+               <li class="nav-item">
+                    <a href="./edit_account" class="nav-link" name="profile">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Profile
+                        </p>
+                    </a>
+                </li> 
                 <li class="nav-item">
                     <a href="./index" class="nav-link" name="dashboard">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -65,6 +103,16 @@
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
                             ตรวจสอบการแจ้งซ่อม
+                            <span class="badge badge-info right"><?php echo $Count;?></span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="./cheack_req_parcel" class="nav-link" name="check-req-parcecl">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                            ตรวจสอบการเบิกพัสดุ
+                            <span class="badge badge-info right"><?php echo $CountParcel;?></span>
                         </p>
                     </a>
                 </li>
@@ -133,10 +181,41 @@
                                 </li>
                     
                             </ul>
+                        </li>             
+                    </ul>
+                </li>
+                <li class="nav-item" name="print">
+                    <a href="#" class="nav-link" name="print-option">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            พิมพ์
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="./qr_print" class="nav-link" name="qr">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    Qr-code พัสดุ
+                                </p>
+                            </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="./repair_report_pdf" class="nav-link" name="report">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>รายงานการแจ้งซ่อม</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./req_report_pdf" class="nav-link" name="report-parcel">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>รายงานการเบิกพัสดุ</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-            </li>
 
         </nav>
         <!-- /.sidebar-menu -->

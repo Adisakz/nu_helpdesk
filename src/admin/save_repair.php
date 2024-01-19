@@ -3,6 +3,22 @@ session_start();
 require_once '../dbconfig.php';
 
 
+///////////  แสดงชื่อหน่วยงาน
+function name_department($id) {
+    global $conn; // Assuming $conn is your database connection variable
+
+    $sql_department = "SELECT name FROM department WHERE id_department = '$id' LIMIT 1";
+    $result_department = mysqli_query($conn, $sql_department);
+
+    if ($row_department = mysqli_fetch_assoc($result_department)) {
+        $department_durable = $row_department['name'];
+        return $department_durable;
+    } else {
+        $department_durable = '';
+        return $department_durable;
+    }
+}
+
 function resizeImage($tmp_name, $img_name, $img_size, $dir, $new_width, $new_height) {
   list($width, $height) = getimagesize($tmp_name);
   $tmp_img = imagecreatetruecolor($new_width, $new_height);
@@ -55,7 +71,7 @@ if (isset($_POST['submit'])) {
   $type = $_POST['type'];
   $type_Repair = $_POST['type-repair'];
   $assetId = $_POST['asset-id'];
-  $departmentName = $_POST['department-name'];
+  $departmentName = $_POST['department-id'];
   $assetName = $_POST['asset-name'];
   $assetDetail = $_POST['asset-detail'];
   $neet = $_POST['neet'];
@@ -66,6 +82,7 @@ if (isset($_POST['submit'])) {
   $room_number = $_POST['room-number'];
   $singature_report = $_POST['image-signature-report'];
   $name_report = $_POST['name-report'];
+  $reasons = $_POST['reasons'];
   $data1 = $_POST['department-option'];
  /* echo $id_durable;
   echo 'Type: ' . $type . '<br>';
@@ -104,7 +121,7 @@ if ($data1 == 2) {
 document.addEventListener('DOMContentLoaded', function() {
     Swal.fire({
         title: '<h4 class="t1"><strong>ลงนามผู้รับรอง</strong></h4>',
-        html: '<center><div class="mb-3"><div class="mb-3"><label class="form-label" for="imp_sig"></label><div id="canvasDiv"></div><br><button type="button" class="btn btn-danger" id="reset-btn">Clear</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="btn-save">Save</button></div> <form id="signatureform" action="save_repair" style="display:none" method="post"><input type="hidden" id="signature" name="signature"><input type="hidden" name="signaturesubmit" value="1"><input type="hidden" name="data1" value="<?php echo htmlspecialchars($type); ?>"><input type="hidden" name="data2" value="<?php echo htmlspecialchars($type_Repair); ?>"><input type="hidden" name="data3" value="<?php echo htmlspecialchars($assetId); ?>"><input type="hidden" name="data4" value="<?php echo htmlspecialchars($departmentName); ?>"><input type="hidden" name="data5" value="<?php echo htmlspecialchars($assetName); ?>"><input type="hidden" name="data6" value="<?php echo htmlspecialchars($assetDetail); ?>"><input type="hidden" name="data7" value="<?php echo htmlspecialchars($neet); ?>"><input type="hidden" name="data8" value="<?php echo htmlspecialchars($status); ?>"><input type="hidden" name="data9" value="<?php echo htmlspecialchars($id_tech); ?>"><input type="hidden" name="data10" value="<?php echo htmlspecialchars($id_person); ?>"><input type="hidden" name="data11" value="<?php echo htmlspecialchars($building); ?>"><input type="hidden" name="data12" value="<?php echo htmlspecialchars($room_number); ?>"><input type="hidden" name="data13" value="<?php echo htmlspecialchars($name_report); ?>"><input type="hidden" name="data14" value="<?php echo htmlspecialchars($id_durable); ?>"></form></div></center>',
+        html: '<center><div class="mb-3"><div class="mb-3"><label class="form-label" for="imp_sig"></label><div id="canvasDiv"></div><br><button type="button" class="btn btn-danger" id="reset-btn">Clear</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="btn-save">Save</button></div> <form id="signatureform" action="save_repair" style="display:none" method="post"><input type="hidden" id="signature" name="signature"><input type="hidden" name="signaturesubmit" value="1"><input type="hidden" name="data1" value="<?php echo htmlspecialchars($type); ?>"><input type="hidden" name="data2" value="<?php echo htmlspecialchars($type_Repair); ?>"><input type="hidden" name="data3" value="<?php echo htmlspecialchars($assetId); ?>"><input type="hidden" name="data4" value="<?php echo htmlspecialchars($departmentName); ?>"><input type="hidden" name="data5" value="<?php echo htmlspecialchars($assetName); ?>"><input type="hidden" name="data6" value="<?php echo htmlspecialchars($assetDetail); ?>"><input type="hidden" name="data7" value="<?php echo htmlspecialchars($neet); ?>"><input type="hidden" name="data8" value="<?php echo htmlspecialchars($status); ?>"><input type="hidden" name="data9" value="<?php echo htmlspecialchars($id_tech); ?>"><input type="hidden" name="data10" value="<?php echo htmlspecialchars($id_person); ?>"><input type="hidden" name="data11" value="<?php echo htmlspecialchars($building); ?>"><input type="hidden" name="data12" value="<?php echo htmlspecialchars($room_number); ?>"><input type="hidden" name="data13" value="<?php echo htmlspecialchars($name_report); ?>"><input type="hidden" name="data14" value="<?php echo htmlspecialchars($id_durable); ?>"><input type="hidden" name="data15" value="<?php echo htmlspecialchars($reasons); ?>"></form></div></center>',
         confirmButtonText: '<div class="text t1">ออก</div>',
         allowOutsideClick: false,
         allowEscapeKey: false,
@@ -135,8 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
             move_uploaded_file($resized_img_name, $dir);
 
             // INSERT into database
-            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status) 
-                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$resized_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
+            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status,reasons) 
+                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$resized_img_name','$name_report',CURRENT_TIMESTAMP,'$status','$reasons')";
             mysqli_query($conn, $sql);
             header("location: ./save_repair?success=success&id=$assetId&id_durable=$id_durable");
         } else {
@@ -146,8 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
             move_uploaded_file($tmp_name, $dir);
 
             // INSERT into database
-            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status) 
-                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$new_img_name','$name_report',CURRENT_TIMESTAMP,'$status')";
+            $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status,reasons) 
+                    VALUES ('$type','$type_Repair','$departmentName','$assetName','$assetId','$assetDetail','$building','$room_number','$neet','$id_tech','$id_person','$new_img_name','$name_report',CURRENT_TIMESTAMP,'$status','$reasons')";
             mysqli_query($conn, $sql);
             header("location: ./save_repair?success=success&id=$assetId&id_durable=$id_durable");
         }
@@ -182,6 +199,7 @@ if (isset($_POST['signaturesubmit'])) {
     $data12 = $_REQUEST['data12'];//room_number
     $data13 = $_REQUEST['data13'];//name_report
     $data14 = $_REQUEST['data14'];//name_report
+    $data15 = $_REQUEST['data15']; //reasons
     $id_person = $_SESSION['id'] ;//
      // ทำการแสดงผลค่าที่ได้รับจากฟอร์ม
      /*echo 'Type: ' . $data1 . '<br>';
@@ -198,8 +216,8 @@ if (isset($_POST['signaturesubmit'])) {
      echo 'Name Report: ' . $data10  . '<br>';
      echo 'signature: ' . $signatureFileName . '<br>';*/
   // INSERT into database
-  $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status) 
-  VALUES ('$data1','$data2','$data4','$data5','$data3','$data6','$data11','$data12','$data7','$data9','$id_person', '$signatureFileName','$data13', CURRENT_TIMESTAMP, '$data8')";
+  $sql = "INSERT INTO repair_report_pd05 (type, type_repair, department_id, asset_name, asset_id, asset_detail, building, room_number, neet, tech_id, id_person_report, report_signature, report_name, date_report_in, status,reasons) 
+  VALUES ('$data1','$data2','$data4','$data5','$data3','$data6','$data11','$data12','$data7','$data9','$id_person', '$signatureFileName','$data13', CURRENT_TIMESTAMP, '$data8','$data15')";
     mysqli_query($conn, $sql);
     header("location: ./save_repair?success=success&id=$data3&id_durable=$data14");
 }
@@ -241,6 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = '0';
     $name_tech = $title.$firstName.' '. $lastName;
     $name_report = $_SESSION['name_title'].$_SESSION['first_name'].' '.$_SESSION['last_name'];
+    $reasons = $_POST['reasons'];
 }
 ?>
 
@@ -310,19 +329,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <!-- form start -->
                                 <form id="quickForm" action="" method="post" enctype="multipart/form-data">
                                     <div class="card-body">
+                                    <div class="form-group">
+                                            <input type="text" name="type"
+                                                value="<?php echo $type?>" style="display: none; ">
+                                            <label for="type">ประเภท : <span
+                                                    style="color:green;"><?php echo htmlspecialchars($type); ?></span></label>
+                                        </div>
                                         <div class="form-group">
-                                            <input type="text" name="type" value="<?php echo $type?>"
-                                                style="display: none; ">
                                             <input type="text" name="type-repair" value="<?php echo $typeRepair?>"
                                                 style="display: none; ">
-                                            <label for="type-repair">ประเภท : <span
+                                            <label for="type-repair">หมวดหมู่ครุภัณฑ์ : <span
                                                     style="color:green;"><?php echo htmlspecialchars($typeRepair); ?></span></label>
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" name="department-name"
+                                            <input type="text" name="department-id"
                                                 value="<?php echo $departmentName?>" style="display: none; ">
-                                            <label for="department-name">ชื่อหน่วยงาน : <span
-                                                    style="color:green;"><?php echo htmlspecialchars($departmentName); ?></span></label>
+                                            <label for="department-id">ชื่อหน่วยงาน : <span
+                                                    style="color:green;"><?php echo htmlspecialchars(name_department($departmentName)); ?></span></label>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" name="asset-name" value="<?php echo $assetName?>"
@@ -353,6 +376,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     style="color:green;"><?php echo htmlspecialchars($room_number); ?></span></label>
                                             <input type="text" name="room-number" value="<?php echo $room_number?>"
                                                 style="display: none; ">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="reasons" value="<?php echo $reasons?>"
+                                                style="display: none; ">
+                                            <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน : <span
+                                                    style="color:green;"><?php echo htmlspecialchars($reasons); ?></span></label>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" name="neet" value="<?php echo $neet?>"

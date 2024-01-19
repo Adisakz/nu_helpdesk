@@ -48,7 +48,7 @@ function name_department($id) {
     // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
     document.addEventListener('DOMContentLoaded', function() {
         // เลือก element และเปลี่ยน class
-        document.querySelector('a[name="form_rapair"]').classList.add('nav-link', 'active');
+        document.querySelector('a[name="search_asset"]').classList.add('nav-link', 'active');
     });
 </script> 
 

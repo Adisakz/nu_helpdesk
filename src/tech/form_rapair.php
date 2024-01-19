@@ -1,6 +1,35 @@
 <?php 
 session_start();
 require_once '../dbconfig.php';
+
+$id_asset = urldecode($_GET['id']);
+$id_durable = $_GET['id_durable'];
+$sql = "SELECT * FROM durable_articles WHERE asset_id = '$id_asset'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$typeRepair = $row['type_durable'];
+$departmentName = $row['department'];
+$assetName = $row['name'];
+$assetId = $row['asset_id'];
+$building = $row['building'];
+$room_number = $row['room_number'];
+
+
+///////////  แสดงชื่อหน่วยงาน
+function name_department($id) {
+  global $conn; // Assuming $conn is your database connection variable
+
+  $sql_department = "SELECT name FROM department WHERE id_department = '$id' LIMIT 1";
+  $result_department = mysqli_query($conn, $sql_department);
+
+  if ($row_department = mysqli_fetch_assoc($result_department)) {
+      $department_durable = $row_department['name'];
+      return $department_durable;
+  } else {
+      $department_durable = '';
+      return $department_durable;
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +37,7 @@ require_once '../dbconfig.php';
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Help Desk | Tech</title>
+  <title>Help Desk | Parcel</title>
   <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
 
   <!-- Google Font: Source Sans Pro -->
@@ -66,67 +95,57 @@ require_once '../dbconfig.php';
               <!-- form start -->
               <form id="quickForm" action="tech" method="post" >
                 <div class="card-body">
+                
+                  
                   <div class="form-group">
                     <label for="type-rapair">ประเภท</label>
-                    <select name="type-repair" class="form-control" id="type-repair" required>
-                        <option value="" disabled selected>--- เลือกประเภท ---</option>
-                        <?php
-                        // ทำการดึงข้อมูลจากฐานข้อมูล
-                        $sql = "SELECT * FROM type_repair"; // แทน your_table_name ด้วยชื่อตารางของคุณ
-                        $result = mysqli_query($conn, $sql);
-
-                        // ตรวจสอบว่ามีข้อมูลหรือไม่
-                        if ($result) {
-                            // วนลูปเพื่อแสดงข้อมูลใน dropdown
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<option value="' .$row['name'] . '">' . $row['name'] . '</option>';
-                            }
-
-                            // ปิดการเชื่อมต่อ
-                           
-                        }
-                        ?>
-                    </select>
+                    <input type="text" name="id-durable" class="form-control" id="type-repair" value="<?php echo $id_durable?>" hidden>
+                    <input type="text" name="type-repair" class="form-control" id="type-repair" value="<?php echo $typeRepair?>" readonly>
                   </div>
                   <div class="form-group">
                     <label for="department-id">ชื่อหน่วยงาน</label>
-                    <select name="department-id" class="form-control" id="department-id" required>
-                        <option value="" disabled selected>--- เลือกหน่วยงาน ---</option>
-                        <?php
-                        // ทำการดึงข้อมูลจากฐานข้อมูล
-                        $sql = "SELECT * FROM department"; // แทน your_table_name ด้วยชื่อตารางของคุณ
-                        $result = mysqli_query($conn, $sql);
-
-                        // ตรวจสอบว่ามีข้อมูลหรือไม่
-                        if ($result) {
-                            // วนลูปเพื่อแสดงข้อมูลใน dropdown
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<option value="' . $row['id_department'] . '">' . $row['name'] . '</option>';
-                            }
-                        }
-                        ?>
-                    </select>
+                    <input type="text"  class="form-control" value="<?php echo name_department($departmentName)?>" readonly>
+                    <input type="text" name="department-id" class="form-control" id="department-id" value="<?php echo $departmentName?>" hidden>
                   </div>
                   <div class="form-group">
                     <label for="asset-name">ทรัพย์สินที่ต้องการซ่อม</label>
-                    <input type="text" name="asset-name" class="form-control" id="asset-name" required>
+                    <input type="text" name="asset-name" class="form-control" id="asset-name" value="<?php echo $assetName?>" readonly>
                   </div>
                   <div class="form-group">
                   <label for="asset-id">หมายเลขครุภัณฑ์</label>
-                    <input type="text" name="asset-id" class="form-control" id="asset-id" >
+                  <input type="text" name="asset-id" class="form-control" id="asset-id" value="<?php echo $assetId?>" readonly>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="building">อาคาร</label>
+                    <input type="text" name="building" class="form-control" id="building" value="<?php echo $building?>" readonly>
                   </div>
                   <div class="form-group">
-                    <label for="asset-detail">สภาพการชำรุด</label>
+                    <label for="room-number">ห้อง</label>
+                    <input type="text" name="room-number" class="form-control" id="room-number" value="<?php echo $room_number?>" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="type">ประเภทการแจ้ง</label>
+                    <select name="type" class="form-control" id="type" required>
+                        <option value="" disabled selected>--- เลือกประเภท ---</option>
+                        <option value="ซ่อม">ซ่อม</option>
+                        <option value="service">service</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="asset-detail">สภาพการชำรุด/รายละเอียดการขอ service</label>
                     <input type="text" name="asset-detail" class="form-control" id="asset-detail" required>
                   </div>
                   <div class="form-group">
-                    <label for="location">ที่ตั้ง</label>
-                    <input type="text" name="location" class="form-control" id="location" required>
+                    <label for="reasons">เหตุผลความจำเป็นในการจ้างซ่อมทรัพย์สิน</label>
+                    <input type="text" name="reasons" class="form-control" id="reasons"
+                        required>
                   </div>
+                  
                   <div class="form-group">
                     <label for="neet">ความต้องการ</label>
                     <select name="neet" class="form-control" id="neet" required>
-                        <option value="" >---- เลือกตามความต้องการของคุณ ----</option>
+                        <option value="" disabled selected>---- เลือกตามความต้องการของคุณ ----</option>
                         <option value="ด่วนที่สุด">ด่วนที่สุด</option>
                         <option value="ด่วนมาก">ด่วนมาก</option>
                         <option value="ด่วน">ด่วน</option>

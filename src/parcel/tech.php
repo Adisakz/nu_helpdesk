@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require_once '../dbconfig.php';
+error_reporting(E_ERROR | E_PARSE);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับข้อมูลจากฟอร์ม
     $id_durable = $_POST['id-durable'];
@@ -41,8 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- /.menu -->
   <?php include './menu/menu.php' ;?>
   <!-- /.menu -->
- 
   <script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="search_asset"]').classList.add('nav-link', 'active');
+    });
+</script> 
+  <script>
+    
 function selectUser(userId, titleName, firstName, lastName) {
     var form = document.createElement('form');
     form.action = 'save_repair';
@@ -172,21 +180,8 @@ function selectUser(userId, titleName, firstName, lastName) {
         <div class="card-body pb-0">
           <div class="row">
             <?php
-               $sqlCount = "SELECT COUNT(*) AS total FROM account WHERE urole = 'ช่าง'";
-               $resultCount = mysqli_query($conn, $sqlCount);
-               $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-               
-               // กำหนดจำนวนรายการต่อหน้า
-               $recordsPerPage = 6;
-               
-               // รับค่าหน้าปัจจุบัน
-               $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-           
-               // คำนวณ offset สำหรับคำสั่ง SQL
-               $offset = ($page - 1) * $recordsPerPage;
-           
-               // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-               $sql = "SELECT * FROM account WHERE urole = 'ช่าง' LIMIT $offset, $recordsPerPage";
+              
+               $sql = "SELECT * FROM account WHERE urole = 'ช่าง'";
                $result = mysqli_query($conn, $sql);
 
                 // ตรวจสอบว่ามีข้อมูลหรือไม่
@@ -204,7 +199,7 @@ function selectUser(userId, titleName, firstName, lastName) {
                         echo '          <p class="text-muted text-sm"><b>About: </b>' . $row['about'] . '</p>';
                         echo '        </div>';
                         echo '        <div class="col-5 text-center">';
-                        echo '          <img src="../dist/img/avatar.png" alt="user-avatar" class="img-circle img-fluid">';
+                        echo '           <img src="../image_profile/'.$row['profile_img'].'" alt="user-avatar" class="img-circle img-fluid">';
                         echo '        </div>';
                         echo '      </div>';
                         echo '    </div>';
@@ -217,6 +212,7 @@ function selectUser(userId, titleName, firstName, lastName) {
                         echo '    </div>';
                         echo '  </div>';
                         echo '</div>';
+                      echo ' <style>img.img-circle {width: 128px;height: 128px;object-fit: cover;border-radius: 50%;  /* เพิ่มบรรทัดนี้เพื่อทำให้รูปภาพเป็นวงกลม */}</style>';
                     }
 
                     // ปิดการเชื่อมต่อ
@@ -228,24 +224,6 @@ function selectUser(userId, titleName, firstName, lastName) {
 ?>
           </div>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          <nav aria-label="Contacts Page Navigation">
-              <ul class="pagination justify-content-center m-0">
-                  <?php
-                  // คำนวณจำนวนหน้าทั้งหมด
-                  $totalPages = ceil($totalRecords / $recordsPerPage);
-
-                  // แสดงปุ่ม Pagination
-                  for ($i = 1; $i <= $totalPages; $i++) {
-                      $activeClass = ($page == $i) ? 'active' : '';
-                      echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                  }
-                  ?>
-              </ul>
-          </nav>
-        </div>
-        <!-- /.card-footer -->
       </div>
       <!-- /.card -->
 

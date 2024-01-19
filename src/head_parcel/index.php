@@ -3,26 +3,91 @@
   <?php 
   session_start();
   require_once '../dbconfig.php';
-  
-//แสดงจำนวนบัญชีทั้งหมด
-$sqlAssetsToRepair = "SELECT COUNT(*) AS assetCount FROM durable_articles ";
-$resultAssetsToRepair = mysqli_query($conn, $sqlAssetsToRepair);
-if (!$resultAssetsToRepair) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowAssetsToRepair = mysqli_fetch_assoc($resultAssetsToRepair);
-$assetCount = $rowAssetsToRepair['assetCount'];
-mysqli_free_result($resultAssetsToRepair);
+  $id_person = $_SESSION['id'] ;
+  $department = $_SESSION['department'] ;
+
 
 //แสดงจำนวนการแจ้งซ่อมทั้งหมด
-$sqlAssetsAwaitingInspection = "SELECT COUNT(*) AS repair FROM repair_report_pd05 WHERE send_to = 'พัสดุ'AND (status = '4' OR status = '1')";
-$resultAssetsAwaitingInspection = mysqli_query($conn, $sqlAssetsAwaitingInspection);
-if (!$resultAssetsAwaitingInspection) {
+$sqlRepairme = "SELECT COUNT(*) AS Countme FROM repair_report_pd05 WHERE id_person_report = $id_person";
+$resultRepairme = mysqli_query($conn, $sqlRepairme);
+if (!$resultRepairme) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDatame = mysqli_fetch_assoc($resultRepairme);
+$Countme = $resultDatame['Countme'];
+mysqli_free_result($resultRepairme);
+
+//แสดงจำนวนการแจ้งซ่อมที่ซ่อมแล้วทั้งหมด
+$sqlRepairsuccess = "SELECT COUNT(*) AS Countsuccess FROM repair_report_pd05 WHERE id_person_report = $id_person and status='3'";
+$resultRepairsuccess = mysqli_query($conn, $sqlRepairsuccess);
+if (!$resultRepairsuccess) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDatasuccess = mysqli_fetch_assoc($resultRepairsuccess);
+$Countsuccess = $resultDatasuccess['Countsuccess'];
+mysqli_free_result($resultRepairsuccess);
+
+//แสดงจำนวนการแจ้งซ่อมที่ถูกยกเลิกทั้งหมด
+$sqlRepairfail = "SELECT COUNT(*) AS Countfail FROM repair_report_pd05 WHERE id_person_report = $id_person and status='2'";
+$resultRepairfail = mysqli_query($conn, $sqlRepairfail);
+if (!$resultRepairfail) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDatafail = mysqli_fetch_assoc($resultRepairfail);
+$Countfail = $resultDatafail['Countfail'];
+mysqli_free_result($resultRepairfail);
+
+//แสดงจำนวนการแจ้งซ่อมที่รอนุมัติทั้งหมด
+$sqlRepairwait = "SELECT COUNT(*) AS Countwait FROM repair_report_pd05 WHERE id_person_report = $id_person AND status IN ('4', '5','0')";
+$resultRepairwait = mysqli_query($conn, $sqlRepairwait);
+if (!$resultRepairwait) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDatawait = mysqli_fetch_assoc($resultRepairwait);
+$Countwait = $resultDatawait['Countwait'];
+mysqli_free_result($resultRepairwait);
+
+
+//แสดงจำนวนการเบิกพัสดุ
+$sqlNeetParcel = "SELECT COUNT(*) AS NeetParcel FROM report_req_parcel where dapartment_id =$department ";
+$resultNeetParcel = mysqli_query($conn, $sqlNeetParcel);
+if (!$resultNeetParcel) {
     die("Query failed: " . mysqli_error($conn));
 }
-$rowAssetsAwaitingInspection = mysqli_fetch_assoc($resultAssetsAwaitingInspection);
-$repairAwaitingInspection = $rowAssetsAwaitingInspection['repair'];
-mysqli_free_result($resultAssetsAwaitingInspection);
+$rowNeetParcel = mysqli_fetch_assoc($resultNeetParcel);
+$NeetParcel = $rowNeetParcel['NeetParcel'];
+mysqli_free_result($resultNeetParcel);
+
+
+//แสดงจำนวนการเบิกพัสดุอนุมัติ
+$sqlsuccessParcel = "SELECT COUNT(*) AS successParcel FROM report_req_parcel where dapartment_id =$department and status='4' ";
+$resultsuccessParcel = mysqli_query($conn, $sqlsuccessParcel);
+if (!$resultsuccessParcel) {
+    die("Query failed: " . mysqli_error($conn));
+}
+$rowsuccessParcel = mysqli_fetch_assoc($resultsuccessParcel);
+$successParcel = $rowsuccessParcel['successParcel'];
+mysqli_free_result($resultsuccessParcel);
+
+//แสดงจำนวนการเบิกพัสดุรออนุมัติ
+$sqlwaitParcel = "SELECT COUNT(*) AS waitParcel FROM report_req_parcel where dapartment_id =$department and status='2' ";
+$resultwaitParcel = mysqli_query($conn, $sqlwaitParcel);
+if (!$resultwaitParcel) {
+    die("Query failed: " . mysqli_error($conn));
+}
+$rowwaitParcel = mysqli_fetch_assoc($resultwaitParcel);
+$waitParcel = $rowwaitParcel['waitParcel'];
+mysqli_free_result($resultwaitParcel);
+
+//แสดงจำนวนการเบิกพัสดุที่ถูกยกเลิก
+$sqlcancelParcel = "SELECT COUNT(*) AS cancelParcel FROM report_req_parcel where dapartment_id =$department and status='5' ";
+$resultcancelParcel = mysqli_query($conn, $sqlcancelParcel);
+if (!$resultcancelParcel) {
+    die("Query failed: " . mysqli_error($conn));
+}
+$rowcancelParcel = mysqli_fetch_assoc($resultcancelParcel);
+$cancelParcel = $rowcancelParcel['cancelParcel'];
+mysqli_free_result($resultcancelParcel);
 
   ?>
   <!-- /.navbar -->
@@ -101,32 +166,33 @@ mysqli_free_result($resultAssetsAwaitingInspection);
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-lg-3 col-6">
-              <!-- small box -->
-              <div class="small-box bg-info">
-                  <div class="inner">
-                      <h3><?php echo $assetCount; ?></h3>
-                      <p>จำนวนครุภัณฑ์ในระบบ</p>
-                  </div>
-                  <div class="icon">
-                      <i class="ion ion-settings"></i>
-                  </div>
-                  <a href="parcel" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?php echo $Countme ;?></h3>
+
+                <p>จำนวนการแจ้งซ่อม</p>
               </div>
+              <div class="icon">
+                <i class="ion"><i class="fa fa-file"></i></i>
+              </div>
+              <a href="./repair_me" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
           </div>
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-              <h3><?php echo $repairAwaitingInspection; ?></h3>
+                <h3><?php echo $Countsuccess ;?></h3>
 
-                <p>การแจ้งซ่อมรอการตรวจสอบ</p>
+                <p>จำนวนที่ซ่อมเสร็จ</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="ion ion-checkmark"></i>
               </div>
-              <a href="repair" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="./repair_me" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -134,14 +200,14 @@ mysqli_free_result($resultAssetsAwaitingInspection);
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+              <h3><?php echo $Countwait  ;?></h3>
 
-                <p>User Registrations</p>
+                <p>จำนวนการซ่อมที่รออนุมัติ</p>
               </div>
               <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="ion "><i class="fa fa-clock"></i></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="./repair_me" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -149,131 +215,79 @@ mysqli_free_result($resultAssetsAwaitingInspection);
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+              <h3><?php echo $Countfail  ;?></h3>
 
-                <p>Unique Visitors</p>
+              <p>จำนวนการซ่อมที่ถูกยกเลิก</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion "><i class="fa fa-ban"></i></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="./repair_me" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?php echo $NeetParcel ;?></h3>
+
+                <p>จำนวนการเบิกพัสดุ</p>
+              </div>
+              <div class="icon">
+                <i class="ion"><i class="fa fa-file"></i></i>
+              </div>
+              <a href="./req_parcel_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3><?php echo $successParcel ;?></h3>
+
+                <p>จำนวนเบิกพัสดุที่อนุมัติ</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-checkmark"></i>
+              </div>
+              <a href="./req_parcel_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+              <h3><?php echo $waitParcel  ;?></h3>
+
+                <p>จำนวนการเบิกพัสดุที่รออนุมัติ</p>
+              </div>
+              <div class="icon">
+                <i class="ion "><i class="fa fa-clock"></i></i>
+              </div>
+              <a href="./req_parcel_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+              <h3><?php echo $cancelParcel ;?></h3>
+
+              <p>จำนวนการเบิกพัสดุที่ถูกยกเลิก</p>
+              </div>
+              <div class="icon">
+                <i class="ion "><i class="fa fa-ban"></i></i>
+              </div>
+              <a href="./req_parcel_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
         </div>
         <!-- /.row -->
-        <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
-          <section class="col-lg-7 connectedSortable">
-            <!-- Custom tabs (Charts with tabs)-->
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  Sales
-                </h3>
-                <div class="card-tools">
-                  <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                    </li>
-                  </ul>
-                </div>
-              </div><!-- /.card-header -->
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  <!-- Morris chart - Sales -->
-                  <div class="chart tab-pane active" id="revenue-chart"
-                       style="position: relative; height: 300px;">
-                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
-                   </div>
-                  <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
-                  </div>
-                </div>
-              </div><!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-           
-          </section>
-          <!-- /.Left col -->
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-5 connectedSortable">
-
-            <!-- Map card -->
-            <div class="card bg-gradient-primary" hidden> <!-- ปิดาส่วนบนของปฏิทิน-->
-              <!-- /.card-body-->
-              <div class="card-footer bg-transparent">
-                <div class="row">
-                  <div class="col-4 text-center">
-                    <div id="sparkline-1"></div>
-                   
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-2"></div>
-                   
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-3"></div>
-                  
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-            </div>
-            <!-- /.card -->
-
-            <!-- Calendar -->
-            <div class="card bg-gradient-success">
-              <div class="card-header border-0">
-
-                <h3 class="card-title">
-                  <i class="far fa-calendar-alt"></i>
-                  Calendar
-                </h3>
-                <!-- tools card -->
-                <div class="card-tools">
-                  <!-- button with a dropdown -->
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                      <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="dropdown-menu" role="menu">
-                      <a href="#" class="dropdown-item">Add new event</a>
-                      <a href="#" class="dropdown-item">Clear events</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item">View calendar</a>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <!-- /. tools -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body pt-0">
-                <!--The calendar -->
-                <div id="calendar" style="width: 100%"></div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </section>
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
+      
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

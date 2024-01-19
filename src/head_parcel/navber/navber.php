@@ -13,6 +13,12 @@ if ($_SESSION['urole'] !== 'หัวหน้าหน่วย') {
 header("Location:index");
   exit();
 }}
+
+else if (empty($_SESSION['name_title']) || empty($_SESSION['first_name']) || empty($_SESSION['last_name']) || empty($_SESSION['position']) || empty($_SESSION['department'])) {
+  // หากไม่มีค่า name_title, first_name, last_name, position, department ให้ไปที่หน้า edit_account
+  header("Location: ../setting");
+  exit();
+}
     $id_person = $_SESSION['id'] ;
     $name_title = $_SESSION['name_title'] ;
     $first_name = $_SESSION['first_name'] ;

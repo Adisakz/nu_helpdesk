@@ -26,15 +26,15 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
             header("location: ./admin/index");
         } else if ($row['urole'] == 'ช่าง') {
             header("location: ./tech/index");
-        } else if ($row['urole'] == 'หัวหน้าหน่วย') {
+        } else if ($row['urole'] == 'หัวหน้าหน่วย') {//หัวหน้ากองคลัง
             if ( $row["department"] =='11'){
                 header("location: ./head_klung/index");
             }
-            else if ( $row["department"] =='2'){
+            else if ( $row["department"] =='2'){//หัวหน้าพัสดุ
                 header("location: ./head_parcel/index");
             }
             else {
-                header("location: ./head/index");
+                header("location: ./head/index");//หัวหน้าหน่วย
             }
         } else if ($row['urole'] == 'ผู้อำนวยการ') {
             header("location: ./director/index");
@@ -116,12 +116,20 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
 
                                             <div class="form-group row">
                                                 <div class="col-sm-8 mb-3 mb-sm-0 mx-auto">
-                                                    <input type="text" class="form-control t1" name="id-person" placeholder="เลขบัตรประจำตัวประชาชน">
+                                                <input type="text" class="form-control t1" name="id-person" placeholder="เลขบัตรประจำตัวประชาชน" minlength="13" maxlength="13" pattern="\d{13}">
                                                 </div>
                                             </div>
                                             <center>
+                                                <p>---- สิทธิ์เข้าระบบ ----</p>
+                                                <p>ช่าง : 2222222222222</p>
+                                                <p>พัสดุ : 3333333333333</p>
+                                                <p>หัวหน้าพัสดุ : 4444444444444</p>
+                                                <p>หัวหน้ากองคลัง : 5555555555555</p>
+                                                <p>หัวหน้ากองบริหารงาน : 6666666666666</p>
+                                                <p>คณบดี : 7777777777777</p>
                                                 <button type="submit" name="signup"
                                                     class="btn btn-success wider-btn1 t1">เข้าสู่ระบบ</button>
+                                                    
                                             </center>
                                         </form>                
                                     </div>

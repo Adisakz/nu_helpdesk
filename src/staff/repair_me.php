@@ -26,23 +26,27 @@ function thaiMonth($month) {
 
 function getStatusText($status) {
   if ($status == 0) {
-      $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style .  ' >รอซ่อม</span>';
+      $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รอช่างตรวจสอบ</button>';
   }  else if ($status == 1){
-    $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
+    $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">กำลังซ่อม</button>';
 }
   else if ($status == 2){
-    $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
+    $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">ยกเลิกการซ่อม</button>';
   }
   else if ($status == 3){
-    $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">ซ่อมเสร็จ</span>';
+    $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">ซ่อมเสร็จ</button>';
   }
   else if ($status == 4){
-    $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-    return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
+    $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
+  }
+else if ($status == 5){
+    $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+    return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
   }
 }
 
@@ -131,9 +135,9 @@ function name_department($id) {
             </button>
           </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
         <div class="table-responsive">
-        <table class="table table-striped projects">
+          <table class="table table-striped projects" cellspacing="0" width="100%" id="dtBasicExample">
               <thead>
                   <tr>
                       <th  class="text-center">
@@ -157,25 +161,15 @@ function name_department($id) {
                       <th class="text-center" width="150px">
                          สถานะ
                       </th>
+                      <th class="text-center" width="150px">
+                        
+                      </th>
                   </tr>
               </thead>
               <tbody>
                 <?php
-                $sqlCount = "SELECT COUNT(*) AS total FROM repair_report_pd05 WHERE id_person_report = '$id_person'";
-                $resultCount = mysqli_query($conn, $sqlCount);
-                $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-                
-                // กำหนดจำนวนรายการต่อหน้า
-                $recordsPerPage = 6;
-                
-                // รับค่าหน้าปัจจุบัน
-                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-                // คำนวณ offset สำหรับคำสั่ง SQL
-                $offset = ($page - 1) * $recordsPerPage;
-
-                // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                $sql = "SELECT * FROM repair_report_pd05 WHERE id_person_report = '$id_person' LIMIT $offset, $recordsPerPage";
+              
+                $sql = "SELECT * FROM repair_report_pd05 WHERE id_person_report = '$id_person'";
                 $result = mysqli_query($conn, $sql);
 
                 if ($result) {
@@ -189,10 +183,12 @@ function name_department($id) {
                         echo '<td class="text-center">' . $row['asset_detail'] . '</td>';
                         echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
                         echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
-                        echo '<td class="project-actions text-right">';
-                        if ($row['status'] == 0) {
+                        echo '<td class="project-actions text-right" style="display:flex;">';
+                         echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>&nbsp&nbsp';
+                         if ($row['status'] == 0) {
                             echo '<a class="btn btn-danger btn-sm del-repair" href="#" data-id="'. $row['id_repair'] ."-,". $row['asset_name'] ."-,". $row['asset_id']."-,". $row['asset_detail'] .'"><i class="fas fa-trash"></i> Delete</a>';
                         }
+                       
                         echo '</td>';
                         echo '</tr>';
                       }
@@ -205,31 +201,10 @@ function name_department($id) {
               
                   ?>
               </tbody>
-          </table>
-                </div>
+            </table>
+          </div>
         </div>
-            <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                    <?php
-                    $totalPages = ceil($totalRecords / $recordsPerPage);
-                    $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
-
-                    // กำหนดจำนวนหน้าที่จะแสดง
-                    $visiblePages = 7;
-
-                    // คำนวณหน้าเริ่มต้นและสิ้นสุดที่จะแสดง
-                    $startPage = max($currentPage - floor($visiblePages / 2), 1);
-                    $endPage = min($startPage + $visiblePages - 1, $totalPages);
-
-                    // ปรับค่าหน้าเริ่มต้นหากมีน้อยกว่า 1
-                    $startPage = max(1, $startPage - ($visiblePages - ($endPage - $startPage)));
-
-                    for ($i = $startPage; $i <= $endPage; $i++) {
-                        echo '<li class="page-item ' . ($i == $currentPage ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }
-                    ?>
-                </ul>
-              </div>
+          
       </div>
       <!-- /.card -->
 
@@ -256,6 +231,8 @@ function name_department($id) {
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </body>
 </html>
 <script>
@@ -313,6 +290,25 @@ if (isset($_REQUEST['success'])) {
   }
 ?>
 
+$(document).ready(function() {
+    $('#btn-next-step').hide();
+    var table = $('#dtBasicExample').DataTable({
+        // ... ตั้งค่า DataTables ตามต้องการ ...
+    });
+
+    // การให้ความสามารถ Show/Hide Columns
+    $('a.toggle-vis').on('click', function(e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+    });
+
+    // การให้ความสามารถค้นหา (Search)
+    $('#dtBasicExample_filter input').unbind().bind('input', function() {
+        table.search(this.value).draw();
+    });
+
+});
 </script>
 <?php
 require '../popup/popup.php';

@@ -1,17 +1,16 @@
 <?php 
-   // ตรวจสอบว่ามี session ของผู้ใช้หรือไม่
+
 if (!isset($_SESSION['id'])) {
-  // หากไม่มี session ของผู้ใช้, นำกลับไปยังหน้าล็อคอิน
+
   header("Location: ../index");
   exit();
 }
-//if ($_SESSION['urole'] !== 'ช่าง') {
-  // หากไม่ใช่ Admin, นำกลับไปยังหน้าที่เหมาะสมหรือทำการปฏิเสธการเข้าถึง
- // header("Location: ../");
- // session_destroy();
-//header("Location:index");
-  //exit();
-//}
+else if (empty($_SESSION['name_title']) || empty($_SESSION['first_name']) || empty($_SESSION['last_name']) || empty($_SESSION['position']) || empty($_SESSION['department'])) {
+  // หากไม่มีค่า name_title, first_name, last_name, position, department ให้ไปที่หน้า edit_account
+  header("Location: ../setting");
+  exit();
+}
+
     $id_person = $_SESSION['id'] ;
     $name_title = $_SESSION['name_title'] ;
     $first_name = $_SESSION['first_name'] ;
@@ -21,7 +20,7 @@ if (!isset($_SESSION['id'])) {
     $profile_img = $_SESSION['profile_img'] ;
     $urole = $_SESSION['urole'] ;
     $signature = $_SESSION['signature'];
-      // ตรวจสอบว่ามี session ของผู้ใช้หรือไม่
+
 
 ?>
 <!-- Navbar -->

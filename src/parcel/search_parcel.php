@@ -1,5 +1,7 @@
 <?php 
-
+//fetch_data.php
+//add_qty_qr.php
+//cut_qty_qr.php
 session_start();
 require_once '../dbconfig.php';
 
@@ -70,35 +72,35 @@ function thaiMonth($month) {
     <script src="../barcode/html5-qrcode-master/minified/html5-qrcode.min.js"></script>
 </head>
 <style>
-        #videoContainer {
-            display: none;
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const typeParcelNavItem = document.querySelector('a[name="qr-code"]')
-            const stockLink = document.querySelector('li[name="stock"]');
-            const stockLinkActive = document.querySelector('a[name="stock"]');
-            const parcelLink = document.querySelector('li[name="parcel"]');
-            const parcelLinkActive = document.querySelector('a[name="parcel-head"]');
-            if (stockLink) {
-                stockLink.classList.add('nav-item', 'menu-open');
-            }
-            if (parcelLink) {
-                parcelLink.classList.add('nav-item', 'menu-open');
-            }
+#videoContainer {
+    display: none;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const typeParcelNavItem = document.querySelector('a[name="qr-code"]')
+    const stockLink = document.querySelector('li[name="stock"]');
+    const stockLinkActive = document.querySelector('a[name="stock"]');
+    const parcelLink = document.querySelector('li[name="parcel"]');
+    const parcelLinkActive = document.querySelector('a[name="parcel-head"]');
+    if (stockLink) {
+        stockLink.classList.add('nav-item', 'menu-open');
+    }
+    if (parcelLink) {
+        parcelLink.classList.add('nav-item', 'menu-open');
+    }
 
-            if (typeParcelNavItem) {
-                typeParcelNavItem.classList.add('nav-link', 'active');
-            }
-            if (stockLinkActive) {
-                stockLinkActive.classList.add('nav-link', 'active');
-            }
-            if (parcelLinkActive) {
-                parcelLinkActive.classList.add('nav-link', 'active');
-            }
-        });
-        </script>
+    if (typeParcelNavItem) {
+        typeParcelNavItem.classList.add('nav-link', 'active');
+    }
+    if (stockLinkActive) {
+        stockLinkActive.classList.add('nav-link', 'active');
+    }
+    if (parcelLinkActive) {
+        parcelLinkActive.classList.add('nav-link', 'active');
+    }
+});
+</script>
 
 
 <body class="hold-transition sidebar-mini">
@@ -119,12 +121,12 @@ function thaiMonth($month) {
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>แจ้งซ่อมครุภัณฑ์</h1>
+                            <h1>รายการข้อมูลพัสดุ</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="./index">Home</a></li>
-                                <li class="breadcrumb-item active">แจ้งซ่อมครุภัณฑ์</li>
+                                <li class="breadcrumb-item active">รายการข้อมูลพัสดุ</li>
                             </ol>
                         </div>
                     </div>
@@ -133,124 +135,56 @@ function thaiMonth($month) {
 
             <!-- Main content -->
             <section class="content">
-    <!-- Default box -->
-    <div class="card">
-        <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
-            <div class="form-group">
-                <form action="" method="GET" id="searchForm">
-                    <label for="searchInput">ค้นหา:</label>
-                    <input type="text" name="search" id="searchInput" class="form-control" placeholder="กรอกเลขครุภัณฑ์" required><br>
-                    <button type="submit" class="form-control btn btn-primary">ค้นหา</button>
-                </form>
-            </div>
-            <div class="card">
-                <audio id="scan-success-sound" src="../barcode/Qr_code.mp3"></audio>
-                <div id="qr-reader" style="width:500px"></div>
-                <div id="qr-reader-results"></div>
-            </div>
-        </div>
-    </div>
-    <?php
-    if (isset($_GET['search'])) {
-        $search = mysqli_real_escape_string($conn, $_GET['search']);
-        $sql = "SELECT * FROM durable_articles WHERE asset_id LIKE '%$search%'";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-    ?>
-                <div class="card 1">
-                    <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
-                        <div class="form-group">
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-striped projects">
-                                        <tbody id="tableBody">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">#</th>
-                                                    <th class="text-center">หมวดหมู่ครุภัณฑ์</th>
-                                                    <th class="text-center">เลขที่ครุภัณฑ์</th>
-                                                    <th class="text-center">ชื่อครุภัณฑ์</th>
-                                                    <th class="text-center">ปีที่ซื้อ</th>
-                                                    <th class="text-center">ราคา(บาท)</th>
-                                                    <th class="text-center">แผนกที่รับผิดชอบ</th>
-                                                    <th class="text-center">Service ล่าสุด</th>
-                                                    <th class="text-center">ซ่อมล่าสุด</th>
-                                                    <th class="text-center">ดูข้อมูล</th>
-                                                    <th class="text-center">แจ้งซ่อม</th>
-                                                </tr>
-                                            </thead>
-                                            <?php
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr>';
-                                                echo '<td class="text-center">' . $row['id_durable'] . '</td>';
-                                                echo '<td class="text-center">' . $row['type_durable'] . '</td>';
-                                                echo '<td class="text-center">' . $row['asset_id'] . '</td>';
-                                                echo '<td class="text-center">' . $row['name'] . '</td>';
-                                                echo '<td class="text-center">' . (isset($row['year']) ? ($row['year'] + 543) : '') . '</td>';
-                                                echo '<td class="text-center">' . $row['price'] . '</td>';
-                                                $department = $row['department'];
-                                                $sql_department = "SELECT name FROM department WHERE id_department = '$department' LIMIT 1";
-                                                $result_department = mysqli_query($conn, $sql_department);
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">รายการข้อมูลพัสดุ</h3>
+                    </div>
+                    <!-- /.card-header -->
 
-                                                if ($row_department = mysqli_fetch_assoc($result_department)) {
-                                                    echo '<td class="text-center">' . $row_department['name'] . '</td>';
-                                                } else {
-                                                    echo '<td class="text-center">N/A</td>';
-                                                }
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row">
 
-                                                $asset_id = $row['asset_id'];
-                                                $sql_service = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$asset_id' AND type = 'service' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
-                                                $result_service = mysqli_query($conn, $sql_service);
-
-                                                if ($result_service && $row_service = mysqli_fetch_assoc($result_service)) {
-                                                    echo '<td class="text-center">' . date('d', strtotime($row_service['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_service['date_report_in']))) . ' ' . (date('Y', strtotime($row_service['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_service['date_report_in'])) . '</td>';
-                                                } else {
-                                                    echo '<td class="text-center">N/A</td>';
-                                                }
-
-                                                $sql_check = "SELECT date_report_in FROM repair_report_pd05 WHERE asset_id = '$asset_id' AND type = 'ซ่อม' AND status = '3' ORDER BY date_report_in DESC LIMIT 1";
-                                                $result_check = mysqli_query($conn, $sql_check);
-
-                                                if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
-                                                    echo '<td class="text-center">' . date('d', strtotime($row_check['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row_check['date_report_in']))) . ' ' . (date('Y', strtotime($row_check['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row_check['date_report_in'])) . '</td>';
-                                                } else {
-                                                    echo '<td class="text-center">N/A</td>';
-                                                }
-
-                                                echo '<td class="project-actions text-right"><a class="btn btn-primary btn-sm" href="./view_asset?id=' . urlencode($row['asset_id']) . '&id_durable=' . $row['id_durable'] . '"><i class="fa fa-search-plus"></i> View</a></td>';
-        
-                                                echo '<td class="project-actions text-right"><a class="btn btn-warning btn-sm" href="./form_rapair?id=' . urlencode($row['asset_id']) . '&id_durable=' . $row['id_durable'] . '"><i class="fas fa-pencil-alt"></i> Repair</a></td>';
-                                                
-                                                echo '</tr>';
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                            <!-- ส่วนซ้าย -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="card">
+                                        <center>
+                                            <audio id="scan-success-sound" src="../barcode/Qr_code.mp3"></audio>
+                                            <div id="qr-reader" style="width:100%"></div>
+                                        </center>
+                                        <button id="resetBtn" class="btn btn-danger">รีเซ็ทการสแกน</button>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- ส่วนขวา -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="card" style=" padding: 0 20px;">
+                                        <h1>ข้อมูลพัสดุ</h1>
+                                        <form action="">
+
+
+                                            <div id="resultData"></div>
+
+
+
+                                           
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+
+
                 </div>
-            <?php
-            } else {
-                $searchedAsset = $_GET['search'];
-                echo '<div class="card" style="border-color: red;">';
-                echo '<div class="card-body">';
-                echo '<h5 class="card-title" style="color: red;">ไม่พบหมายเลขครุภัณฑ์ ' . $searchedAsset . ' </h5>';
-                echo '<p class="card-text">กรุณาตรวจสอบหมายเลขครุภัณฑ์อีกครั้ง หากต้องการแจ้งซ่อม กรุณาคลิกปุ่มด้านล่าง</p>';
-                echo '<a href="./form_rapair_non_search?id='.$searchedAsset.'" class="btn btn-danger">แจ้งซ่อม</a>';
-                echo '</div>';
-                echo '</div>';
-            }
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-    }
-    ?>
-</section>
+                <!-- เพิ่มการ์ดหัวข้อ -->
+            </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -275,81 +209,15 @@ function thaiMonth($month) {
     <script src="..//dist/js/adminlte.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </body>
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close-popup">&times;</span>
+        <p id="popup-message"></p>
+    </div>
+</div>
 
 </html>
 <script>
-<?php
-if (isset($_REQUEST['success'])) {
-  ?>
-setTimeout(function() {
-    Swal.fire({
-        title: 'ดำเนินการเรียบร้อย',
-        icon: 'success',
-        confirmButtonText: 'ตกลง',
-        allowOutsideClick: false, // ไม่อนุญาตให้คลิกนอก popup ปิด
-        allowEscapeKey: true, // ไม่อนุญาตให้กดปุ่ม ESC เพื่อปิด
-        allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "./parcel";
-        }
-    });
-});
-
-<?php
-  }
-?>
-<?php
-if (isset($_REQUEST['error'])) {
-  ?>
-setTimeout(function() {
-    Swal.fire({
-        title: 'ไม่สามารถดำเนินการได้',
-        icon: 'error',
-        confirmButtonText: 'ตกลง',
-        allowOutsideClick: false, // ไม่อนุญาตให้คลิกนอก popup ปิด
-        allowEscapeKey: true, // ไม่อนุญาตให้กดปุ่ม ESC เพื่อปิด
-        allowEnterKey: true // ไม่อนุญาตให้กดปุ่ม Enter เพื่อปิด
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "./parcel";
-        }
-    });
-});
-
-<?php
-  }
-?>
-
-const deleteAsset = document.querySelectorAll('.del-asset');
-
-deleteAsset.forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.preventDefault();
-        const repairData = this.getAttribute('data-id').split('-,'); // แยกข้อมูลด้วยตัวแยก '-'
-        const repairId = repairData[0];
-        const repairName = repairData[1];
-
-        Swal.fire({
-            title: '<h4><label class="label t1">คุณต้องการลบข้อมูล</label></h4>',
-            html: `<div><h6><label class="label t1">ชื่อครุภัณฑ์ : </label> ${repairName}<br><label class="label t1">เลขครุภัณฑ์ : </label>${repairId}<br></h6><br>`,
-            focusConfirm: false,
-            preConfirm: () => {
-                return [];
-            },
-            confirmButtonText: 'Delete',
-            showCancelButton: true,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Modify the URL to include the uroleId
-                window.location.href = `./controller/del_asset?id_repair=${repairId}`;
-            }
-        });
-    });
-});
 
 function docReady(fn) {
     // see if DOM is already available
@@ -361,7 +229,7 @@ function docReady(fn) {
     }
 }
 
-docReady(function () {
+docReady(function() {
     var resultContainer = document.getElementById('qr-reader-results');
     var searchInput = document.getElementById('searchInput');
     var lastResult, countResults = 0;
@@ -374,20 +242,99 @@ docReady(function () {
         }
     }
 
-    // Function to perform automatic search
     function performAutomaticSearch() {
         var decodedText = lastResult;
         if (decodedText) {
-            // Set the decoded text to the search input
-            searchInput.value = decodedText;
-
+            // Parse the decodedText as an integer
+            var searchValue = decodedText;
             // Play scan success sound
             playScanSuccessSound();
+            $.ajax({
+                type: 'POST',
+                url: './controller/fetch_data.php', // Adjust the URL to your server-side script
+                data: {
+                    search: searchValue
+                }, // Pass the integer value
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        console.log(response);
+                        // Update the resultData div with the fetched data
+                        $('#resultData').html(
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หมวดหมู่พัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.type + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ชื่อพัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.name_parcel + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">รุ่น</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.model + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ยี่ห้อ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.brand + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หน่วยนับ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.unit_num + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">จำนวนคงเหลือ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + response.qty + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">เพิ่ม - ลด</label>' +
+                            '<div class="col-sm-8">' +
+                            '<input class="form-control qty-input" type="number" min="0" value="0" data-id="' +
+                            response.id + '">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>'+
+                            '<center>'+
+                                '<a class="btn btn-success btn-sm btn-add" href="#">'+
+                                '<i class="fas fa-plus"></i> Add</a>&nbsp;&nbsp;'+
+                                '<a class="btn btn-danger btn-sm btn-cut" href="#">'+
+                                '<i class="fas fa-minus"></i>Cut</a>'+
+                            '</center>'
+                        );
+                    } else {
+                        $('#resultData').html('<p>Data not found.</p>');
+                    }
+                },
+                error: function(error) {
+                    console.log('Error fetching data:', error);
+                }
+            });
 
-            // Optionally, you can trigger a form submit here
-            // For example, if your form has an ID "searchForm":
-            // document.getElementById('searchForm').submit();
+
         }
+
     }
 
     function onScanSuccess(decodedText, decodedResult) {
@@ -396,26 +343,242 @@ docReady(function () {
             lastResult = decodedText;
             // Handle on success condition with the decoded message.
             console.log(`Scan result ${decodedText}`, decodedResult);
-            
+
             // Perform automatic search
             performAutomaticSearch();
         }
     }
 
     var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader", { fps: 10, qrbox: 250 });
+        "qr-reader", {
+            fps: 10,
+            qrbox: 250
+        });
     html5QrcodeScanner.render(onScanSuccess);
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+        lastResult = null;
+        countResults = 0;
+        searchInput.value = '';
+    });
+
+
+ 
+});
+// Event listener สำหรับปุ่ม "Add"
+$(document).on('click', '.btn-add', function() {
+    // ดึงค่าที่ผู้ใช้กรอก
+    const inputValue = $('.qty-input').val();
+    const itemId = $(this).closest('.form-group').find('input.qty-input').data('id');
+    
+    $.ajax({
+                type: 'POST',
+                url: './controller/add_qty_qr.php',
+                data: {
+                    id: itemId,
+                    newQuantity: inputValue
+                },
+                success: function(updateResponse) {
+                    showPopup('เพิ่มจำนวนเรียบร้อย');
+                    $('#resultData').html(
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หมวดหมู่พัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.type + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ชื่อพัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.name_parcel + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">รุ่น</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.model + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ยี่ห้อ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.brand + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หน่วยนับ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.unit_num + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">จำนวนคงเหลือ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + updateResponse.qty + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">เพิ่ม - ลด</label>' +
+                            '<div class="col-sm-8">' +
+                            '<input class="form-control qty-input" type="number" min="0" value="0" data-id="' +
+                            updateResponse.id + '">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>'+
+                            '<center>'+
+                                '<a class="btn btn-success btn-sm btn-add" href="#">'+
+                                '<i class="fas fa-plus"></i> Add</a>&nbsp;&nbsp;'+
+                                '<a class="btn btn-danger btn-sm btn-cut" href="#">'+
+                                '<i class="fas fa-minus"></i>Cut</a>'+
+                            '</center>'
+                        );
+                },
+                error: function(error) {
+                    console.log('Error updating quantity:', error);
+                }
+            });
+  
 });
 
+// Event listener สำหรับปุ่ม "Delete"
+$(document).on('click', '.btn-cut', function() {
+    // ดึงค่าที่ผู้ใช้กรอก
+    const inputValue = $('.qty-input').val();
+    const itemId = $(this).closest('.form-group').find('input.qty-input').data('id');
+    
+    $.ajax({
+                type: 'POST',
+                url: './controller/cut_qty_qr.php',
+                data: {
+                    id: itemId,
+                    newQuantity: inputValue
+                },
+                success: function(delResponse) {
+                    showPopup('ลดจำนวนเรียบร้อย');
+                    $('#resultData').html(
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หมวดหมู่พัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.type + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ชื่อพัสดุ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.name_parcel + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">รุ่น</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.model + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">ยี่ห้อ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.brand + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">หน่วยนับ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.unit_num + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' + '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">จำนวนคงเหลือ</label>' +
+                            '<div class="col-sm-8">' +
+                            '<p>' + delResponse.qty + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<div class="mb-3 row">' +
+                            '<label for="repair-date" class="col-sm-4 col-form-label">เพิ่ม - ลด</label>' +
+                            '<div class="col-sm-8">' +
+                            '<input class="form-control qty-input" type="number" min="0" value="0" data-id="' +
+                            delResponse.id + '">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>'+
+                            '<center>'+
+                                '<a class="btn btn-success btn-sm btn-add" href="#">'+
+                                '<i class="fas fa-plus"></i> Add</a>&nbsp;&nbsp;'+
+                                '<a class="btn btn-danger btn-sm btn-cut" href="#">'+
+                                '<i class="fas fa-minus"></i>Cut</a>'+
+                            '</center>'
+                        );
+                },
+                error: function(error) {
+                    console.log('Error updating quantity:', error);
+                }
+            });
+  
+});
 
-</script>
-<style>
-.table .project-actions {
-    white-space: nowrap;
+// ฟังก์ชันแสดง Popup
+function showPopup(message) {
+    // กำหนดข้อความใน Popup
+    $("#popup-message").text(message);
+
+    // แสดง Popup
+    $("#popup").fadeIn();
+
+    // รีเฟรชหน้าหลังจากเวลาที่กำหนด (ในตัวอย่างคือ 2 วินาที)
+    setTimeout(function() {
+        // ซ่อน Popup เมื่อหมดเวลา
+        $("#popup").fadeOut();
+    }, 2000);
 }
 
-.table .project-actions a.btn {
-    margin-right: 5px;
+// ปิด Popup ด้วยการคลิกที่ปุ่มปิด
+$(".close-popup").on("click", function() {
+    $("#popup").fadeOut();
+});
+</script>
+<style>
+.popup {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content {
+    display: flex;
+    align-items: center;
+}
+
+.close-popup {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 20px;
 }
 </style>
 <?php require '../popup/popup.php'; ?>

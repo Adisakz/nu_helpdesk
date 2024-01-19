@@ -110,76 +110,77 @@ function thaiMonth($month) {
             <section class="content">
 
                 <!-- Default box -->
-                <div class="card" >
-                    <div class="card-header" >
+                <div class="card">
+                    <div class="card-header">
                         <h3 class="card-title">รายการข้อมูลครุภัณฑ์</h3>
                         <a class="btn btn-success btn-sm" href="form_add_asset"
-                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>        
-                                          
+                            style=" margin-left: 10px ;margin-right: auto; "><i class="fas fa-plus"></i>Add</a>
+
                     </div>
                     <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
-                    <div class="form-group">
-                                    <label for="departmentFilter">เลือกแผนก:</label>
-                                    <select class="form-control" id="departmentFilter">
-                                    <option value="">ทั้งหมด</option>
-                                            <!-- เพิ่มตัวเลือกแผนกจากฐานข้อมูลหรือวงเล็บ PHP -->
-                                            <?php
+                        <div class="form-group">
+                            <label for="departmentFilter">เลือกแผนก:</label>
+                            <select class="form-control" id="departmentFilter">
+                                <option value="">ทั้งหมด</option>
+                                <!-- เพิ่มตัวเลือกแผนกจากฐานข้อมูลหรือวงเล็บ PHP -->
+                                <?php
                                             $sql_departments = "SELECT * FROM department";
                                             $result_departments = mysqli_query($conn, $sql_departments);
                                             while ($row_department = mysqli_fetch_assoc($result_departments)) {
                                                 echo '<option value="' . $row_department['name'] . '">' . $row_department['name'] . '</option>';
                                             }
                                             ?>
-                                    </select>
-                                </div>
-                                <div class="table-responsive">
-                        <table class="table table-striped projects" cellspacing="0" width="100%" id="dtBasicExample">
-                            
-                            <thead >
-                                <tr>
-                                    <th class="text-center">
-                                        #
-                                    </th>
-                                    <th class="text-center">
-                                        หมวดหมู่ครุภัณฑ์
-                                    </th>
-                                    <th class="text-center">
-                                        เลขที่ครุภัณฑ์
-                                    </th>
-                                    <th class="text-center">
-                                        ชื่อครุภัณฑ์
-                                    </th>
-                                    <th class="text-center" >
-                                        ปีที่ซื้อ
-                                    </th>
-                                    <th class="text-center" >
-                                        ราคา(บาท)
-                                    </th>
-                                    <th class="text-center" >
-                                        แผนกที่รับผิดชอบ
-                                    </th>
-                                    <th class="text-center">
-                                        Service ล่าสุด
-                                    </th>
-                                    <th class="text-center">
-                                        ซ่อมล่าสุด
-                                    </th>
-                                    <th class="text-center">
-                                        ดูข้อมูล
-                                    </th>
-                                    <th class="text-center">
-                                        โอนย้าย
-                                    </th>
-                                    <th class="text-center">
-                                        แจ้งซ่อม
-                                    </th>
-                                    <th class="text-center">
-                                        ลบ
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $sql = "SELECT * FROM durable_articles";
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped projects" cellspacing="0" width="100%"
+                                id="dtBasicExample">
+
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            #
+                                        </th>
+                                        <th class="text-center">
+                                            หมวดหมู่ครุภัณฑ์
+                                        </th>
+                                        <th class="text-center">
+                                            เลขที่ครุภัณฑ์
+                                        </th>
+                                        <th class="text-center">
+                                            ชื่อครุภัณฑ์
+                                        </th>
+                                        <th class="text-center">
+                                            ปีที่ซื้อ
+                                        </th>
+                                        <th class="text-center">
+                                            ราคา(บาท)
+                                        </th>
+                                        <th class="text-center">
+                                            แผนกที่รับผิดชอบ
+                                        </th>
+                                        <th class="text-center">
+                                            Service ล่าสุด
+                                        </th>
+                                        <th class="text-center">
+                                            ซ่อมล่าสุด
+                                        </th>
+                                        <th class="text-center">
+                                            ดูข้อมูล
+                                        </th>
+                                        <th class="text-center">
+                                            โอนย้าย
+                                        </th>
+                                        <th class="text-center">
+                                            แจ้งซ่อม
+                                        </th>
+                                        <th class="text-center">
+                                            ลบ
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $sql = "SELECT * FROM durable_articles";
                 $result = mysqli_query($conn, $sql); 
                
                 if ($result) {
@@ -237,8 +238,8 @@ function thaiMonth($month) {
                 mysqli_close($conn);
             
                 ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -269,7 +270,7 @@ function thaiMonth($month) {
     <script src="..//plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="..//dist/js/adminlte.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </body>
 
 </html>
@@ -349,35 +350,34 @@ deleteAsset.forEach(button => {
 
 
 
-$(document).ready(function () {
+$(document).ready(function() {
     var table = $('#dtBasicExample').DataTable({
         // ... ตั้งค่า DataTables ตามต้องการ ...
     });
 
     // การให้ความสามารถ Show/Hide Columns
-    $('a.toggle-vis').on('click', function (e) {
+    $('a.toggle-vis').on('click', function(e) {
         e.preventDefault();
         var column = table.column($(this).attr('data-column'));
         column.visible(!column.visible());
     });
 
     // การให้ความสามารถค้นหา (Search)
-    $('#dtBasicExample_filter input').unbind().bind('input', function () {
+    $('#dtBasicExample_filter input').unbind().bind('input', function() {
         table.search(this.value).draw();
     });
 
     // การกรองตารางโดยใช้ Dropdown แผนก
-    $('#departmentFilter').on('change', function () {
+    $('#departmentFilter').on('change', function() {
         var selectedDepartment = $(this).val();
         table.column(6) // 6 คือ index ของคอลัมน์ที่ต้องการกรอง (index นับตั้งแต่ 0)
             .search(selectedDepartment)
             .draw();
     });
 });
-
 </script>
 <style>
-    .table .project-actions {
+.table .project-actions {
     white-space: nowrap;
 }
 

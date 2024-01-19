@@ -113,7 +113,7 @@ function thaiMonth($month) {
             <div class="form-group">
                 <form action="" method="GET" id="searchForm">
                     <label for="searchInput">ค้นหา:</label>
-                    <input type="text" name="search" id="searchInput" class="form-control " placeholder="กรอกเลขครุภัณฑ์" required><br>
+                    <input type="text" name="search" id="searchInput" class="form-control" placeholder="กรอกเลขครุภัณฑ์" required><br>
                     <button type="submit" class="form-control btn btn-primary">ค้นหา</button>
                 </form>
             </div>
@@ -362,10 +362,6 @@ function displayDataInTable(data) {
     });
 }
 
-// ฟังก์ชันเปิดฟอร์มแจ้งซ่อม
-function openRepairForm() {
-    // ... (เพิ่มโค้ดเปิดฟอร์มแจ้งซ่อมตามที่คุณต้องการ) ...
-}
 </script>
 <style>
 .table .project-actions {

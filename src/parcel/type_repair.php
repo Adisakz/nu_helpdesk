@@ -70,9 +70,9 @@ require_once '../dbconfig.php';
                 <a class="btn btn-success btn-sm" href="#" style=" margin-left: 10px ;margin-right: auto; " id="add-type-repair"><i class="fas fa-plus"></i>Add</a>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
+              <div class="card-body" style="margin: 10px 10px 0 10px;">
               <div class="table-responsive">
-                <table class="table table-striped projects">
+                <table class="table table-striped projects" cellspacing="0" width="100%" id="dtBasicExample">
                   <thead>
                       <tr>
                           <th  class="text-center">
@@ -88,20 +88,7 @@ require_once '../dbconfig.php';
                   </thead>
                   <tbody>
                   <?php
-                    $sqlCount = "SELECT COUNT(*) AS total FROM type_repair";
-                    $resultCount = mysqli_query($conn, $sqlCount);
-                    $totalRecords = mysqli_fetch_assoc($resultCount)['total'];
-                    // กำหนดจำนวนรายการต่อหน้า
-                    $recordsPerPage = 5;
-
-                    // รับค่าหน้าปัจจุบัน
-                    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-                    // คำนวณ offset สำหรับคำสั่ง SQL
-                    $offset = ($page - 1) * $recordsPerPage;
-
-                    // คำสั่ง SQL สำหรับดึงข้อมูลพร้อมกับการใช้ LIMIT
-                    $sql = "SELECT * FROM type_repair LIMIT $offset, $recordsPerPage";
+                    $sql = "SELECT * FROM type_repair ";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result) {
@@ -125,19 +112,6 @@ require_once '../dbconfig.php';
                 </table>
                   </div>
               </div><!-- /.card-body -->
-              <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                <?php
-                    // คำนวณจำนวนหน้าทั้งหมด
-                    $totalPages = ceil($totalRecords / $recordsPerPage);
-
-                    // แสดงปุ่ม Pagination
-                    for ($i = 1; $i <= $totalPages; $i++) {
-                        $activeClass = ($page == $i) ? 'active' : '';
-                        echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }?>
-                </ul>
-              </div>
             </div>
             <!-- /.card -->
 
@@ -164,9 +138,31 @@ require_once '../dbconfig.php';
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </body>
 </html>
 <script>
+
+$(document).ready(function() {
+    $('#btn-next-step').hide();
+    var table = $('#dtBasicExample').DataTable({
+        // ... ตั้งค่า DataTables ตามต้องการ ...
+    });
+
+    // การให้ความสามารถ Show/Hide Columns
+    $('a.toggle-vis').on('click', function(e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+    });
+
+    // การให้ความสามารถค้นหา (Search)
+    $('#dtBasicExample_filter input').unbind().bind('input', function() {
+        table.search(this.value).draw();
+    });
+
+});
   ///เมื่อกด add ประเภทการซ่อม จะแสดง popup นี้
     document.getElementById('add-type-repair').addEventListener('click', function() {
     Swal.fire({

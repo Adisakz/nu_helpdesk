@@ -5,6 +5,11 @@ if (!isset($_SESSION['id'])) {
   header("Location: ../index");
   exit();
 }
+else if (empty($_SESSION['name_title']) || empty($_SESSION['first_name']) || empty($_SESSION['last_name']) || empty($_SESSION['position']) || empty($_SESSION['department'])) {
+  // หากไม่มีค่า name_title, first_name, last_name, position, department ให้ไปที่หน้า edit_account
+  header("Location: ../setting");
+  exit();
+}
 //if ($_SESSION['urole'] !== 'ช่าง') {
   // หากไม่ใช่ Admin, นำกลับไปยังหน้าที่เหมาะสมหรือทำการปฏิเสธการเข้าถึง
  // header("Location: ../");
@@ -20,7 +25,6 @@ if (!isset($_SESSION['id'])) {
     $department = $_SESSION['department'] ;
     $profile_img = $_SESSION['profile_img'] ;
     $urole = $_SESSION['urole'] ;
-    $signature = $_SESSION['signature'];
       // ตรวจสอบว่ามี session ของผู้ใช้หรือไม่
 
 ?>

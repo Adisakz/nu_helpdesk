@@ -48,26 +48,29 @@ if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
     $date_repair = 'N/A';
 }
 
-
 function getStatusText($status) {
     if ($status == 0) {
-        $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
-        return '<span ' . $style .  ' >รอซ่อม</span>';
-    } else if ($status == 1){
-        $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-        return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
-    }
+        $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+        return '<button ' . $style . '  class="text-white">รอซ่อม</button>';
+    }  else if ($status == 1){
+      $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">กำลังซ่อม</button>';
+  }
     else if ($status == 2){
-      $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
+      $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">ยกเลิกการซ่อม</button>';
     }
     else if ($status == 3){
-      $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">ซ่อมเสร็จ</span>';
+      $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">ซ่อมเสร็จ</button>';
     }
     else if ($status == 4){
-      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
+    }
+  else if ($status == 5){
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
     }
   }
 

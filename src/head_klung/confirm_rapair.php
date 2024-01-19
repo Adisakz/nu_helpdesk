@@ -129,7 +129,7 @@ function name_department($id) {
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form id="quickForm" action="head_department_klung" method="post">
+                                <form id="quickForm" action="head_department_director" method="post">
                                     <div class="card-body">
                                         <div class="form-group">
 

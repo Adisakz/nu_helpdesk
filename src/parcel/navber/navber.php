@@ -6,12 +6,17 @@ if (!isset($_SESSION['id'])) {
   exit();
 }
 if ($_SESSION['urole'] !== 'พัสดุ') {
-  // หากไม่ใช่ Admin, นำกลับไปยังหน้าที่เหมาะสมหรือทำการปฏิเสธการเข้าถึง
   header("Location: ../");
   session_destroy();
 header("Location:index");
   exit();
 }
+else if (empty($_SESSION['name_title']) || empty($_SESSION['first_name']) || empty($_SESSION['last_name']) || empty($_SESSION['position']) || empty($_SESSION['department'])) {
+  // หากไม่มีค่า name_title, first_name, last_name, position, department ให้ไปที่หน้า edit_account
+  header("Location: ../setting");
+  exit();
+}
+
     $id_person = $_SESSION['id'] ;
     $name_title = $_SESSION['name_title'] ;
     $first_name = $_SESSION['first_name'] ;

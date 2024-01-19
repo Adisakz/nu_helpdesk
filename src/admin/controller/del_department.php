@@ -4,7 +4,6 @@ require_once '../../dbconfig.php';
 
 if(isset($_REQUEST['id_department'])) { 
   $id_department = $_GET['id_department'];
-  echo  $id_department;
   $sql = "SELECT * FROM department WHERE id_department = $id_department";
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0){ 

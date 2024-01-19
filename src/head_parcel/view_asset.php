@@ -51,23 +51,27 @@ if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
 
 function getStatusText($status) {
     if ($status == 0) {
-        $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;"';
-        return '<span ' . $style .  ' >รอซ่อม</span>';
-    } else if ($status == 1){
-        $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-        return '<span ' . $style . '  class="text-white">กำลังซ่อม</span>';
-    }
+        $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+        return '<button ' . $style . '  class="text-white">รอช่างตรวจสอบ</button>';
+    }  else if ($status == 1){
+      $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">กำลังซ่อม</button>';
+  }
     else if ($status == 2){
-      $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">ยกเลิกการซ่อม</span>';
+      $style = 'style="background-color: #dc3545; border-color: #dc3545; box-shadow: 0px 0px 4px 1px #dc3545; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">ยกเลิกการซ่อม</button>';
     }
     else if ($status == 3){
-      $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">ซ่อมเสร็จ</span>';
+      $style = 'style="background-color: #28a745; border-color: #28a745; box-shadow: 0px 0px 4px 1px #28a745; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">ซ่อมเสร็จ</button>';
     }
     else if ($status == 4){
-      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;"';
-      return '<span ' . $style . '  class="text-white">รออนุมัติ</span>';
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
+    }
+  else if ($status == 5){
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
+      return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
     }
   }
 
@@ -141,7 +145,7 @@ function thaiMonth($month) {
         // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
             // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="parcel"]').classList.add('nav-link', 'active');
+            document.querySelector('a[name="asset"]').classList.add('nav-link', 'active');
         });
         </script>
 
@@ -366,6 +370,9 @@ function thaiMonth($month) {
                                                 <th class="text-center" width="150px">
                                                     สถานะ
                                                 </th>
+                                                <th class="text-center" width="150px">
+                                                       
+                                                    </th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody">
@@ -383,6 +390,9 @@ function thaiMonth($month) {
                                                         echo '<td class="text-center">' . $row['report_name'] . '</td>';
                                                         echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
                                                         echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
+                                                        echo '<td class="text-center">';
+                                                        echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>';
+                                                        echo '</td>';
                                                         echo '</tr>';
                                                     }
                                                     } else {

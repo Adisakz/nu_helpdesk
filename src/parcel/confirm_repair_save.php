@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
     // INSERT into database
     $sql = "UPDATE repair_report_pd05 SET reasons='$reasons',amount='$amount',last_amount='$amountLast',
     inspector_name1='$inspectorName1',inspector_name2='$inspectorName2',inspector_name3='$inspectorName3',send_to='$id_person_send', 
-    date_tech_confirm = CURRENT_TIMESTAMP WHERE id_repair=$idRepair";
+    date_tech_confirm = CURRENT_TIMESTAMP ,status='5'WHERE id_repair=$idRepair";
     mysqli_query($conn, $sql);
     header("location: ./repair?success=success");
       
@@ -229,7 +229,13 @@ function name_person($id) {
         <!-- /.navbar -->
         <?php include './menu/menu.php' ;?>
 
-
+        <script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
+    });
+</script>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->

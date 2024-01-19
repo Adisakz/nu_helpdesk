@@ -52,7 +52,7 @@ if ($result_check && $row_check = mysqli_fetch_assoc($result_check)) {
 function getStatusText($status) {
     if ($status == 0) {
         $style = 'style="background-color: #ffc107; border-color: #FFC107; box-shadow: 0px 0px 4px 1px #FFC107; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
-        return '<button ' . $style . '  class="text-white">รอซ่อม</button>';
+        return '<button ' . $style . '  class="text-white">รอช่างตรวจสอบ</button>';
     }  else if ($status == 1){
       $style = 'style="background-color: #fd7e14; border-color: #fd7e14; box-shadow: 0px 0px 4px 1px #fd7e14; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
       return '<button ' . $style . '  class="text-white">กำลังซ่อม</button>';
@@ -67,7 +67,10 @@ function getStatusText($status) {
     }
     else if ($status == 4){
       $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
-    
+      return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
+    }
+  else if ($status == 5){
+      $style = 'style="background-color: #007bff; border-color: #007bff; box-shadow: 0px 0px 4px 1px #007bff; padding: 4px 8px; border-radius: 4px; color: #000;border:none;"';
       return '<button ' . $style . '  class="text-white">รออนุมัติ</button>';
     }
   }
@@ -139,12 +142,12 @@ function thaiMonth($month) {
         <?php include './menu/menu.php' ;?>
         <!-- /.menu -->
         <script>
-        // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
-        document.addEventListener('DOMContentLoaded', function() {
-            // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="parcel"]').classList.add('nav-link', 'active');
-        });
-        </script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="search_asset"]').classList.add('nav-link', 'active');
+    });
+</script> 
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -294,7 +297,8 @@ function thaiMonth($month) {
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="mb-3 row">
-                                                        <label for="service-date" class="col-sm-4 col-form-label">Service
+                                                        <label for="service-date"
+                                                            class="col-sm-4 col-form-label">Service
                                                             ล่าสุด</label></label>
                                                         <div class="col-sm-8">
                                                             <p><?php echo ($date_service); ?></p>
@@ -306,7 +310,7 @@ function thaiMonth($month) {
                                                         <label for="repair-date"
                                                             class="col-sm-4 col-form-label">ซ่อมล่าสุด</label></label>
                                                         <div class="col-sm-8">
-                                                        <p><?php echo ($date_repair); ?></p>
+                                                            <p><?php echo ($date_repair); ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -331,7 +335,8 @@ function thaiMonth($month) {
                                     <div class="card-footer">
                                         <div aria-label="Contacts Page Navigation">
                                             <button type="submit" name="submit" class="btn btn-success">บันทึก</button>
-                                            <button type="button" class="btn btn-warning" onclick="submitFormAndNavigate()">แจ้งซ่อม</button>
+                                            <button type="button" class="btn btn-warning"
+                                                onclick="submitFormAndNavigate()">แจ้งซ่อม</button>
                                         </div>
                                     </div>
                                 </form>
@@ -344,34 +349,37 @@ function thaiMonth($month) {
                                     <h3 class="card-title">รายการ ซ่อม/service ครุภัณฑ์</h3>
                                 </div>
                                 <div class="card-body p-0" style="margin: 10px 10px 0 10px;">
-                                <div class="table-responsive">
-                                    <table class="table table-striped projects" cellspacing="0" width="100%"
-                                        id="dtBasicExample">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped projects" cellspacing="0" width="100%"
+                                            id="dtBasicExample">
 
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center" width="120px">
-                                                    #
-                                                </th>
-                                                <th class="text-center" width="120px">
-                                                    ประเภทการแจ้ง
-                                                </th>
-                                                <th class="text-center" width="300px">
-                                                    สภาพการชำรุด
-                                                </th>
-                                                <th class="text-center" width="150px">
-                                                    ผู้แจ้ง
-                                                </th>
-                                                <th class="text-center" width="150px">
-                                                    วันที่ดำเนินการ
-                                                </th>
-                                                <th class="text-center" width="150px">
-                                                    สถานะ
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tableBody">
-                                            <?php 
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" width="120px">
+                                                        #
+                                                    </th>
+                                                    <th class="text-center" width="120px">
+                                                        ประเภทการแจ้ง
+                                                    </th>
+                                                    <th class="text-center" width="300px">
+                                                        สภาพการชำรุด
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                        ผู้แจ้ง
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                        วันที่ดำเนินการ
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                        สถานะ
+                                                    </th>
+                                                    <th class="text-center" width="150px">
+                                                       
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <?php 
                                                     $sql = "SELECT * FROM repair_report_pd05 WHERE asset_id = '$id_asset'";
                                                     $result = mysqli_query($conn, $sql); 
                                                 
@@ -385,6 +393,9 @@ function thaiMonth($month) {
                                                         echo '<td class="text-center">' . $row['report_name'] . '</td>';
                                                         echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
                                                         echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
+                                                        echo '<td class="text-center">';
+                                                        echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>';
+                                                        echo '</td>';
                                                         echo '</tr>';
                                                     }
                                                     } else {
@@ -395,8 +406,8 @@ function thaiMonth($month) {
                                                     mysqli_close($conn);
                                                 
                                                     ?>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 

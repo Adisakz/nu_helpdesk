@@ -84,7 +84,7 @@ function thaiMonth($month) {
         // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
             // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="parcel"]').classList.add('nav-link', 'active');
+            document.querySelector('a[name="asset"]').classList.add('nav-link', 'active');
         });
         </script>
         <!-- Content Wrapper. Contains page content -->
