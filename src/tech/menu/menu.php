@@ -9,7 +9,6 @@ $resultData = mysqli_fetch_assoc($resultRepair);
 $Count = $resultData['Count'];
 mysqli_free_result($resultRepair);
 
-
 ?>
 
 <!-- Main Sidebar Container -->

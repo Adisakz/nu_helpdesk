@@ -36,6 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $filename = 'user_' . $idPerson . '.' . $fileExtension;
         $targetFileName = $uploadDirectory . 'user_' . $idPerson . '.' . $fileExtension;
 
+        // ตรวจสอบว่าไฟล์ที่จะบันทึกมีอยู่แล้วหรือไม่
+        if (file_exists($targetFileName)) {
+            // ถ้ามีอยู่แล้ว สร้างชื่อไฟล์ใหม่หรือทำการตอบกลับหรือกระทำตามที่คุณต้องการ
+            $filename = 'user_' . $idPerson . '_' . time() . '.' . $fileExtension;
+            $targetFileName = $uploadDirectory . $filename;
+        }
+    
         // ทำการ resize รูปภาพ
         list($originalWidth, $originalHeight) = getimagesize($uploadedImage['tmp_name']);
         $aspectRatio = $originalWidth / $originalHeight;
