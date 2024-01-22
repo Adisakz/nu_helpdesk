@@ -3,92 +3,7 @@
   <?php 
   session_start();
   require_once '../dbconfig.php';
-  $id_person = $_SESSION['id'] ;
-  $department = $_SESSION['department'] ;
-
-
-//แสดงจำนวนการแจ้งซ่อมทั้งหมด
-$sqlRepairme = "SELECT COUNT(*) AS Countme FROM repair_report_pd05 WHERE id_person_report = $id_person";
-$resultRepairme = mysqli_query($conn, $sqlRepairme);
-if (!$resultRepairme) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatame = mysqli_fetch_assoc($resultRepairme);
-$Countme = $resultDatame['Countme'];
-mysqli_free_result($resultRepairme);
-
-//แสดงจำนวนการแจ้งซ่อมที่ซ่อมแล้วทั้งหมด
-$sqlRepairsuccess = "SELECT COUNT(*) AS Countsuccess FROM repair_report_pd05 WHERE id_person_report = $id_person and status='3'";
-$resultRepairsuccess = mysqli_query($conn, $sqlRepairsuccess);
-if (!$resultRepairsuccess) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatasuccess = mysqli_fetch_assoc($resultRepairsuccess);
-$Countsuccess = $resultDatasuccess['Countsuccess'];
-mysqli_free_result($resultRepairsuccess);
-
-//แสดงจำนวนการแจ้งซ่อมที่ถูกยกเลิกทั้งหมด
-$sqlRepairfail = "SELECT COUNT(*) AS Countfail FROM repair_report_pd05 WHERE id_person_report = $id_person and status='2'";
-$resultRepairfail = mysqli_query($conn, $sqlRepairfail);
-if (!$resultRepairfail) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatafail = mysqli_fetch_assoc($resultRepairfail);
-$Countfail = $resultDatafail['Countfail'];
-mysqli_free_result($resultRepairfail);
-
-//แสดงจำนวนการแจ้งซ่อมที่รอนุมัติทั้งหมด
-$sqlRepairwait = "SELECT COUNT(*) AS Countwait FROM repair_report_pd05 WHERE id_person_report = $id_person AND status IN ('4', '5','0')";
-$resultRepairwait = mysqli_query($conn, $sqlRepairwait);
-if (!$resultRepairwait) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatawait = mysqli_fetch_assoc($resultRepairwait);
-$Countwait = $resultDatawait['Countwait'];
-mysqli_free_result($resultRepairwait);
-
-
-//แสดงจำนวนการเบิกพัสดุ
-$sqlNeetParcel = "SELECT COUNT(*) AS NeetParcel FROM report_req_parcel where dapartment_id =$department ";
-$resultNeetParcel = mysqli_query($conn, $sqlNeetParcel);
-if (!$resultNeetParcel) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowNeetParcel = mysqli_fetch_assoc($resultNeetParcel);
-$NeetParcel = $rowNeetParcel['NeetParcel'];
-mysqli_free_result($resultNeetParcel);
-
-
-//แสดงจำนวนการเบิกพัสดุอนุมัติ
-$sqlsuccessParcel = "SELECT COUNT(*) AS successParcel FROM report_req_parcel where dapartment_id =$department and status='3' ";
-$resultsuccessParcel = mysqli_query($conn, $sqlsuccessParcel);
-if (!$resultsuccessParcel) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowsuccessParcel = mysqli_fetch_assoc($resultsuccessParcel);
-$successParcel = $rowsuccessParcel['successParcel'];
-mysqli_free_result($resultsuccessParcel);
-
-//แสดงจำนวนการเบิกพัสดุรออนุมัติ
-$sqlwaitParcel = "SELECT COUNT(*) AS waitParcel FROM report_req_parcel where dapartment_id =$department and status='2' ";
-$resultwaitParcel = mysqli_query($conn, $sqlwaitParcel);
-if (!$resultwaitParcel) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowwaitParcel = mysqli_fetch_assoc($resultwaitParcel);
-$waitParcel = $rowwaitParcel['waitParcel'];
-mysqli_free_result($resultwaitParcel);
-
-//แสดงจำนวนการเบิกพัสดุที่ถูกยกเลิก
-$sqlcancelParcel = "SELECT COUNT(*) AS cancelParcel FROM report_req_parcel where dapartment_id =$department and status='5' ";
-$resultcancelParcel = mysqli_query($conn, $sqlcancelParcel);
-if (!$resultcancelParcel) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowcancelParcel = mysqli_fetch_assoc($resultcancelParcel);
-$cancelParcel = $rowcancelParcel['cancelParcel'];
-mysqli_free_result($resultcancelParcel);
-
+ 
   ?>
   <!-- /.navbar -->
 <!DOCTYPE html>
@@ -131,7 +46,93 @@ mysqli_free_result($resultcancelParcel);
   <?php include './navber/navber.php' ;?>
   <!-- /.menu -->
   <!-- /.menu -->
-  <?php include './menu/menu.php' ;?>
+  <?php include './menu/menu.php' ;
+   $id_person = $_SESSION['id'] ;
+   $department = $_SESSION['department'] ;
+ 
+ 
+ //แสดงจำนวนการแจ้งซ่อมทั้งหมด
+ $sqlRepairme = "SELECT COUNT(*) AS Countme FROM repair_report_pd05 WHERE id_person_report = $id_person";
+ $resultRepairme = mysqli_query($conn, $sqlRepairme);
+ if (!$resultRepairme) {
+   die("Query failed: " . mysqli_error($conn));
+ }
+ $resultDatame = mysqli_fetch_assoc($resultRepairme);
+ $Countme = $resultDatame['Countme'];
+ mysqli_free_result($resultRepairme);
+ 
+ //แสดงจำนวนการแจ้งซ่อมที่ซ่อมแล้วทั้งหมด
+ $sqlRepairsuccess = "SELECT COUNT(*) AS Countsuccess FROM repair_report_pd05 WHERE id_person_report = $id_person and status='3'";
+ $resultRepairsuccess = mysqli_query($conn, $sqlRepairsuccess);
+ if (!$resultRepairsuccess) {
+   die("Query failed: " . mysqli_error($conn));
+ }
+ $resultDatasuccess = mysqli_fetch_assoc($resultRepairsuccess);
+ $Countsuccess = $resultDatasuccess['Countsuccess'];
+ mysqli_free_result($resultRepairsuccess);
+ 
+ //แสดงจำนวนการแจ้งซ่อมที่ถูกยกเลิกทั้งหมด
+ $sqlRepairfail = "SELECT COUNT(*) AS Countfail FROM repair_report_pd05 WHERE id_person_report = $id_person and status='2'";
+ $resultRepairfail = mysqli_query($conn, $sqlRepairfail);
+ if (!$resultRepairfail) {
+   die("Query failed: " . mysqli_error($conn));
+ }
+ $resultDatafail = mysqli_fetch_assoc($resultRepairfail);
+ $Countfail = $resultDatafail['Countfail'];
+ mysqli_free_result($resultRepairfail);
+ 
+ //แสดงจำนวนการแจ้งซ่อมที่รอนุมัติทั้งหมด
+ $sqlRepairwait = "SELECT COUNT(*) AS Countwait FROM repair_report_pd05 WHERE id_person_report = $id_person AND status IN ('4', '5','0')";
+ $resultRepairwait = mysqli_query($conn, $sqlRepairwait);
+ if (!$resultRepairwait) {
+   die("Query failed: " . mysqli_error($conn));
+ }
+ $resultDatawait = mysqli_fetch_assoc($resultRepairwait);
+ $Countwait = $resultDatawait['Countwait'];
+ mysqli_free_result($resultRepairwait);
+ 
+ 
+ //แสดงจำนวนการเบิกพัสดุ
+ $sqlNeetParcel = "SELECT COUNT(*) AS NeetParcel FROM report_req_parcel where dapartment_id =$department ";
+ $resultNeetParcel = mysqli_query($conn, $sqlNeetParcel);
+ if (!$resultNeetParcel) {
+     die("Query failed: " . mysqli_error($conn));
+ }
+ $rowNeetParcel = mysqli_fetch_assoc($resultNeetParcel);
+ $NeetParcel = $rowNeetParcel['NeetParcel'];
+ mysqli_free_result($resultNeetParcel);
+ 
+ 
+ //แสดงจำนวนการเบิกพัสดุอนุมัติ
+ $sqlsuccessParcel = "SELECT COUNT(*) AS successParcel FROM report_req_parcel where dapartment_id =$department and status='3' ";
+ $resultsuccessParcel = mysqli_query($conn, $sqlsuccessParcel);
+ if (!$resultsuccessParcel) {
+     die("Query failed: " . mysqli_error($conn));
+ }
+ $rowsuccessParcel = mysqli_fetch_assoc($resultsuccessParcel);
+ $successParcel = $rowsuccessParcel['successParcel'];
+ mysqli_free_result($resultsuccessParcel);
+ 
+ //แสดงจำนวนการเบิกพัสดุรออนุมัติ
+ $sqlwaitParcel = "SELECT COUNT(*) AS waitParcel FROM report_req_parcel where dapartment_id =$department and status='2' ";
+ $resultwaitParcel = mysqli_query($conn, $sqlwaitParcel);
+ if (!$resultwaitParcel) {
+     die("Query failed: " . mysqli_error($conn));
+ }
+ $rowwaitParcel = mysqli_fetch_assoc($resultwaitParcel);
+ $waitParcel = $rowwaitParcel['waitParcel'];
+ mysqli_free_result($resultwaitParcel);
+ 
+ //แสดงจำนวนการเบิกพัสดุที่ถูกยกเลิก
+ $sqlcancelParcel = "SELECT COUNT(*) AS cancelParcel FROM report_req_parcel where dapartment_id =$department and status='5' ";
+ $resultcancelParcel = mysqli_query($conn, $sqlcancelParcel);
+ if (!$resultcancelParcel) {
+     die("Query failed: " . mysqli_error($conn));
+ }
+ $rowcancelParcel = mysqli_fetch_assoc($resultcancelParcel);
+ $cancelParcel = $rowcancelParcel['cancelParcel'];
+ mysqli_free_result($resultcancelParcel);
+ ?>
   <!-- /.menu -->
   
   <script>

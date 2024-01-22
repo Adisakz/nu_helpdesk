@@ -3,59 +3,7 @@
   <?php 
   session_start();
   require_once '../dbconfig.php';
-  $id_person = $_SESSION['id'] ;
 
-//แสดงจำนวนครุภัณฑ์ทั้งหมด
-$sqlAssetsToRepair = "SELECT COUNT(*) AS assetCount FROM durable_articles ";
-$resultAssetsToRepair = mysqli_query($conn, $sqlAssetsToRepair);
-if (!$resultAssetsToRepair) {
-    die("Query failed: " . mysqli_error($conn));
-}
-$rowAssetsToRepair = mysqli_fetch_assoc($resultAssetsToRepair);
-$assetCount = $rowAssetsToRepair['assetCount'];
-mysqli_free_result($resultAssetsToRepair);
-
-
-//แสดงจำนวนการแจ้งซ่อมทั้งหมด
-$sqlRepair = "SELECT COUNT(*) AS Count FROM repair_report_pd05 WHERE id_person_report = $id_person";
-$resultRepair = mysqli_query($conn, $sqlRepair);
-if (!$resultRepair) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultData = mysqli_fetch_assoc($resultRepair);
-$Count = $resultData['Count'];
-mysqli_free_result($resultRepair);
-
-
-//แสดงจำนวนการแจ้งซ่อมที่ซ่อมแล้วทั้งหมด
-$sqlRepairsuccess = "SELECT COUNT(*) AS Countsuccess FROM repair_report_pd05 WHERE id_person_report = $id_person and status='3'";
-$resultRepairsuccess = mysqli_query($conn, $sqlRepairsuccess);
-if (!$resultRepairsuccess) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatasuccess = mysqli_fetch_assoc($resultRepairsuccess);
-$Countsuccess = $resultDatasuccess['Countsuccess'];
-mysqli_free_result($resultRepairsuccess);
-
-//แสดงจำนวนการแจ้งซ่อมที่ถูกยกเลิกทั้งหมด
-$sqlRepairfail = "SELECT COUNT(*) AS Countfail FROM repair_report_pd05 WHERE id_person_report = $id_person and status='2'";
-$resultRepairfail = mysqli_query($conn, $sqlRepairfail);
-if (!$resultRepairfail) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatafail = mysqli_fetch_assoc($resultRepairfail);
-$Countfail = $resultDatafail['Countfail'];
-mysqli_free_result($resultRepairfail);
-
-//แสดงจำนวนการแจ้งซ่อมที่รอนุมัติทั้งหมด
-$sqlRepairwait = "SELECT COUNT(*) AS Countwait FROM repair_report_pd05 WHERE id_person_report = $id_person AND status IN ('4', '5','0')";
-$resultRepairwait = mysqli_query($conn, $sqlRepairwait);
-if (!$resultRepairwait) {
-  die("Query failed: " . mysqli_error($conn));
-}
-$resultDatawait = mysqli_fetch_assoc($resultRepairwait);
-$Countwait = $resultDatawait['Countwait'];
-mysqli_free_result($resultRepairwait);
   ?>
   <!-- /.navbar -->
 <!DOCTYPE html>
@@ -98,7 +46,61 @@ mysqli_free_result($resultRepairwait);
   <?php include './navber/navber.php' ;?>
   <!-- /.menu -->
   <!-- /.menu -->
-  <?php include './menu/menu.php' ;?>
+  <?php include './menu/menu.php' ;
+    $id_person = $_SESSION['id'] ;
+
+    //แสดงจำนวนครุภัณฑ์ทั้งหมด
+    $sqlAssetsToRepair = "SELECT COUNT(*) AS assetCount FROM durable_articles ";
+    $resultAssetsToRepair = mysqli_query($conn, $sqlAssetsToRepair);
+    if (!$resultAssetsToRepair) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+    $rowAssetsToRepair = mysqli_fetch_assoc($resultAssetsToRepair);
+    $assetCount = $rowAssetsToRepair['assetCount'];
+    mysqli_free_result($resultAssetsToRepair);
+    
+    
+    //แสดงจำนวนการแจ้งซ่อมทั้งหมด
+    $sqlRepair = "SELECT COUNT(*) AS Count FROM repair_report_pd05 WHERE id_person_report = $id_person";
+    $resultRepair = mysqli_query($conn, $sqlRepair);
+    if (!$resultRepair) {
+      die("Query failed: " . mysqli_error($conn));
+    }
+    $resultData = mysqli_fetch_assoc($resultRepair);
+    $Count = $resultData['Count'];
+    mysqli_free_result($resultRepair);
+    
+    
+    //แสดงจำนวนการแจ้งซ่อมที่ซ่อมแล้วทั้งหมด
+    $sqlRepairsuccess = "SELECT COUNT(*) AS Countsuccess FROM repair_report_pd05 WHERE id_person_report = $id_person and status='3'";
+    $resultRepairsuccess = mysqli_query($conn, $sqlRepairsuccess);
+    if (!$resultRepairsuccess) {
+      die("Query failed: " . mysqli_error($conn));
+    }
+    $resultDatasuccess = mysqli_fetch_assoc($resultRepairsuccess);
+    $Countsuccess = $resultDatasuccess['Countsuccess'];
+    mysqli_free_result($resultRepairsuccess);
+    
+    //แสดงจำนวนการแจ้งซ่อมที่ถูกยกเลิกทั้งหมด
+    $sqlRepairfail = "SELECT COUNT(*) AS Countfail FROM repair_report_pd05 WHERE id_person_report = $id_person and status='2'";
+    $resultRepairfail = mysqli_query($conn, $sqlRepairfail);
+    if (!$resultRepairfail) {
+      die("Query failed: " . mysqli_error($conn));
+    }
+    $resultDatafail = mysqli_fetch_assoc($resultRepairfail);
+    $Countfail = $resultDatafail['Countfail'];
+    mysqli_free_result($resultRepairfail);
+    
+    //แสดงจำนวนการแจ้งซ่อมที่รอนุมัติทั้งหมด
+    $sqlRepairwait = "SELECT COUNT(*) AS Countwait FROM repair_report_pd05 WHERE id_person_report = $id_person AND status IN ('4', '5','0')";
+    $resultRepairwait = mysqli_query($conn, $sqlRepairwait);
+    if (!$resultRepairwait) {
+      die("Query failed: " . mysqli_error($conn));
+    }
+    $resultDatawait = mysqli_fetch_assoc($resultRepairwait);
+    $Countwait = $resultDatawait['Countwait'];
+    mysqli_free_result($resultRepairwait);
+  ?>
   <!-- /.menu -->
   
   <script>
