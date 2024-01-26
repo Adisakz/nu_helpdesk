@@ -103,8 +103,8 @@
  mysqli_free_result($resultNeetParcel);
  
  
- //แสดงจำนวนการเบิกพัสดุอนุมัติ
- $sqlsuccessParcel = "SELECT COUNT(*) AS successParcel FROM report_req_parcel where dapartment_id =$department and status='3' ";
+ //แสดงจำนวนการเบิกพัสดุที่สำเร็จ
+ $sqlsuccessParcel = "SELECT COUNT(*) AS successParcel FROM report_req_parcel where dapartment_id =$department and status='4' ";
  $resultsuccessParcel = mysqli_query($conn, $sqlsuccessParcel);
  if (!$resultsuccessParcel) {
      die("Query failed: " . mysqli_error($conn));
@@ -248,7 +248,7 @@
               <div class="inner">
                 <h3><?php echo $successParcel ;?></h3>
 
-                <p>จำนวนเบิกพัสดุที่อนุมัติ</p>
+                <p>จำนวนเบิกพัสดุที่สำเร็จ</p>
               </div>
               <div class="icon">
                 <i class="ion ion-checkmark"></i>

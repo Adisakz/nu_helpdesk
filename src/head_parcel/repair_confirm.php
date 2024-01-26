@@ -178,7 +178,7 @@ else if ($status == 5){
                          สถานะ
                       </th>
                       
-                      <th class="text-center" width="200px">
+                      <th class="text-center"  width="170px">
                          
                       </th>
                   </tr>
@@ -201,7 +201,7 @@ else if ($status == 5){
                             echo '<td class="text-center">' . date('d', strtotime($row['date_report_in'])) . ' ' . thaiMonth(date('m', strtotime($row['date_report_in']))) . ' ' . (date('Y', strtotime($row['date_report_in'])) + 543) . ' || ' . date('H:i', strtotime($row['date_report_in'])) . '</td>';
                             echo '<td class="text-center">' . $row['neet'] . '</td>';
                             echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
-                            echo '<td class="project-actions text-right" ">';
+                            echo '<td class="project-actions text-right" style="display:flex;">';
                             echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>&nbsp&nbsp';
                             echo '<a class="btn btn-success btn-sm del-repair" href="confirm_rapair_head_parcel?id=' . $row['id_repair'] . '"><i class="fas fa-pencil-alt"></i> ตรวจสอบ</a>';
                             echo '</td>';

@@ -12,7 +12,7 @@ mysqli_free_result($resultRepair);
 
 
 //จำนวนการซ่อมรอนุมัติ
-$sqlCountRepairwait = "SELECT COUNT(*) AS totalRepairwait FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1')";
+$sqlCountRepairwait = "SELECT COUNT(*) AS totalRepairwait FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4')";
 $resultRepairRepairwait = mysqli_query($conn, $sqlCountRepairwait);
 if (!$resultRepairRepairwait) {
   die("Query failed: " . mysqli_error($conn));
@@ -20,6 +20,16 @@ if (!$resultRepairRepairwait) {
 $resultDataRepairwait = mysqli_fetch_assoc($resultRepairRepairwait);
 $CountRepairwait = $resultDataRepairwait['totalRepairwait'];
 mysqli_free_result($resultRepairRepairwait);
+
+//จำนวการแจ้งซ่อม
+$sqlCountparcel = "SELECT COUNT(*) AS total FROM report_req_parcel where dapartment_id =$department and status=3 ";
+$resultRepairparcel = mysqli_query($conn, $sqlCountparcel);
+if (!$resultRepairparcel) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDataparcel = mysqli_fetch_assoc($resultRepairparcel);
+$Countparcel = $resultDataparcel['total'];
+mysqli_free_result($resultRepairparcel);
 ?>
 
 
@@ -96,6 +106,9 @@ img.img-circle1 {
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 รายการเบิกพัสดุ
+                <?php if($Countparcel>0){?>
+                  <span class="badge badge-info right"><?php echo $Countparcel;?></span>
+                <?php }?>
               </p>
             </a>
           </li>

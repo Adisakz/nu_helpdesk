@@ -313,13 +313,23 @@ function name_person($id) {
         <!-- /.navbar -->
         <?php include './menu/menu.php' ;?>
         <script>
-        // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
-            // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="confirm-repair"]').classList.add('nav-link', 'active');
+            const typeParcelNavItem = document.querySelector('a[name="confirm-repair"]')
+            const parcelLink = document.querySelector('li[name="wait"]');
+            const parcelLinkActive = document.querySelector('a[name="wait-success"]');
+
+            if (parcelLink) {
+                parcelLink.classList.add('nav-item', 'menu-open');
+            }
+
+            if (typeParcelNavItem) {
+                typeParcelNavItem.classList.add('nav-link', 'active');
+            }
+            if (parcelLinkActive) {
+                parcelLinkActive.classList.add('nav-link', 'active');
+            }
         });
         </script>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->

@@ -253,7 +253,7 @@ mysqli_free_result($resultcancelParcel);
               <div class="inner">
                 <h3><?php echo $successParcel ;?></h3>
 
-                <p>จำนวนเบิกพัสดุที่อนุมัติ</p>
+                <p>จำนวนเบิกพัสดุที่สำเร็จ</p>
               </div>
               <div class="icon">
                 <i class="ion ion-checkmark"></i>

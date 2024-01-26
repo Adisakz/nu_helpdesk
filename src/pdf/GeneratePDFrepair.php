@@ -326,17 +326,17 @@ if(isset($signature_director)){
 if(isset($signature_dean)){
   $pdf->Image("../image_signature/$signature_dean", 150, 252, 20, 20);
   if(!isset($cancel_comment_dean)){
-    $pdf->SetY(248);
+    $pdf->SetY(250);
     $pdf->SetX(82);
     $pdf->SetFont('sara', '', 25);
     $pdf->Cell(52, 5, iconv('utf-8', 'cp874',"/" ), 0, 1, 'C');
   }else{
-    $pdf->SetY(251);
+    $pdf->SetY(255);
     $pdf->SetX(83);
     $pdf->SetFont('sara', '', 25);
     $pdf->Cell(52, 5, iconv('utf-8', 'cp874',"/" ), 0, 1, 'C');
 
-    $pdf->SetY(249);
+    $pdf->SetY(252);
     $pdf->SetX(140);
     $pdf->SetFont('sara', '', 13);
     $pdf->Cell(55, 10, iconv('utf-8', 'cp874', $cancel_comment_dean), 0, 1, 'C');

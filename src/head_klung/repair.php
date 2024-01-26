@@ -174,7 +174,7 @@ function name_department($id) {
               <tbody>
                 <?php
                   
-                    $sql = "SELECT * FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4' OR status = '1')";
+                    $sql = "SELECT * FROM repair_report_pd05 WHERE (send_to = 'พัสดุ' OR send_to = '$id_person') AND (status = '4')";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result) {

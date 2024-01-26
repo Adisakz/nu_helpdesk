@@ -84,10 +84,21 @@ function name_person($id) {
         <!-- /.navbar -->
         <?php include './menu/menu.php' ;?>
         <script>
-        // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
-            // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="check-repair"]').classList.add('nav-link', 'active');
+            const typeParcelNavItem = document.querySelector('a[name="check-repair"]')
+            const parcelLink = document.querySelector('li[name="wait1"]');
+            const parcelLinkActive = document.querySelector('a[name="wait-cheack"]');
+
+            if (parcelLink) {
+                parcelLink.classList.add('nav-item', 'menu-open');
+            }
+
+            if (typeParcelNavItem) {
+                typeParcelNavItem.classList.add('nav-link', 'active');
+            }
+            if (parcelLinkActive) {
+                parcelLinkActive.classList.add('nav-link', 'active');
+            }
         });
         </script>
 

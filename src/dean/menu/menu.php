@@ -9,6 +9,14 @@ $resultDataRepairwait = mysqli_fetch_assoc($resultRepairRepairwait);
 $CountRepairwait = $resultDataRepairwait['totalRepairwait'];
 mysqli_free_result($resultRepairRepairwait);
 
+$sqlCountparcel = "SELECT COUNT(*) AS total FROM report_req_parcel where dapartment_id =$department and status=3 ";
+$resultRepairparcel = mysqli_query($conn, $sqlCountparcel);
+if (!$resultRepairparcel) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDataparcel = mysqli_fetch_assoc($resultRepairparcel);
+$Countparcel = $resultDataparcel['total'];
+mysqli_free_result($resultRepairparcel);
 ?>
 <!-- Main Sidebar Container -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -83,6 +91,9 @@ mysqli_free_result($resultRepairRepairwait);
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 รายการเบิกพัสดุ
+                <?php if($Countparcel>0){?>
+                  <span class="badge badge-info right"><?php echo $Countparcel;?></span>
+                <?php }?>
               </p>
             </a>
           </li>
@@ -96,7 +107,7 @@ mysqli_free_result($resultRepairRepairwait);
             </a>
           </li>
           <li class="nav-item">
-            <a href="./search_asset" class="nav-link" name="form_rapair">
+            <a href="./search_asset" class="nav-link" name="search_asset">
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 แจ้งซ่อม

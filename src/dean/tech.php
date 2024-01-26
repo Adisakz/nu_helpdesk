@@ -43,7 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php include './menu/menu.php' ;?>
   <!-- /.menu -->
  
-
+  <script>
+    // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
+    document.addEventListener('DOMContentLoaded', function() {
+        // เลือก element และเปลี่ยน class
+        document.querySelector('a[name="search_asset"]').classList.add('nav-link', 'active');
+    });
+</script> 
 
 
   <!-- Content Wrapper. Contains page content -->

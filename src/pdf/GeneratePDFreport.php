@@ -336,12 +336,12 @@ if(isset($signature_dean)){
     $pdf->SetFont('sara', '', 25);
     $pdf->Cell(52, 5, iconv('utf-8', 'cp874',"/" ), 0, 1, 'C');
   }else{
-    $pdf->SetY(251);
+    $pdf->SetY(255);
     $pdf->SetX(83);
     $pdf->SetFont('sara', '', 25);
     $pdf->Cell(52, 5, iconv('utf-8', 'cp874',"/" ), 0, 1, 'C');
 
-    $pdf->SetY(249);
+    $pdf->SetY(252);
     $pdf->SetX(140);
     $pdf->SetFont('sara', '', 13);
     $pdf->Cell(55, 10, iconv('utf-8', 'cp874', $cancel_comment_dean), 0, 1, 'C');

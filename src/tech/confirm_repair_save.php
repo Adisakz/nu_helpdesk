@@ -1,7 +1,21 @@
 <?php
 session_start();
 require_once '../dbconfig.php';
+///////////  แสดงชื่อหน่วยงาน
+function name_department($id) {
+  global $conn; // Assuming $conn is your database connection variable
 
+  $sql_department = "SELECT name FROM department WHERE id_department = '$id' LIMIT 1";
+  $result_department = mysqli_query($conn, $sql_department);
+
+  if ($row_department = mysqli_fetch_assoc($result_department)) {
+      $department_durable = $row_department['name'];
+      return $department_durable;
+  } else {
+      $department_durable = '';
+      return $department_durable;
+  }
+}
 
 function resizeImage($tmp_name, $img_name, $img_size, $dir, $new_width, $new_height) {
   list($width, $height) = getimagesize($tmp_name);
@@ -290,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </div>
                   <div class="form-group">
                   <input type="text" name="department-id" value="<?php echo $departmentId?>" style="display: none; ">
-                    <label for="department-name">ชื่อหน่วยงาน : <span style="font-weight: normal;"><?php echo htmlspecialchars($departmentId); ?></span></label>
+                    <label for="department-name">ชื่อหน่วยงาน : <span style="font-weight: normal;"><?php echo htmlspecialchars(name_department($departmentId)); ?></span></label>
                   </div>
                   <div class="form-group">
                   <input type="text" name="asset-name" value="<?php echo $asset_name?>" style="display: none; ">

@@ -8,6 +8,17 @@ if (!$resultRepair) {
 $resultData = mysqli_fetch_assoc($resultRepair);
 $Count = $resultData['total'];
 mysqli_free_result($resultRepair);
+
+
+
+$sqlCountparcel = "SELECT COUNT(*) AS total FROM report_req_parcel where dapartment_id =$department and status=3 ";
+$resultRepairparcel = mysqli_query($conn, $sqlCountparcel);
+if (!$resultRepairparcel) {
+  die("Query failed: " . mysqli_error($conn));
+}
+$resultDataparcel = mysqli_fetch_assoc($resultRepairparcel);
+$Countparcel = $resultDataparcel['total'];
+mysqli_free_result($resultRepairparcel);
 ?>
 
 
@@ -83,6 +94,9 @@ mysqli_free_result($resultRepair);
               <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 รายการเบิกพัสดุ
+                <?php if($Countparcel>0){?>
+                  <span class="badge badge-info right"><?php echo $Countparcel;?></span>
+                <?php }?>
               </p>
             </a>
           </li>

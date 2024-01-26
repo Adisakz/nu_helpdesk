@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ในกรณีที่ต้องการรอให้หน้าเว็บโหลดเสร็จก่อน
         document.addEventListener('DOMContentLoaded', function() {
             // เลือก element และเปลี่ยน class
-            document.querySelector('a[name="check-req-parcecl"]').classList.add('nav-link', 'active');
+            document.querySelector('a[name="list-me-req"]').classList.add('nav-link', 'active');
         });
         </script>
 
