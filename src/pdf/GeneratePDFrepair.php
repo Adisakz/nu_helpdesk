@@ -116,7 +116,8 @@ $date_dean_update = isset($row['date_dean_update']) ? thaiMonth($row['date_dean_
 
 $pdf = new FPDF('P','mm','A4');
 $pdf->AddPage();
-$pdf->AddFont('sara', '', 'THSarabun.php');
+$pdf->AddFont('sara', '', '
+.php');
 $pdf->AddFont('sara', 'B', 'THSarabun Bold.php');
 $pdf->SetMargins(0, 0, 0);
 $pdf->Image('./form_pd05.png', 0, 0,-200);

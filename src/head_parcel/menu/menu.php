@@ -295,6 +295,25 @@ img.img-circle1 {
                         </li>   
                     </ul>
                 </li>
+                <li class="nav-item" name="user-manual">
+                    <a href="#" class="nav-link" name="user-manual1">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            คู่มือการใช้งาน
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="../user_manual/repair.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    การแจ้งซ่อม
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
