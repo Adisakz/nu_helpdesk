@@ -113,6 +113,14 @@ img.img-circle1 {
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/tech.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    การตรวจสอบการแจ้งซ่อม
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

@@ -233,6 +233,33 @@ $result = mysqli_query($conn, $sql);
         }
             
     $mpdf->Output('GeneratePDFReq.pdf', \Mpdf\Output\Destination::INLINE);        
+    }else{
+        $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $mpdf = new \Mpdf\Mpdf (
+            [
+                'fontDir' => array_merge($fontDirs, [
+                    __DIR__ . '/font',
+                ]), 
+                'fontdata' => $fontData + [
+                    'thsarabun' => [
+                        'R' => 'THSarabunNew.ttf'
+                    ]
+                ],
+                'default_font' =>'thsarabun'
+            ]
+        );
+        $mpdf->AddPageByArray([
+            'margin-left' => 20,
+            'margin-right' => 20,
+            'margin-top' => 20,
+            'margin-bottom' => 20,
+        ]);
+        $data = '<div style="width:100%;text-align:center; font-size:20px;" >ไม่พบข้อมูล</div>';
+        $mpdf->WriteHTML($data);  
+        $mpdf->Output('GeneratePDFReq.pdf', \Mpdf\Output\Destination::INLINE);  
     }
 }
 ?>

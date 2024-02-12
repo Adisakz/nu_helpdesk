@@ -91,6 +91,14 @@ img.img-circle1 {
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="./type_repair" class="nav-link" name="type-repair">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                            จัดการหมวดหมู่ครุภัณฑ์
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="./repair_me" class="nav-link" name="list-me">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
@@ -116,14 +124,7 @@ img.img-circle1 {
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="./type_repair" class="nav-link" name="type-repair">
-                        <i class="nav-icon fas fa-file-invoice"></i>
-                        <p>
-                            จัดการหมวดหมู่ครุภัณฑ์
-                        </p>
-                    </a>
-                </li>
+               
                 <li class="nav-item">
                     <a href="./search_asset" class="nav-link" name="search_asset">
                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -231,6 +232,39 @@ img.img-circle1 {
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_check_repair.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    ตรวจสอบการแจ้งซ่อม
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_controller_durable.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    จัดการเกี่ยวกับครุภัณ์
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_controller_parcel.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    จัดการเกี่ยวกับพัสดุของใช้
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_print_export.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    พิมพ์รายงาน
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 
