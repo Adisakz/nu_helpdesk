@@ -143,6 +143,22 @@ mysqli_free_result($resultRepairparcel);
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/head_req_parcel.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    การเบิกพัสดุ
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/head_allow_repair.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    รายการแจ้งซ่อมรออนุมัติ
+                                </p>
+                            </a>
+                        </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

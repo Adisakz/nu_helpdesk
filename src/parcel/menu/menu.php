@@ -241,6 +241,14 @@ img.img-circle1 {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="../user_manual/parcel_check_req_parcel.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    ตรวจสอบการเบิกพัสดุ
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="../user_manual/parcel_controller_durable.pdf" class="nav-link" name="user-manual-repair">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>

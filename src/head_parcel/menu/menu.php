@@ -312,6 +312,46 @@ img.img-circle1 {
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/head_req_parcel.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    การเบิกพัสดุ
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_controller_durable.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    จัดการเกี่ยวกับครุภัณ์
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_controller_parcel.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    จัดการเกี่ยวกับพัสดุของใช้
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/head_parcel_check_repair.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    เอกสารรอตรวจสอบ
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../user_manual/parcel_print_export.pdf" class="nav-link" name="user-manual-repair">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>
+                                    พิมพ์รายงาน
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

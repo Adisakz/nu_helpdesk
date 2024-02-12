@@ -189,7 +189,7 @@ function name_department($id) {
                             echo '<td class="text-center">' . $row['neet'] . '</td>';
                             echo '<td class="text-center">' . getStatusText($row['status']) . '</td>';
                             echo '<td class="project-actions text-right" style="display:flex;">';
-                            echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>&nbsp&nbsp';
+                            echo '<a class="btn btn-primary btn-sm" href="../pdf/GeneratePDFrepair.php?id='. $row['id_repair'] .'"><i class="fas fa-folder"></i> View</a>&nbsp&nbsp';
                             if ($row['status'] == 0) {
                               echo '<a class="btn btn-success btn-sm del-repair" href="confirm_rapair?id=' . $row['id_repair'] . '"><i class="fas fa-pencil-alt"></i> ตรวจสอบ</a>';
                             }

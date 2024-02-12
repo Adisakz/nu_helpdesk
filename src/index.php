@@ -12,6 +12,10 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
 
     if ($row && $row['id_person'] == $id_person) {
         // User found in the database
+
+ 
+
+
         $_SESSION["id"] = $row["id_person"];
         $_SESSION["name_title"] = $row["name_title"];
         $_SESSION["first_name"] = $row["first_name"];
@@ -108,11 +112,11 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
                                                 <img class=" d-none d-lg-block" src="./image/logo.png" width="150px"
                                                     height="150px"><br>
                                             </center>
-                                            <h1 class="h4 text-gray-900 mb-4 t1"><strong>ระบบแจ้งซ่อม</strong></h1>
+                                            <h1 class="h4 text-gray-900 mb-4 t1"><strong>ระบบแจ้งซ่อม <?=$_POST['id-person'];?></strong></h1>
                                             <h1 class="h4 text-gray-900 mb-4 t1"><strong>คณะพยาบาลศาสตร์
                                                     มหาวิทยาลัยขอนแก่น</strong></h1>
                                         </div>
-                                        <form class="user" action="" method="post">
+                                        <form class="user" action="index.php" method="post">
 
                                             <div class="form-group row">
                                                 <div class="col-sm-8 mb-3 mb-sm-0 mx-auto">
@@ -127,7 +131,7 @@ if (isset($_POST['signup']) && isset($_POST['id-person'])) {
                                                 <p>หัวหน้ากองคลัง : 5555555555555</p>
                                                 <p>ผู้อำนวยการกองบริหารงาน : 6666666666666</p>
                                                 <p>คณบดี : 7777777777777</p>
-                                                <button type="submit" name="signup"
+                                                <button type="submit" name="signup" value="signup" 
                                                     class="btn btn-success wider-btn1 t1">เข้าสู่ระบบ</button>
                                                     
                                             </center>
