@@ -27,4 +27,6 @@
 - MPDF
 - FPDF
 - API GOOGLE QR CODE GENERATE
-![Uploading Help Desk _ Parcel_page-0001.jpg…]()
+![Opera Snapshot_2024-03-14_150354_localhost](https://github.com/Adisakz/nu_helpdesk/assets/118262988/a15eb89e-f30f-4d49-91d7-dd83ddfc43e4)
+![Help Desk _ Parcel_page-0001](https://github.com/Adisakz/nu_helpdesk/assets/118262988/bf12099c-1204-4db0-939f-e1cb8f040686)
+![Help Desk _ Admin_page-0001](https://github.com/Adisakz/nu_helpdesk/assets/118262988/24036f34-4222-402f-a9ee-c304d7b156d9)
