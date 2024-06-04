@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "nuservice2024";
-$password = "@#aa123456@#";
+$username = "";
+$password = "";
 $dbname = "nuservice2024";
 
 // Create connection
